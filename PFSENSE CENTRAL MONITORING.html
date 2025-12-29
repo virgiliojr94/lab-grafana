@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CETIF - pfSense Central Monitoring</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0e14;
+            --bg-secondary: #0d1117;
+            --bg-card: #161b22;
+            --bg-card-hover: #1c2128;
+            --border-color: #30363d;
+            --border-glow: rgba(88, 166, 255, 0.3);
+            --text-primary: #f0f6fc;
+            --text-secondary: #8b949e;
+            --text-muted: #6e7681;
+            --accent-blue: #58a6ff;
+            --accent-purple: #a371f7;
+            --accent-green: #3fb950;
+            --accent-yellow: #d29922;
+            --accent-orange: #db6d28;
+            --accent-red: #f85149;
+            --accent-cyan: #39c5cf;
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-success: linear-gradient(135deg, #3fb950 0%, #2ea043 100%);
+            --gradient-warning: linear-gradient(135deg, #d29922 0%, #db6d28 100%);
+            --gradient-danger: linear-gradient(135deg, #f85149 0%, #da3633 100%);
+            --gradient-info: linear-gradient(135deg, #58a6ff 0%, #1f6feb 100%);
+            --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.4);
+            --shadow-glow-green: 0 0 20px rgba(63, 185, 80, 0.3);
+            --shadow-glow-red: 0 0 20px rgba(248, 81, 73, 0.3);
+            --shadow-glow-blue: 0 0 20px rgba(88, 166, 255, 0.3);
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(102, 126, 234, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(118, 75, 162, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(88, 166, 255, 0.03) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .dashboard {
+            position: relative;
+            z-index: 1;
+            padding: 20px 30px;
+            max-width: 1920px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            background: linear-gradient(180deg, rgba(22, 27, 34, 0.95) 0%, rgba(22, 27, 34, 0.8) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-primary);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 800;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .logo-text {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: 4px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-center {
+            text-align: center;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+        }
+
+        .header-subtitle {
+            font-size: 11px;
+            color: var(--text-muted);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .header-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 5px;
+        }
+
+        .clock {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 32px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            color: var(--text-primary);
+            text-shadow: 0 0 30px rgba(88, 166, 255, 0.5);
+        }
+
+        .date {
+            font-size: 12px;
+            color: var(--text-secondary);
+            letter-spacing: 1px;
+        }
+
+        /* Global Status Banner */
+        .global-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            padding: 15px 30px;
+            background: rgba(63, 185, 80, 0.1);
+            border: 1px solid rgba(63, 185, 80, 0.3);
+            border-radius: 16px;
+            margin-bottom: 25px;
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+
+        .global-status.warning {
+            background: rgba(210, 153, 34, 0.1);
+            border-color: rgba(210, 153, 34, 0.3);
+        }
+
+        .global-status.critical {
+            background: rgba(248, 81, 73, 0.1);
+            border-color: rgba(248, 81, 73, 0.3);
+            animation: pulse-danger 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(63, 185, 80, 0.2); }
+            50% { box-shadow: 0 0 40px rgba(63, 185, 80, 0.4); }
+        }
+
+        @keyframes pulse-danger {
+            0%, 100% { box-shadow: 0 0 20px rgba(248, 81, 73, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(248, 81, 73, 0.6); }
+        }
+
+        .status-indicator {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--accent-green);
+            box-shadow: 0 0 15px var(--accent-green);
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        .status-indicator.warning { background: var(--accent-yellow); box-shadow: 0 0 15px var(--accent-yellow); }
+        .status-indicator.critical { background: var(--accent-red); box-shadow: 0 0 15px var(--accent-red); }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .status-text {
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        /* Main Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 360px 1fr;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        /* Cards */
+        .card {
+            background: linear-gradient(180deg, var(--bg-card) 0%, rgba(22, 27, 34, 0.95) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 24px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: rgba(88, 166, 255, 0.3);
+            box-shadow: 0 0 30px rgba(88, 166, 255, 0.1);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+        }
+
+        .card-title-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .card-title-icon.system { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .card-title-icon.wan { background: linear-gradient(135deg, #3fb950 0%, #2ea043 100%); }
+        .card-title-icon.gateway { background: linear-gradient(135deg, #58a6ff 0%, #1f6feb 100%); }
+        .card-title-icon.vpn { background: linear-gradient(135deg, #a371f7 0%, #8957e5 100%); }
+        .card-title-icon.alert { background: linear-gradient(135deg, #f85149 0%, #da3633 100%); }
+        .card-title-icon.lan { background: linear-gradient(135deg, #39c5cf 0%, #1f9aa8 100%); }
+
+        /* Summary Items */
+        .summary-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 18px;
+            background: var(--bg-secondary);
+            border-radius: 14px;
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .summary-item:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--border-color);
+            transform: translateX(5px);
+        }
+
+        .summary-item.highlight {
+            background: linear-gradient(135deg, rgba(63, 185, 80, 0.1) 0%, rgba(46, 160, 67, 0.05) 100%);
+            border: 1px solid rgba(63, 185, 80, 0.3);
+        }
+
+        .summary-item.warning {
+            background: linear-gradient(135deg, rgba(210, 153, 34, 0.1) 0%, rgba(219, 109, 40, 0.05) 100%);
+            border: 1px solid rgba(210, 153, 34, 0.3);
+        }
+
+        .summary-item.danger {
+            background: linear-gradient(135deg, rgba(248, 81, 73, 0.1) 0%, rgba(218, 54, 51, 0.05) 100%);
+            border: 1px solid rgba(248, 81, 73, 0.3);
+        }
+
+        .summary-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .summary-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .summary-value.success { color: var(--accent-green); }
+        .summary-value.warning { color: var(--accent-yellow); }
+        .summary-value.danger { color: var(--accent-red); }
+        .summary-value.info { color: var(--accent-blue); }
+
+        /* Metric Gauges */
+        .gauge-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .gauge-item {
+            background: var(--bg-secondary);
+            border-radius: 14px;
+            padding: 18px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .gauge-circle {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 12px;
+            position: relative;
+        }
+
+        .gauge-circle svg {
+            transform: rotate(-90deg);
+        }
+
+        .gauge-circle circle {
+            fill: none;
+            stroke-width: 8;
+        }
+
+        .gauge-circle .bg {
+            stroke: var(--bg-card);
+        }
+
+        .gauge-circle .progress {
+            stroke-linecap: round;
+            transition: stroke-dashoffset 0.5s ease;
+        }
+
+        .gauge-circle .progress.success { stroke: var(--accent-green); }
+        .gauge-circle .progress.warning { stroke: var(--accent-yellow); }
+        .gauge-circle .progress.danger { stroke: var(--accent-red); }
+
+        .gauge-value {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .gauge-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Interface Grid */
+        .interface-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 18px;
+        }
+
+        .interface-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .interface-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-success);
+            border-radius: 16px 16px 0 0;
+        }
+
+        .interface-card.warning::before { background: var(--gradient-warning); }
+        .interface-card.down::before { background: var(--gradient-danger); }
+
+        .interface-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+            border-color: rgba(88, 166, 255, 0.3);
+        }
+
+        .interface-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .interface-name {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .interface-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: var(--bg-card);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .interface-name-text {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: 0.5px;
+        }
+
+        .status-badge {
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .status-badge.up {
+            background: rgba(63, 185, 80, 0.15);
+            color: var(--accent-green);
+            border: 1px solid rgba(63, 185, 80, 0.4);
+            box-shadow: 0 0 15px rgba(63, 185, 80, 0.2);
+        }
+
+        .status-badge.warning {
+            background: rgba(210, 153, 34, 0.15);
+            color: var(--accent-yellow);
+            border: 1px solid rgba(210, 153, 34, 0.4);
+        }
+
+        .status-badge.down {
+            background: rgba(248, 81, 73, 0.15);
+            color: var(--accent-red);
+            border: 1px solid rgba(248, 81, 73, 0.4);
+            animation: pulse-badge 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse-badge {
+            0%, 100% { box-shadow: 0 0 10px rgba(248, 81, 73, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(248, 81, 73, 0.6); }
+        }
+
+        /* Traffic Stats */
+        .traffic-stats {
+            display: grid;
+            gap: 12px;
+        }
+
+        .traffic-row {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .traffic-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .traffic-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .traffic-label .arrow {
+            font-size: 14px;
+        }
+
+        .traffic-label .arrow.in { color: var(--accent-blue); }
+        .traffic-label .arrow.out { color: var(--accent-green); }
+
+        .traffic-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--bg-card);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-fill.in {
+            background: linear-gradient(90deg, #58a6ff 0%, #1f6feb 100%);
+            box-shadow: 0 0 10px rgba(88, 166, 255, 0.5);
+        }
+
+        .progress-fill.out {
+            background: linear-gradient(90deg, #3fb950 0%, #2ea043 100%);
+            box-shadow: 0 0 10px rgba(63, 185, 80, 0.5);
+        }
+
+        .error-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 12px;
+            margin-top: 8px;
+            border-top: 1px solid var(--border-color);
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+
+        .error-row.has-errors {
+            color: var(--accent-red);
+        }
+
+        /* Gateway Cards */
+        .gateway-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .gateway-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-success);
+            border-radius: 16px 16px 0 0;
+        }
+
+        .gateway-card.warning::before { background: var(--gradient-warning); }
+        .gateway-card.down::before { background: var(--gradient-danger); }
+
+        .gateway-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .metric-grid {
+            display: grid;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 14px;
+            background: var(--bg-card);
+            border-radius: 10px;
+        }
+
+        .metric-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .metric-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        /* VPN Cards */
+        .vpn-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .vpn-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #a371f7 0%, #8957e5 100%);
+            border-radius: 16px 16px 0 0;
+        }
+
+        .vpn-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .vpn-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .vpn-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .client-count {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 42px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #a371f7 0%, #8957e5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin: 15px 0;
+        }
+
+        .client-label {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Alerts Section */
+        .alert-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 14px 18px;
+            background: var(--bg-secondary);
+            border-radius: 14px;
+            margin-bottom: 10px;
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .alert-item.critical {
+            background: linear-gradient(90deg, rgba(248, 81, 73, 0.1) 0%, transparent 100%);
+            border-left-color: var(--accent-red);
+        }
+
+        .alert-item.warning {
+            background: linear-gradient(90deg, rgba(210, 153, 34, 0.1) 0%, transparent 100%);
+            border-left-color: var(--accent-yellow);
+        }
+
+        .alert-item.ok {
+            background: linear-gradient(90deg, rgba(63, 185, 80, 0.1) 0%, transparent 100%);
+            border-left-color: var(--accent-green);
+        }
+
+        .alert-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .alert-item.critical .alert-icon { background: rgba(248, 81, 73, 0.2); }
+        .alert-item.warning .alert-icon { background: rgba(210, 153, 34, 0.2); }
+        .alert-item.ok .alert-icon { background: rgba(63, 185, 80, 0.2); }
+
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-severity {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 3px;
+        }
+
+        .alert-item.critical .alert-severity { color: var(--accent-red); }
+        .alert-item.warning .alert-severity { color: var(--accent-yellow); }
+        .alert-item.ok .alert-severity { color: var(--accent-green); }
+
+        .alert-message {
+            font-size: 12px;
+            color: var(--text-primary);
+        }
+
+        /* Section Divider */
+        .section-divider {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .section-divider::before,
+        .section-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border-color), transparent);
+        }
+
+        .section-divider span {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1400px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            .interface-grid {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            .header-right {
+                align-items: center;
+            }
+            .gauge-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-pattern"></div>
+    
+    <div class="dashboard">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo-section">
+                <div class="logo-icon">C</div>
+                <div class="logo-text">CETIF</div>
+            </div>
+            <div class="header-center">
+                <div class="header-title">PFSENSE CENTRAL MONITORING</div>
+                <div class="header-subtitle">Network Health • Gateways • VPN • Traffic Analysis • System Monitoring</div>
+            </div>
+            <div class="header-right">
+                <div class="clock" id="clock">00:00:00</div>
+                <div class="date" id="date">--</div>
+            </div>
+        </header>
+
+        <!-- Global Status Banner -->
+        <div class="global-status" id="global-status">
+            <div class="status-indicator"></div>
+            <span class="status-text">FIREWALL OPERATIONAL</span>
+            <div class="status-indicator"></div>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="main-grid">
+            <!-- Left Sidebar -->
+            <div class="sidebar">
+                <!-- System Overview -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <div class="card-title-icon system">📊</div>
+                            System Overview
+                        </div>
+                    </div>
+                    
+                    <div class="summary-grid">
+                        <div class="summary-item highlight">
+                            <span class="summary-label">Global Status</span>
+                            <span class="summary-value success">ONLINE</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">WANs Monitored</span>
+                            <span class="summary-value">2</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Gateways</span>
+                            <span class="summary-value success">8 / 8</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Total Errors</span>
+                            <span class="summary-value success">0</span>
+                        </div>
+                    </div>
+
+                    <div class="gauge-grid">
+                        <div class="gauge-item">
+                            <div class="gauge-circle">
+                                <svg width="80" height="80" viewBox="0 0 80 80">
+                                    <circle class="bg" cx="40" cy="40" r="32"/>
+                                    <circle class="progress success" cx="40" cy="40" r="32" 
+                                        stroke-dasharray="201" stroke-dashoffset="60"/>
+                                </svg>
+                                <span class="gauge-value" style="color: var(--accent-green)">23%</span>
+                            </div>
+                            <div class="gauge-label">CPU</div>
+                        </div>
+                        <div class="gauge-item">
+                            <div class="gauge-circle">
+                                <svg width="80" height="80" viewBox="0 0 80 80">
+                                    <circle class="bg" cx="40" cy="40" r="32"/>
+                                    <circle class="progress warning" cx="40" cy="40" r="32" 
+                                        stroke-dasharray="201" stroke-dashoffset="40"/>
+                                </svg>
+                                <span class="gauge-value" style="color: var(--accent-yellow)">67%</span>
+                            </div>
+                            <div class="gauge-label">Memory</div>
+                        </div>
+                        <div class="gauge-item">
+                            <div class="gauge-circle">
+                                <svg width="80" height="80" viewBox="0 0 80 80">
+                                    <circle class="bg" cx="40" cy="40" r="32"/>
+                                    <circle class="progress success" cx="40" cy="40" r="32" 
+                                        stroke-dasharray="201" stroke-dashoffset="130"/>
+                                </svg>
+                                <span class="gauge-value" style="color: var(--accent-green)">35%</span>
+                            </div>
+                            <div class="gauge-label">Disk</div>
+                        </div>
+                        <div class="gauge-item">
+                            <div class="gauge-circle">
+                                <svg width="80" height="80" viewBox="0 0 80 80">
+                                    <circle class="bg" cx="40" cy="40" r="32"/>
+                                    <circle class="progress success" cx="40" cy="40" r="32" 
+                                        stroke-dasharray="201" stroke-dashoffset="195"/>
+                                </svg>
+                                <span class="gauge-value" style="color: var(--accent-green)">3%</span>
+                            </div>
+                            <div class="gauge-label">Swap</div>
+                        </div>
+                    </div>
+
+                    <div class="section-divider"><span>Details</span></div>
+
+                    <div class="summary-grid">
+                        <div class="summary-item">
+                            <span class="summary-label">States Table</span>
+                            <span class="summary-value info">12.4%</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Uptime</span>
+                            <span class="summary-value">45d 12h</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Processes</span>
+                            <span class="summary-value">24 / 186</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alerts -->
+                <div class="card" style="margin-top: 20px;">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <div class="card-title-icon alert">🔔</div>
+                            Active Alerts
+                        </div>
+                    </div>
+                    
+                    <div id="alerts">
+                        <div class="alert-item ok">
+                            <div class="alert-icon">✓</div>
+                            <div class="alert-content">
+                                <div class="alert-severity">INFO</div>
+                                <div class="alert-message">All systems operational</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VPN Summary -->
+                <div class="card" style="margin-top: 20px;">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <div class="card-title-icon vpn">🔐</div>
+                            VPN Overview
+                        </div>
+                    </div>
+                    
+                    <div class="summary-grid">
+                        <div class="summary-item">
+                            <span class="summary-label">Total VPN Clients</span>
+                            <span class="summary-value" style="color: var(--accent-purple)">47</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Tunnels UP</span>
+                            <span class="summary-value success">12 / 12</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Content -->
+            <div class="content">
+                <!-- WAN Links -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <div class="card-title-icon wan">🌐</div>
+                            WAN Links
+                        </div>
+                    </div>
+                    
+                    <div class="interface-grid" id="wan-interfaces">
+                        <div class="interface-card">
+                            <div class="interface-header">
+                                <div class="interface-name">
+                                    <div class="interface-icon">🔗</div>
+                                    <span class="interface-name-text">WAN</span>
+                                </div>
+                                <div class="status-badge up">ONLINE</div>
+                            </div>
+                            <div class="traffic-stats">
+                                <div class="traffic-row">
+                                    <div class="traffic-header">
+                                        <span class="traffic-label"><span class="arrow in">↓</span> Inbound</span>
+                                        <span class="traffic-value">125.4 Mb/s</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill in" style="width: 65%"></div>
+                                    </div>
+                                </div>
+                                <div class="traffic-row">
+                                    <div class="traffic-header">
+                                        <span class="traffic-label"><span class="arrow out">↑</span> Outbound</span>
+                                        <span class="traffic-value">48.2 Mb/s</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill out" style="width: 35%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="error-row">
+                                <span>Errors IN/OUT:</span>
+                                <span>0 / 0</span>
+                            </div>
+                        </div>
+
+                        <div class="interface-card">
+                            <div class="interface-header">
+                                <div class="interface-name">
+                                    <div class="interface-icon">🔗</div>
+                                    <span class="interface-name-text">WAN_CTI</span>
+                                </div>
+                                <div class="status-badge up">ONLINE</div>
+                            </div>
+                            <div class="traffic-stats">
+                                <div class="traffic-row">
+                                    <div class="traffic-header">
+                                        <span class="traffic-label"><span class="arrow in">↓</span> Inbound</span>
+                                        <span class="traffic-value">87.1 Mb/s</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill in" style="width: 45%"></div>
+                                    </div>
+                                </div>
+                                <div class="traffic-row">
+                                    <div class="traffic-header">
+                                        <span class="traffic-label"><span class="arrow out">↑</span> Outbound</span>
+                                        <span class="traffic-value">22.8 Mb/s</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill out" style="width: 20%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="error-row">
+                                <span>Errors IN/OUT:</span>
+                                <span>0 / 0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gateway Metrics -->
+                <div class="card" style="margin-top: 20px;">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <div class="card-title-icon gateway">🚀</div>
+                            Gateway Metrics
+                        </div>
+                    </div>
+                    
+                    <div class="interface-grid" id="gateways">
+                        <div class="gateway-card">
+                            <div class="interface-header">
+                                <div class="interface-name">
+                                    <div class="interface-icon">🌍</div>
+                                    <span class="interface-name-text">GW WAN</span>
+                                </div>
+                                <div class="status-badge up">ONLINE</div>
+                            </div>
+                            <div class="metric-grid">
+                                <div class="metric-row">
+                                    <span class="metric-label">Packet Loss</span>
+                                    <span class="metric-value" style="color: var(--accent-green)">0.0%</span>
+                                </div>
+                                <div class="metric-row">
+                                    <span class="metric-label">RTT</span>
+                                    <span class="metric-value" style="color: var(--accent-green)">12.4 ms</span>
+                                </div>
+                                <div class="metric-row">
+                                    <span class="metric-label">Jitter</span>
+                                    <span class="metric-value" style="color: var(--text-secondary)">1.2 ms</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="gateway-card">
+                            <div class="interface-header">
+                                <div class="interface-name">
+                                    <div class="interface-icon">🌍</div>
+                                    <span class="interface-name-text">GW WAN_CTI</span>
+                                </div>
+                                <div class="status-badge up">ONLINE</div>
+                            </div>
+                            <div class="metric-grid">
+                                <div class="metric-row">
+                                    <span class="metric-label">Packet Loss</span>
+                                    <span class="metric-value" style="color: var(--accent-green)">0.0%</span>
+                                </div>
+                                <div class="metric-row">
+                                    <span class="metric-label">RTT</span>
+                                    <span class="metric-value" style="color: var(--accent-green)">8.7 ms</span>
+                                </div>
+                                <div class="metric-row">
+                                    <span class="metric-label">Jitter</span>
+                                    <span class="metric-value" style="color: var(--text-secondary)">0.8 ms</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="gateway-card">
+                            <div class="interface-header">
+                                <div class="interface-name">
+                                    <div class="interface-icon">🌍</div>
+                                    <span class="interface-name-text">GW DMZ</span>
+                                </div>
+                                <div class="status-badge up">ONLINE</div>
+                            </div>
+                            <div class="metric-grid">
+                                <div class="metric-row">
+                                    <span class="metric-label">Packet Loss</span>
+                                    <span class="metric-value" style="color: var(--accent-green)">0.0%</span>
+                                </div>
+                                <div class="metric-row">
+                                    <span class="metric-label">RTT</span>
+                                    <span class="metric-value" style="color: var(--accent-green)">0.5 ms</span>
+                                </div>
+                                <div class="metric-row">
+                                    <span class="metric-label">Jitter</span>
+                                    <span class="metric-value" style="color: var(--text-secondary)">0.1 ms</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="gateway-card warning">
+                            <div class="interface-header">
+                                <div class="interface-name">
+                                    <div class="interface-icon">🌍</div>
+                                    <span class="interface-name-text">GW INTRANET</span>
+                                </div>
+                                <div class="status-badge warning">DEGRADED</div>
+                            </div>
+                            <div class="metric-grid">
+                                <div class="metric-row">
+                                    <span class="metric-label">Packet Loss</span>
+                                    <span class="metric-value" style="color: var(--accent-yellow)">2.1%</span>
+                                </div>
+                                <div class="metric-row">
+                                    <span class="metric-label">RTT</span>
+                                    <span class="metric-value" style="color: var(--accent-yellow)">245 ms</span>
+                                </div>
+                                <div class="metric-row">
+                                    <span class="metric-label">Jitter</span>
+                                    <span class="metric-value" style="color: var(--accent-yellow)">15.4 ms</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- OpenVPN Servers -->
+                <div class="card" style="margin-top: 20px;">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <div class="card-title-icon vpn">🔐</div>
+                            OpenVPN Servers
+                        </div>
+                    </div>
+                    
+                    <div class="interface-grid" id="ovpn-servers">
+                        <div class="vpn-card">
+                            <div class="vpn-header">
+                                <span class="vpn-name">CETIF</span>
+                                <div class="status-badge up">ACTIVE</div>
+                            </div>
+                            <div class="client-count">12</div>
+                            <div class="client-label">Connected Clients</div>
+                        </div>
+
+                        <div class="vpn-card">
+                            <div class="vpn-header">
+                                <span class="vpn-name">SEFAZ</span>
+                                <div class="status-badge up">ACTIVE</div>
+                            </div>
+                            <div class="client-count">8</div>
+                            <div class="client-label">Connected Clients</div>
+                        </div>
+
+                        <div class="vpn-card">
+                            <div class="vpn-header">
+                                <span class="vpn-name">FIPLAN</span>
+                                <div class="status-badge up">ACTIVE</div>
+                            </div>
+                            <div class="client-count">15</div>
+                            <div class="client-label">Connected Clients</div>
+                        </div>
+
+                        <div class="vpn-card">
+                            <div class="vpn-header">
+                                <span class="vpn-name">IBROWSE</span>
+                                <div class="status-badge warning">IDLE</div>
+                            </div>
+                            <div class="client-count">0</div>
+                            <div class="client-label">Connected Clients</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LAN Interfaces -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <div class="card-title-icon lan">📡</div>
+                    LAN / VLAN / DMZ Interfaces (Top 12 by Traffic)
+                </div>
+            </div>
+            
+            <div class="interface-grid" id="lan-interfaces">
+                <div class="interface-card">
+                    <div class="interface-header">
+                        <div class="interface-name">
+                            <div class="interface-icon">📶</div>
+                            <span class="interface-name-text">INTRANET</span>
+                        </div>
+                        <div class="status-badge up">ONLINE</div>
+                    </div>
+                    <div class="traffic-stats">
+                        <div class="traffic-row">
+                            <div class="traffic-header">
+                                <span class="traffic-label"><span class="arrow in">↓</span> Inbound</span>
+                                <span class="traffic-value">245.7 Mb/s</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill in" style="width: 75%"></div>
+                            </div>
+                        </div>
+                        <div class="traffic-row">
+                            <div class="traffic-header">
+                                <span class="traffic-label"><span class="arrow out">↑</span> Outbound</span>
+                                <span class="traffic-value">89.3 Mb/s</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill out" style="width: 45%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="error-row">
+                        <span>Errors IN/OUT:</span>
+                        <span>0 / 0</span>
+                    </div>
+                </div>
+
+                <div class="interface-card">
+                    <div class="interface-header">
+                        <div class="interface-name">
+                            <div class="interface-icon">📶</div>
+                            <span class="interface-name-text">DMZ</span>
+                        </div>
+                        <div class="status-badge up">ONLINE</div>
+                    </div>
+                    <div class="traffic-stats">
+                        <div class="traffic-row">
+                            <div class="traffic-header">
+                                <span class="traffic-label"><span class="arrow in">↓</span> Inbound</span>
+                                <span class="traffic-value">156.2 Mb/s</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill in" style="width: 60%"></div>
+                            </div>
+                        </div>
+                        <div class="traffic-row">
+                            <div class="traffic-header">
+                                <span class="traffic-label"><span class="arrow out">↑</span> Outbound</span>
+                                <span class="traffic-value">67.4 Mb/s</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill out" style="width: 35%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="error-row">
+                        <span>Errors IN/OUT:</span>
+                        <span>0 / 0</span>
+                    </div>
+                </div>
+
+                <div class="interface-card">
+                    <div class="interface-header">
+                        <div class="interface-name">
+                            <div class="interface-icon">📶</div>
+                            <span class="interface-name-text">SRVSINTRANET</span>
+                        </div>
+                        <div class="status-badge up">ONLINE</div>
+                    </div>
+                    <div class="traffic-stats">
+                        <div class="traffic-row">
+                            <div class="traffic-header">
+                                <span class="traffic-label"><span class="arrow in">↓</span> Inbound</span>
+                                <span class="traffic-value">98.5 Mb/s</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill in" style="width: 50%"></div>
+                            </div>
+                        </div>
+                        <div class="traffic-row">
+                            <div class="traffic-header">
+                                <span class="traffic-label"><span class="arrow out">↑</span> Outbound</span>
+                                <span class="traffic-value">45.2 Mb/s</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill out" style="width: 30%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="error-row">
+                        <span>Errors IN/OUT:</span>
+                        <span>0 / 0</span>
+                    </div>
+                </div>
+
+                <div class="interface-card">
+                    <div class="interface-header">
+                        <div class="interface-name">
+                            <div class="interface-icon">📶</div>
+                            <span class="interface-name-text">PALACIO</span>
+                        </div>
+                        <div class="status-badge up">ONLINE</div>
+                    </div>
+                    <div class="traffic-stats">
+                        <div class="traffic-row">
+                            <div class="traffic-header">
+                                <span class="traffic-label"><span class="arrow in">↓</span> Inbound</span>
+                                <span class="traffic-value">76.3 Mb/s</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill in" style="width: 40%"></div>
+                            </div>
+                        </div>
+                        <div class="traffic-row">
+                            <div class="traffic-header">
+                                <span class="traffic-label"><span class="arrow out">↑</span> Outbound</span>
+                                <span class="traffic-value">32.1 Mb/s</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill out" style="width: 25%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="error-row">
+                        <span>Errors IN/OUT:</span>
+                        <span>0 / 0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Clock update
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
+            
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('date').textContent = now.toLocaleDateString('pt-BR', options);
+        }
+        
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        // Simulate real-time updates for demo
+        function simulateTraffic() {
+            document.querySelectorAll('.progress-fill').forEach(bar => {
+                const currentWidth = parseFloat(bar.style.width);
+                const variation = (Math.random() - 0.5) * 10;
+                const newWidth = Math.max(5, Math.min(95, currentWidth + variation));
+                bar.style.width = newWidth + '%';
+            });
+        }
+
+        setInterval(simulateTraffic, 3000);
+
+        // Demo: Toggle global status for visualization
+        function demoStatusChange() {
+            const statuses = ['', 'warning', 'critical'];
+            const statusTexts = ['FIREWALL OPERATIONAL', 'FIREWALL DEGRADED', 'FIREWALL CRITICAL'];
+            let currentIndex = 0;
+
+            setInterval(() => {
+                const statusEl = document.getElementById('global-status');
+                statusEl.className = 'global-status ' + statuses[currentIndex];
+                statusEl.querySelector('.status-text').textContent = statusTexts[currentIndex];
+                
+                statusEl.querySelectorAll('.status-indicator').forEach(ind => {
+                    ind.className = 'status-indicator ' + statuses[currentIndex];
+                });
+
+                currentIndex = (currentIndex + 1) % statuses.length;
+            }, 10000);
+        }
+
+        // Uncomment to see status changes demo
+        // demoStatusChange();
+    </script>
+</body>
+</html>

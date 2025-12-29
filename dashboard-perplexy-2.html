@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<title>FLOWBIX - Firewall Checkpoint</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-main: #050608;
+  --bg-panel: #13151b;
+  --bg-panel-alt: #181b22;
+  --accent-green: #2ecc71;
+  --accent-yellow: #f1c40f;
+  --accent-red: #e74c3c;
+  --accent-blue: #3498db;
+  --accent-orange: #e67e22;
+  --text-main: #f5f5f5;
+  --text-muted: #9ca0b1;
+  --border-soft: #20232d;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Roboto", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: radial-gradient(circle at top, #181b22 0, #050608 60%);
+  color: var(--text-main);
+}
+
+/* Layout geral */
+.dashboard {
+  max-width: 1600px;
+  margin: 10px auto 30px;
+  padding: 10px 20px 30px;
+}
+
+/* Topo */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.logo {
+  font-size: 32px;
+  letter-spacing: 4px;
+  font-weight: 700;
+}
+
+.logo span {
+  color: var(--accent-green);
+}
+
+.header-center {
+  text-align: center;
+}
+
+.header-center h1 {
+  font-size: 22px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.header-center p {
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.header-time {
+  font-size: 18px;
+  letter-spacing: 2px;
+}
+
+/* Título da seção */
+.section-title {
+  margin: 10px 0 6px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* Grade responsiva principal */
+.grid {
+  display: grid;
+  grid-gap: 10px;
+}
+
+.panel {
+  background: linear-gradient(145deg, var(--bg-panel), var(--bg-panel-alt));
+  border-radius: 6px;
+  border: 1px solid var(--border-soft);
+  padding: 12px 14px;
+  position: relative;
+  overflow: hidden;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+}
+
+.panel-header span {
+  color: var(--text-main);
+}
+
+/* Disponibilidade */
+.disponibilidade {
+  display: grid;
+  grid-template-columns: 1.5fr 2fr;
+  grid-gap: 10px;
+}
+
+/* Card de disponibilidade */
+.availability-card {
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+.avail-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.avail-main-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.checkpoint-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent-pink, #ff4f81);
+  box-shadow: 0 0 10px rgba(255, 79, 129, 0.8);
+}
+
+.avail-main-title {
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+.avail-main-status {
+  font-size: 10px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(46, 204, 113, 0.18);
+  color: var(--accent-green);
+  border: 1px solid rgba(46, 204, 113, 0.6);
+}
+
+.avail-list {
+  display: grid;
+  gap: 6px;
+}
+
+.avail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 4px;
+  background: rgba(10, 12, 18, 0.9);
+  font-size: 11px;
+}
+
+.avail-item-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-green);
+}
+
+.status-pill {
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(46, 204, 113, 0.12);
+  color: var(--accent-green);
+}
+
+/* Cartões WAN */
+.wan-links {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 8px;
+}
+
+.wan-card {
+  padding: 8px 10px;
+  border-radius: 4px;
+  background: rgba(9, 11, 16, 0.9);
+  border: 1px solid #1e222e;
+}
+
+.wan-title {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.wan-bar {
+  height: 90px;
+  border-radius: 4px;
+  background: linear-gradient(to top, rgba(52, 152, 219, 0.1), rgba(52, 152, 219, 0.65));
+  position: relative;
+  overflow: hidden;
+}
+
+.wan-bar::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.wan-footer {
+  margin-top: 6px;
+  font-size: 10px;
+  color: var(--text-muted);
+  text-align: right;
+}
+
+/* Gráfico de linhas genérico */
+.chart {
+  position: relative;
+  height: 170px;
+  background: radial-gradient(circle at top, #1b202b 0, #090b11 60%);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.chart-grid {
+  position: absolute;
+  inset: 8px 10px 16px 10px;
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+                    linear-gradient(to top, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 40px 100%, 100% 25px;
+  opacity: 0.5;
+}
+
+/* “Linhas” desenhadas com gradientes e blur */
+.chart-line {
+  position: absolute;
+  inset: 8px 10px 16px 10px;
+  background: radial-gradient(circle at 10% 60%, rgba(46, 204, 113, 0.9), transparent 50%),
+              radial-gradient(circle at 40% 35%, rgba(46, 204, 113, 0.8), transparent 50%),
+              radial-gradient(circle at 55% 80%, rgba(46, 204, 113, 0.6), transparent 45%),
+              radial-gradient(circle at 75% 40%, rgba(46, 204, 113, 0.7), transparent 45%);
+  filter: blur(8px);
+  opacity: 0.9;
+  mix-blend-mode: screen;
+}
+
+/* Legenda de gráfico */
+.chart-legend {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  display: grid;
+  gap: 2px;
+  font-size: 10px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-color {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+/* Detalhes do firewall */
+.details-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1.8fr;
+  grid-gap: 10px;
+}
+
+/* Info cards */
+.info-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 8px;
+  margin-bottom: 10px;
+}
+
+.info-card {
+  background: rgba(9, 11, 16, 0.9);
+  border-radius: 4px;
+  padding: 8px 10px;
+  border: 1px solid #212532;
+  font-size: 11px;
+}
+
+.info-label {
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 10px;
+  margin-bottom: 4px;
+}
+
+.info-value {
+  font-size: 12px;
+}
+
+/* Serviços */
+.services {
+  display: grid;
+  grid-template-columns: 1.2fr 1.2fr;
+  grid-gap: 8px;
+}
+
+.service-list {
+  background: rgba(9, 11, 16, 0.9);
+  border-radius: 4px;
+  padding: 8px 10px;
+  border: 1px solid #212532;
+  font-size: 11px;
+}
+
+.service-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.service-name {
+  color: var(--text-muted);
+}
+
+.service-status-ok,
+.service-status-off {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+}
+
+.service-status-ok {
+  background: var(--accent-green);
+}
+
+.service-status-off {
+  background: var(--accent-red);
+}
+
+/* CPU & memória */
+.sys-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 2fr;
+  grid-gap: 10px;
+  margin-top: 10px;
+}
+
+.sys-stats {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 8px;
+}
+
+.gauge-row {
+  display: flex;
+  gap: 10px;
+}
+
+.gauge {
+  flex: 1;
+  background: rgba(9, 11, 16, 0.9);
+  border-radius: 4px;
+  border: 1px solid #212532;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.gauge-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  display: flex;
+  justify-content: space-between;
+}
+
+.gauge-circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 6px solid rgba(46, 204, 113, 0.18);
+  border-top-color: var(--accent-green);
+  margin-right: 8px;
+}
+
+.gauge-content {
+  display: flex;
+  align-items: center;
+}
+
+.gauge-value {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.gauge-sub {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+/* Pequenos gráficos de linha */
+.mini-chart {
+  height: 65px;
+  border-radius: 4px;
+  background: radial-gradient(circle at 15% 60%, rgba(46, 204, 113, 0.75), transparent 55%),
+              radial-gradient(circle at 45% 30%, rgba(46, 204, 113, 0.5), transparent 45%),
+              radial-gradient(circle at 75% 80%, rgba(46, 204, 113, 0.4), transparent 40%);
+  filter: blur(5px);
+  opacity: 0.9;
+}
+
+/* Severidade */
+.severity-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 8px;
+  margin-top: 10px;
+}
+
+.severity-box {
+  text-align: center;
+  padding: 8px 4px;
+  border-radius: 4px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background: rgba(9, 11, 16, 0.9);
+  border: 1px solid #212532;
+}
+
+.severity-label {
+  margin-top: 4px;
+  color: var(--text-muted);
+}
+
+.severity-disaster {
+  border-bottom: 3px solid var(--accent-red);
+}
+
+.severity-high {
+  border-bottom: 3px solid var(--accent-orange);
+}
+
+.severity-average {
+  border-bottom: 3px solid #f1c40f;
+}
+
+.severity-warning {
+  border-bottom: 3px solid #3498db;
+}
+
+.severity-info {
+  border-bottom: 3px solid #16a085;
+}
+
+/* Responsivo */
+@media (max-width: 1200px) {
+  .disponibilidade {
+    grid-template-columns: 1fr;
+  }
+  .details-grid {
+    grid-template-columns: 1fr;
+  }
+  .sys-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .header {
+    flex-direction: column;
+    gap: 6px;
+  }
+  .info-cards {
+    grid-template-columns: 1fr;
+  }
+  .services {
+    grid-template-columns: 1fr;
+  }
+  .wan-links {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .dashboard {
+    padding: 10px;
+  }
+}
+</style>
+</head>
+<body>
+<div class="dashboard">
+
+  <!-- Topo -->
+  <header class="header">
+    <div class="logo">FLOW<span>BIX</span></div>
+    <div class="header-center">
+      <h1>FIREWALL CHECKPOINT</h1>
+      <p>Informações detalhadas do firewall</p>
+    </div>
+    <div class="header-time">18:05:07</div>
+  </header>
+
+  <!-- Disponibilidade -->
+  <div class="section-title">Disponibilidade</div>
+  <div class="grid disponibilidade">
+    <section class="panel availability-card">
+      <div class="panel-header">
+        <span>Check Point</span>
+      </div>
+      <div>
+        <div class="avail-main">
+          <div class="avail-main-left">
+            <div class="checkpoint-dot"></div>
+            <div class="avail-main-title">Gateway Principal</div>
+          </div>
+          <div class="avail-main-status">Online</div>
+        </div>
+        <div class="avail-list">
+          <div class="avail-item">
+            <div class="avail-item-left">
+              <div class="status-dot"></div>
+              <span>ICMP</span>
+            </div>
+            <div class="status-pill">UP</div>
+          </div>
+          <div class="avail-item">
+            <div class="avail-item-left">
+              <div class="status-dot"></div>
+              <span>SNMP</span>
+            </div>
+            <div class="status-pill">UP</div>
+          </div>
+          <div class="avail-item">
+            <div class="avail-item-left">
+              <div class="status-dot"></div>
+              <span>Uptime</span>
+            </div>
+            <span>5d 23h 39m</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-header">
+        <span>Links WAN</span>
+        <span>Mbps</span>
+      </div>
+      <div class="wan-links">
+        <div class="wan-card">
+          <div class="wan-title">
+            <span>WAN 4 (VIVO)</span>
+            <span>UP</span>
+          </div>
+          <div class="wan-bar" style="background: linear-gradient(to top, rgba(46,204,113,0.1), rgba(46,204,113,0.8));"></div>
+          <div class="wan-footer">@ 2.5 Mb/s</div>
+        </div>
+        <div class="wan-card">
+          <div class="wan-title">
+            <span>WAN 5 (CLARO)</span>
+            <span>UP</span>
+          </div>
+          <div class="wan-bar" style="background: linear-gradient(to top, rgba(52,152,219,0.1), rgba(52,152,219,0.8));"></div>
+          <div class="wan-footer">@ 4.5 Mb/s</div>
+        </div>
+        <div class="wan-card">
+          <div class="wan-title">
+            <span>CAMON</span>
+            <span>UP</span>
+          </div>
+          <div class="wan-bar" style="background: linear-gradient(to top, rgba(230,126,34,0.15), rgba(230,126,34,0.85));"></div>
+          <div class="wan-footer">@ 215.9 Kb/s</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Tráfego WAN -->
+  <div class="section-title">Links WAN - Tráfego de Internet (ISP)</div>
+  <section class="panel">
+    <div class="panel-header">
+      <span>Tráfego de Internet (ISP)</span>
+      <span>Mb/s</span>
+    </div>
+    <div class="chart">
+      <div class="chart-grid"></div>
+      <div class="chart-line"></div>
+      <div class="chart-legend">
+        <div class="legend-item">
+          <div class="legend-color" style="background:#2ecc71;"></div>
+          <span>VIVO - Download</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="background:#e74c3c;"></div>
+          <span>VIVO - Upload</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="background:#3498db;"></div>
+          <span>CLARO - Download</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="background:#f1c40f;"></div>
+          <span>CLARO - Upload</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="background:#e67e22;"></div>
+          <span>CAMON - Download</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Detalhes do firewall -->
+  <div class="section-title">Detalhes do Firewall</div>
+  <div class="grid details-grid">
+    <section>
+      <div class="info-cards">
+        <div class="info-card">
+          <div class="info-label">Nome do Sistema</div>
+          <div class="info-value">FLOWBIX-DF-FW001</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">Versão</div>
+          <div class="info-value">Linux FLOW-DF-FW001 4.x</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">Modelo</div>
+          <div class="info-value">FLOW-DF-FW001</div>
+        </div>
+      </div>
+
+      <div class="services">
+        <div class="service-list">
+          <div class="panel-header"><span>Serviços</span></div>
+          <div class="service-row">
+            <span class="service-name">Firewall</span>
+            <span class="service-status-ok"></span>
+          </div>
+          <div class="service-row">
+            <span class="service-name">Threat</span>
+            <span class="service-status-off"></span>
+          </div>
+          <div class="service-row">
+            <span class="service-name">Anti-Spam</span>
+            <span class="service-status-off"></span>
+          </div>
+          <div class="service-row">
+            <span class="service-name">IPS</span>
+            <span class="service-status-off"></span>
+          </div>
+        </div>
+
+        <div class="service-list">
+          <div class="panel-header"><span>Serviços</span></div>
+          <div class="service-row">
+            <span class="service-name">URL Filter</span>
+            <span class="service-status-ok"></span>
+          </div>
+          <div class="service-row">
+            <span class="service-name">IPSec VPN</span>
+            <span class="service-status-ok"></span>
+          </div>
+          <div class="service-row">
+            <span class="service-name">App Ctrl</span>
+            <span class="service-status-ok"></span>
+          </div>
+          <div class="service-row">
+            <span class="service-name">Anti-Virus</span>
+            <span class="service-status-off"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-header">
+        <span>Tráfego rede interna (LAN/WLAN/DMZ)</span>
+        <span>Mb/s</span>
+      </div>
+      <div class="chart">
+        <div class="chart-grid"></div>
+        <div class="chart-line" style="background:
+          radial-gradient(circle at 15% 60%, rgba(52,152,219,0.9), transparent 50%),
+          radial-gradient(circle at 40% 35%, rgba(231,76,60,0.8), transparent 50%),
+          radial-gradient(circle at 65% 75%, rgba(241,196,15,0.7), transparent 50%),
+          radial-gradient(circle at 85% 40%, rgba(155,89,182,0.7), transparent 45%);
+        "></div>
+        <div class="chart-legend">
+          <div class="legend-item">
+            <div class="legend-color" style="background:#2ecc71;"></div>
+            <span>PPP0 - Upload</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color" style="background:#e74c3c;"></div>
+            <span>PPP0 - Download</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color" style="background:#3498db;"></div>
+            <span>LAN2 - Upload</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color" style="background:#f1c40f;"></div>
+            <span>LAN2 - Download</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color" style="background:#e67e22;"></div>
+            <span>LAN1 (Rede Interna)</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- CPU, memória, load, severidade -->
+  <div class="sys-grid">
+    <section class="panel">
+      <div class="panel-header">
+        <span>Recursos</span>
+      </div>
+      <div class="sys-stats">
+        <div class="gauge-row">
+          <div class="gauge">
+            <div class="gauge-label">
+              <span>CPU</span>
+              <span>Atual</span>
+            </div>
+            <div class="gauge-content">
+              <div class="gauge-circle"></div>
+              <div>
+                <div class="gauge-value">74%</div>
+                <div class="gauge-sub">Utilização de CPU</div>
+              </div>
+            </div>
+            <div class="mini-chart"></div>
+          </div>
+          <div class="gauge">
+            <div class="gauge-label">
+              <span>Memória</span>
+              <span>Total: 3.7 GB</span>
+            </div>
+            <div class="gauge-content">
+              <div class="gauge-circle"></div>
+              <div>
+                <div class="gauge-value">51%</div>
+                <div class="gauge-sub">Utilização de memória</div>
+              </div>
+            </div>
+            <div class="mini-chart"></div>
+          </div>
+        </div>
+        <div class="gauge">
+          <div class="gauge-label">
+            <span>Load Average</span>
+            <span>1m / 15m / 5m</span>
+          </div>
+          <div class="mini-chart" style="height:80px;"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-header">
+        <span>Severidade de Eventos</span>
+      </div>
+      <div class="severity-row">
+        <div class="severity-box severity-disaster">
+          <div>0</div>
+          <div class="severity-label">Disaster</div>
+        </div>
+        <div class="severity-box severity-high">
+          <div>0</div>
+          <div class="severity-label">High</div>
+        </div>
+        <div class="severity-box severity-average">
+          <div>0</div>
+          <div class="severity-label">Average</div>
+        </div>
+        <div class="severity-box severity-warning">
+          <div>0</div>
+          <div class="severity-label">Warning</div>
+        </div>
+        <div class="severity-box severity-info">
+          <div>0</div>
+          <div class="severity-label">Information</div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+</body>
+</html>

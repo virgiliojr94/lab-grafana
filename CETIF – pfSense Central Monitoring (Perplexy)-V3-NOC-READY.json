@@ -1,0 +1,2667 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "Complete NOC dashboard with system health, network traffic, gateways, OpenVPN, IPsec, CARP and alerts",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 110,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "alexanderzobnin-zabbix-datasource",
+        "uid": "aec2bvjiis7pca"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 71,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "SVGBaseFix": true,
+        "add100Percentage": true,
+        "calcsMutation": "standard",
+        "centerAlignContent": false,
+        "codeData": "{}",
+        "css": "@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');*{margin:0;padding:0;box-sizing:border-box}body{background:#0b0f19;color:#e2e8f0;font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;line-height:1.6}.dashboard{min-height:100vh;padding:24px;background:linear-gradient(135deg,#0b0f19 0%,#1a1f2e 100%)}.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;padding:20px 24px;background:rgba(15,23,42,0.6);backdrop-filter:blur(10px);border-radius:16px;border:1px solid rgba(100,116,139,0.2);box-shadow:0 4px 6px rgba(0,0,0,0.3)}.logo-section{display:flex;align-items:center;gap:12px}.logo-icon{width:48px;height:48px;background:linear-gradient(135deg,#3b82f6,#8b5cf6);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:#fff;box-shadow:0 4px 12px rgba(59,130,246,0.4)}.logo-text{font-size:28px;font-weight:800;letter-spacing:-0.5px;background:linear-gradient(135deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.header-center{text-align:center;flex:1}.header-title{font-size:20px;font-weight:700;letter-spacing:1px;margin-bottom:4px;color:#f1f5f9}.header-subtitle{font-size:11px;color:#94a3b8;letter-spacing:0.5px;text-transform:uppercase}.clock-section{display:flex;flex-direction:column;align-items:flex-end}.clock{font-size:28px;font-weight:300;letter-spacing:1px;font-variant-numeric:tabular-nums;color:#f1f5f9}.clock-label{font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:1px;margin-top:2px}.main-grid{display:grid;grid-template-columns:420px 1fr;gap:24px;margin-bottom:24px}@media (max-width:1400px){.main-grid{grid-template-columns:1fr}}.card{background:rgba(15,23,42,0.6);backdrop-filter:blur(10px);border:1px solid rgba(100,116,139,0.2);border-radius:16px;padding:24px;box-shadow:0 4px 6px rgba(0,0,0,0.2)}.card-title{font-size:12px;font-weight:700;letter-spacing:2px;margin-bottom:20px;text-transform:uppercase;color:#64748b;display:flex;align-items:center;gap:8px}.card-title::before{content:'';width:3px;height:16px;background:linear-gradient(180deg,#3b82f6,#8b5cf6);border-radius:2px}.gauge-container{display:flex;justify-content:center;align-items:center;margin:20px 0}.gauge{position:relative;width:140px;height:140px}.gauge-bg{fill:none;stroke:#1e293b;stroke-width:12}.gauge-progress{fill:none;stroke-width:12;stroke-linecap:round;transition:stroke-dashoffset 0.5s ease,stroke 0.3s ease;transform:rotate(-90deg);transform-origin:50% 50%}.gauge-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}.gauge-value{font-size:32px;font-weight:700;display:block;line-height:1}.gauge-label{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:1px;margin-top:4px;display:block}.status-card{background:linear-gradient(135deg,rgba(15,23,42,0.9),rgba(30,41,59,0.9));border:1px solid rgba(100,116,139,0.3);border-radius:12px;padding:16px;margin-bottom:12px;position:relative;overflow:hidden;transition:all 0.3s ease}.status-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;transition:width 0.3s ease}.status-card:hover{transform:translateY(-2px);box-shadow:0 8px 16px rgba(0,0,0,0.3)}.status-card.critical::before{background:linear-gradient(180deg,#ef4444,#dc2626)}.status-card.warning::before{background:linear-gradient(180deg,#f59e0b,#d97706)}.status-card.success::before{background:linear-gradient(180deg,#10b981,#059669)}.status-card.info::before{background:linear-gradient(180deg,#3b82f6,#2563eb)}.status-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.status-title{font-size:13px;font-weight:700;color:#f1f5f9;letter-spacing:0.5px}.status-badge{padding:4px 12px;border-radius:20px;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;display:inline-flex;align-items:center;gap:6px}.status-badge::before{content:'';width:6px;height:6px;border-radius:50%;animation:pulse 2s infinite}.status-badge.up{background:rgba(16,185,129,0.15);color:#10b981;border:1px solid rgba(16,185,129,0.3)}.status-badge.up::before{background:#10b981}@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}.status-badge.warn{background:rgba(245,158,11,0.15);color:#f59e0b;border:1px solid rgba(245,158,11,0.3)}.status-badge.warn::before{background:#f59e0b}.status-badge.down{background:rgba(239,68,68,0.15);color:#ef4444;border:1px solid rgba(239,68,68,0.3)}.status-badge.down::before{background:#ef4444}.metric-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px}.metric-item{background:rgba(15,23,42,0.4);padding:12px;border-radius:8px;border:1px solid rgba(100,116,139,0.2)}.metric-label{font-size:10px;color:#94a3b8;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}.metric-value{font-size:18px;font-weight:700;color:#f1f5f9;font-variant-numeric:tabular-nums}.metric-unit{font-size:11px;color:#64748b;margin-left:4px}.progress-bar{height:6px;background:rgba(15,23,42,0.6);border-radius:10px;overflow:hidden;margin-top:8px;position:relative}.progress-fill{height:100%;transition:width 0.5s ease;position:relative;border-radius:10px}.progress-fill::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);animation:shimmer 2s infinite}@keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}.progress-fill.cpu{background:linear-gradient(90deg,#3b82f6,#8b5cf6)}.progress-fill.memory{background:linear-gradient(90deg,#10b981,#059669)}.progress-fill.disk{background:linear-gradient(90deg,#f59e0b,#d97706)}.progress-fill.network{background:linear-gradient(90deg,#06b6d4,#0891b2)}.interface-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}.gateway-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}.vpn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}.alert-item{background:rgba(15,23,42,0.8);border-left:4px solid;padding:12px 16px;border-radius:8px;margin-bottom:10px;display:flex;align-items:start;gap:12px;transition:all 0.3s ease}.alert-item:hover{transform:translateX(4px)}.alert-item.critical{border-color:#ef4444;background:rgba(239,68,68,0.1)}.alert-item.warning{border-color:#f59e0b;background:rgba(245,158,11,0.1)}.alert-item.info{border-color:#3b82f6;background:rgba(59,130,246,0.1)}.alert-icon{font-size:18px;margin-top:2px}.alert-content{flex:1}.alert-severity{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}.alert-message{font-size:12px;color:#e2e8f0;line-height:1.5}.traffic-indicator{display:flex;align-items:center;gap:8px;margin:8px 0}.traffic-icon{font-size:14px}.traffic-label{font-size:11px;color:#94a3b8;min-width:80px}.traffic-value{font-size:13px;font-weight:700;color:#f1f5f9;font-variant-numeric:tabular-nums}.mini-chart{height:40px;background:rgba(15,23,42,0.4);border-radius:6px;margin-top:8px;position:relative;overflow:hidden}.summary-grid{display:grid;gap:12px}.summary-item{background:rgba(15,23,42,0.5);border:1px solid rgba(100,116,139,0.2);border-radius:10px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;transition:all 0.3s ease}.summary-item:hover{background:rgba(30,41,59,0.6);border-color:rgba(100,116,139,0.4)}.summary-label{font-size:11px;color:#94a3b8;font-weight:600;letter-spacing:0.5px;text-transform:uppercase}.summary-value{font-size:20px;font-weight:700;color:#f1f5f9;font-variant-numeric:tabular-nums}.summary-value.good{color:#10b981}.summary-value.warning{color:#f59e0b}.summary-value.critical{color:#ef4444}.global-status{background:linear-gradient(135deg,rgba(15,23,42,0.9),rgba(30,41,59,0.8));border:2px solid;border-radius:12px;padding:20px;text-align:center;margin-bottom:20px;position:relative;overflow:hidden}.global-status::before{content:'';position:absolute;top:0;left:0;right:0;height:4px}.global-status.ok{border-color:rgba(16,185,129,0.4)}.global-status.ok::before{background:linear-gradient(90deg,#10b981,#059669)}.global-status.degraded{border-color:rgba(245,158,11,0.4);animation:pulse-border 2s infinite}.global-status.degraded::before{background:linear-gradient(90deg,#f59e0b,#d97706)}.global-status.critical{border-color:rgba(239,68,68,0.4);animation:pulse-border 1s infinite}.global-status.critical::before{background:linear-gradient(90deg,#ef4444,#dc2626)}@keyframes pulse-border{0%,100%{border-color:rgba(239,68,68,0.4)}50%{border-color:rgba(239,68,68,0.8)}}.global-status-label{font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}.global-status-value{font-size:28px;font-weight:800;letter-spacing:-0.5px;margin-bottom:4px}.global-status-icon{font-size:48px;margin-bottom:12px;opacity:0.9}.scrollbar-thin::-webkit-scrollbar{width:6px;height:6px}.scrollbar-thin::-webkit-scrollbar-track{background:rgba(15,23,42,0.4)}.scrollbar-thin::-webkit-scrollbar-thumb{background:rgba(100,116,139,0.5);border-radius:3px}.scrollbar-thin::-webkit-scrollbar-thumb:hover{background:rgba(100,116,139,0.7)}",
+        "dynamicData": false,
+        "dynamicFieldDisplayValues": false,
+        "dynamicHtmlGraphics": false,
+        "dynamicProps": false,
+        "fitContentToPanel": true,
+        "html": "<div class=\"dashboard\"><div class=\"header\"><div class=\"logo-section\"><div class=\"logo-icon\">C</div><div class=\"logo-text\">CETIF</div></div><div class=\"header-center\"><div class=\"header-title\">pfSense Central Monitoring</div><div class=\"header-subtitle\">Real-time Network Operations Center Dashboard</div></div><div class=\"clock-section\"><div class=\"clock\" id=\"clock\">00:00:00</div><div class=\"clock-label\">Live Time</div></div></div><div class=\"main-grid\"><div><div class=\"card\"><div class=\"card-title\">System Health Overview</div><div id=\"global-status\"></div><div id=\"system-gauges\"></div></div><div class=\"card\" style=\"margin-top:24px\"><div class=\"card-title\">Critical Alerts & Warnings</div><div id=\"alerts\" class=\"scrollbar-thin\" style=\"max-height:400px;overflow-y:auto\"></div></div><div class=\"card\" style=\"margin-top:24px\"><div class=\"card-title\">Quick Status Summary</div><div class=\"summary-grid\" id=\"summary\"></div></div></div><div><div class=\"card\"><div class=\"card-title\">WAN Interfaces Status</div><div class=\"interface-grid\" id=\"wan-interfaces\"></div></div><div class=\"card\" style=\"margin-top:24px\"><div class=\"card-title\">Gateway Health Monitoring</div><div class=\"gateway-grid\" id=\"gateways\"></div></div><div class=\"card\" style=\"margin-top:24px\"><div class=\"card-title\">OpenVPN Services</div><div class=\"vpn-grid\" id=\"ovpn-servers\"></div></div><div class=\"card\" style=\"margin-top:24px\"><div class=\"card-title\">LAN / VLAN / DMZ Interfaces (Top 12 by Traffic)</div><div class=\"interface-grid\" id=\"lan-interfaces\"></div></div></div></div></div>",
+        "onInit": "",
+        "onInitOnResize": false,
+        "onRender": "(() => {\n  if (!htmlNode || !data || !data.series) return;\n\n  const el = (q) => htmlNode.querySelector(q);\n  const setText = (q, v) => { const n = el(q); if(n) n.innerHTML = v; };\n\n  const last = (series) => {\n    const n = series.fields.find(f => f.type === 'number');\n    if (n && n.values.length) return n.values.get(n.values.length - 1);\n    const s = series.fields.find(f => f.type === 'string');\n    if (s && s.values.length) return s.values.get(s.values.length - 1);\n    return null;\n  };\n\n  const findLastByName = (name) => {\n    const s = data.series.find(x => x.name === name);\n    return s ? last(s) : null;\n  };\n\n  const toNum = (v) => (isFinite(Number(v)) ? Number(v) : 0);\n\n  const bps = (v) => {\n    const x = Number(v ?? 0);\n    if (!isFinite(x) || x < 0) return '0 b/s';\n    const units = ['b/s','Kb/s','Mb/s','Gb/s','Tb/s'];\n    let i=0, val=x;\n    while (val >= 1024 && i < units.length-1){ val/=1024; i++; }\n    return `${val.toFixed(val >= 100 ? 0 : val >= 10 ? 1 : 2)} ${units[i]}`;\n  };\n\n  const formatUptime = (bootTime) => {\n    if (!bootTime) return '--';\n    const now = Math.floor(Date.now() / 1000);\n    const upSec = now - bootTime;\n    const days = Math.floor(upSec / 86400);\n    const hours = Math.floor((upSec % 86400) / 3600);\n    const mins = Math.floor((upSec % 3600) / 60);\n    if (days > 0) return `${days}d ${hours}h`;\n    if (hours > 0) return `${hours}h ${mins}m`;\n    return `${mins}m`;\n  };\n\n  const formatCertDays = (unixTime) => {\n    if (!unixTime) return null;\n    const now = Math.floor(Date.now() / 1000);\n    const diff = unixTime - now;\n    const days = Math.floor(diff / 86400);\n    return days;\n  };\n\n  const updateClock = () => {\n    const now = new Date();\n    const h = String(now.getHours()).padStart(2, '0');\n    const m = String(now.getMinutes()).padStart(2, '0');\n    const s = String(now.getSeconds()).padStart(2, '0');\n    setText('#clock', `${h}:${m}:${s}`);\n  };\n  updateClock();\n  setInterval(updateClock, 1000);\n\n  const rxRe = /^Incoming network traffic on (.+)$/i;\n  const txRe = /^Outgoing network traffic on (.+)$/i;\n  const rxErrRe = /^Incoming errors on (.+)$/i;\n  const txErrRe = /^Outgoing errors on (.+)$/i;\n\n  const byIf = new Map();\n  const ensure = (ifn) => {\n    if (!byIf.has(ifn)) byIf.set(ifn, { rx:0, tx:0, rxErr:0, txErr:0 });\n    return byIf.get(ifn);\n  };\n\n  for (const s of data.series) {\n    const name = s.name || '';\n    let m;\n    if ((m = name.match(rxRe))) ensure(m[1].trim()).rx = toNum(last(s));\n    else if ((m = name.match(txRe))) ensure(m[1].trim()).tx = toNum(last(s));\n    else if ((m = name.match(rxErrRe))) ensure(m[1].trim()).rxErr = toNum(last(s));\n    else if ((m = name.match(txErrRe))) ensure(m[1].trim()).txErr = toNum(last(s));\n  }\n\n  const isWan = (n) => /^WAN($|[_-])/i.test(n);\n\n  const items = [...byIf.entries()].map(([ifName, v]) => ({ ifName, ...v }));\n  const wan = items.filter(x => isWan(x.ifName));\n  const lan = items.filter(x => !isWan(x.ifName)).filter(x => !x.ifName.toLowerCase().startsWith('ovpns')).sort((a,b) => (b.rx+b.tx) - (a.rx+a.tx)).slice(0, 12);\n\n  const errTotal = items.reduce((acc, x) => acc + x.rxErr + x.txErr, 0);\n\n  const cpuIdle = toNum(findLastByName('CPU idle time'));\n  const cpuUser = toNum(findLastByName('CPU user time'));\n  const cpuSystem = toNum(findLastByName('CPU System time'));\n  const cpuUsage = 100 - cpuIdle;\n  const memAvail = toNum(findLastByName('Available memory (percent)'));\n  const memUsage = 100 - memAvail;\n  const memActive = toNum(findLastByName('Memory Active (percent)')) || 0;\n  const memCached = toNum(findLastByName('Memory Cached (percent)')) || 0;\n  const memBuffers = toNum(findLastByName('Memory Buffers (percent)')) || 0;\n  const memWired = toNum(findLastByName('Memory Wired (percent)')) || 0;\n  const memFree = toNum(findLastByName('Memory Free (percent)')) || 0;\n  const diskFree = toNum(findLastByName('Free disk space on / (percentage)'));\n  const diskUsage = 100 - diskFree;\n  const swapFree = toNum(findLastByName('Free swap space in %'));\n  const swapUsage = 100 - swapFree;\n  const swapUsageAlert = swapUsage > 5;\n  const procTotal = toNum(findLastByName('Number of processes'));\n  const procRun = toNum(findLastByName('Number of running processes'));\n  const bootTime = toNum(findLastByName('Host boot time'));\n  const uptime = formatUptime(bootTime);\n  const mbufUsage = toNum(findLastByName('MBUF Total Used (percent)'));\n  const newVersion = findLastByName('New Version of pfSense Available');\n  const certExpiry = toNum(findLastByName('Certificates Manager: earliest validTo'));\n  const certDays = formatCertDays(certExpiry);\n  const statesUsagePercentRaw = findLastByName('States Table Current (percent)');\n  const statesCurrent = toNum(findLastByName('States Table Current'));\n  const statesMax = toNum(findLastByName('States Table Max'));\n  let statesUsagePercent = toNum(statesUsagePercentRaw);\n  if (statesUsagePercent <= 0 && statesCurrent > 0 && statesMax > 0) statesUsagePercent = (statesCurrent / statesMax) * 100;\n  const dhcpProblems = toNum(findLastByName('DHCP Failover Pool Problems'));\n  const carpStatus = findLastByName('CARP Status');\n  const carpExpected = findLastByName('Expected CARP Status');\n  const ipsecStatus = findLastByName('IPsec Tunnel 1 VPN CIELO  Phase 1 Status');\n  const ipsecEnabled = findLastByName('IPsec Tunnel 1 VPN CIELO Tunnel Enabled');\n\n  const mkIfCard = (x) => {\n    const total = x.rx + x.tx;\n    const hasTraffic = total > 0;\n    const hasErr = (x.rxErr + x.txErr) > 0;\n    const adminStatus = findLastByName(`Interface ${x.ifName} Admin Status`);\n    const adminDown = adminStatus && (String(adminStatus).toLowerCase().includes('down') || String(adminStatus) === '0');\n    const linkStatus = findLastByName(`Interface ${x.ifName} Link Status`);\n    const linkDown = linkStatus && (String(linkStatus).toLowerCase().includes('down') || String(linkStatus) === '0');\n    let status = 'up', label = 'ONLINE';\n    if (adminDown) { status = 'down'; label = 'ADMINISTRATIVELY DOWN'; }\n    else if (linkDown) { status = 'down'; label = 'NO LINK'; }\n    else if (hasErr) { status = 'warn'; label = 'WARNING'; }\n    else if (!hasTraffic) { status = 'up'; label = 'IDLE - NO TRAFFIC'; }\n    const rxPct = total > 0 ? Math.min((x.rx / total) * 100, 100) : 0;\n    const txPct = total > 0 ? Math.min((x.tx / total) * 100, 100) : 0;\n    return `<div class=\\\"interface-card ${status}\\\"><div class=\\\"interface-header\\\"><div class=\\\"interface-name\\\">${x.ifName}</div><div class=\\\"status-badge ${status}\\\">${label}</div></div><div class=\\\"traffic-row\\\"><span class=\\\"traffic-label\\\">⬇ INBOUND</span><span class=\\\"traffic-value\\\">${bps(x.rx)}</span></div><div class=\\\"progress-bar\\\"><div class=\\\"progress-fill in\\\" style=\\\"width:${rxPct.toFixed(1)}%\\\"></div></div><div class=\\\"traffic-row\\\"><span class=\\\"traffic-label\\\">⬆ OUTBOUND</span><span class=\\\"traffic-value\\\">${bps(x.tx)}</span></div><div class=\\\"progress-bar\\\"><div class=\\\"progress-fill out\\\" style=\\\"width:${txPct.toFixed(1)}%\\\"></div></div><div class=\\\"error-row ${hasErr ? 'has-error' : ''}\\\"><span>Errors IN/OUT:</span><span>${x.rxErr} / ${x.txErr}</span></div></div>`;\n  };\n\n  setText('#wan-interfaces', wan.map(mkIfCard).join(''));\n  setText('#lan-interfaces', lan.map(mkIfCard).join(''));\n\n  const gwRaw = findLastByName('Gateway Status Raw');\n  const gwNames = ['WAN', 'GW_WAN_CTI', 'defualtvl', 'extranet_ctiGW2', 'extranet_sfzGW', 'GW_DMZ', 'intranet', 'srvsintranet'];\n  const gw = gwNames.map(name => ({ name, status: findLastByName(`Gateway ${name} Status`), loss: findLastByName(`Gateway ${name} Packet  Loss`), rtt: findLastByName(`Gateway ${name} RTT`), stddev: findLastByName(`Gateway ${name} RTT Std Deviation`) })).filter(g => g.status != null);\n  const gwOnline = gw.filter(g => { const s = String(g.status ?? '').trim().toLowerCase(); return s.includes('up') || s.includes('online') || s.includes('ok') || s === '0' || s === '0.0'; }).length;\n  const gwTotal = gw.length;\n  const gwStats = gw.reduce((acc, g) => { const s = (g.status ?? '').toString(); const isUp = (() => { const clean = s.trim().toLowerCase(); return clean.includes('up') || clean.includes('online') || clean.includes('ok') || clean === '0' || clean === '0.0'; })(); const lossNum = toNum((g.loss ?? '').toString().replace('%','')); const rttNum = toNum((g.rtt ?? '').toString().replace('ms','')); const stddevNum = toNum((g.stddev ?? '').toString().replace('ms','')); if (!isUp) acc.down++; else if (rttNum > 500) acc.down++; else if (lossNum >= 2 || stddevNum > 10 || rttNum > 200) acc.warn++; return acc; }, { down: 0, warn: 0 });\n\n  const criticalSignals = [gwStats.down > 0, statesUsagePercent > 85, swapUsage > 10, mbufUsage > 90, cpuUsage > 90, memUsage > 90, diskUsage > 90, carpStatus && carpExpected && carpStatus !== carpExpected];\n  const warningSignals = [gwStats.warn > 0, statesUsagePercent > 70, swapUsage > 5, mbufUsage > 80, cpuUsage > 80, memUsage > 80, diskUsage > 80, dhcpProblems > 0, errTotal > 100];\n  let globalBadge = 'up', globalLabel = 'FIREWALL OK', globalColor = '#00e676';\n  if (criticalSignals.some(Boolean)) { globalBadge = 'down'; globalLabel = 'FIREWALL CRITICAL'; globalColor = '#ff1744'; }\n  else if (warningSignals.some(Boolean)) { globalBadge = 'warn'; globalLabel = 'FIREWALL DEGRADED'; globalColor = '#ffc107'; }\n\n  const summaryHTML = `<div class=\\\"summary-item\\\" style=\\\"border-left:4px solid ${globalColor};background:rgba(255,255,255,0.03)\\\"><span class=\\\"summary-label\\\">Global Status</span><span class=\\\"summary-value\\\" style=\\\"color:${globalColor};font-weight:800\\\">${globalLabel}</span></div><div class=\\\"summary-item\\\"><span class=\\\"summary-label\\\">WANs Monitored</span><span class=\\\"summary-value\\\">${wan.length}</span></div><div class=\\\"summary-item\\\"><span class=\\\"summary-label\\\">Gateways</span><span class=\\\"summary-value\\\" style=\\\"color:${gwOnline < gwTotal ? '#ffc107' : '#00e676'}\\\">${gwOnline} / ${gwTotal}</span></div><div class=\\\"summary-item\\\"><span class=\\\"summary-label\\\">Total Errors</span><span class=\\\"summary-value\\\" style=\\\"color:${errTotal > 0 ? '#ff1744' : '#00e676'}\\\">${errTotal}</span></div><div class=\\\"summary-item\\\" style=\\\"margin-top:20px\\\"><span class=\\\"summary-label\\\">CPU Usage</span><span class=\\\"summary-value\\\" style=\\\"color:${cpuUsage > 90 ? '#ff1744' : cpuUsage > 80 ? '#ffc107' : '#00e676'}\\\">${cpuUsage.toFixed(1)}%</span></div><div class=\\\"summary-item\\\"><span class=\\\"summary-label\\\">Memory Usage</span><span class=\\\"summary-value\\\" style=\\\"color:${memUsage > 90 ? '#ff1744' : memUsage > 80 ? '#ffc107' : '#00e676'}\\\">${memUsage.toFixed(1)}%</span></div><div class=\\\"summary-item\\\"><span class=\\\"summary-label\\\">Disk Usage</span><span class=\\\"summary-value\\\" style=\\\"color:${diskUsage > 90 ? '#ff1744' : diskUsage > 80 ? '#ffc107' : '#00e676'}\\\">${diskUsage.toFixed(1)}%</span></div><div class=\\\"summary-item\\\"><span class=\\\"summary-label\\\">Swap Usage</span><span class=\\\"summary-value\\\" style=\\\"color:${swapUsage > 10 ? '#ff1744' : swapUsage > 5 ? '#ffc107' : '#00e676'}\\\">${swapUsage.toFixed(1)}%</span></div><div class=\\\"summary-item\\\" style=\\\"margin-top:20px;border:2px solid ${statesUsagePercent > 85 ? '#ff1744' : statesUsagePercent > 70 ? '#ffc107' : '#2196f3'}\\\"><span class=\\\"summary-label\\\">States Table Usage</span><span class=\\\"summary-value\\\" style=\\\"color:${statesUsagePercent > 85 ? '#ff1744' : statesUsagePercent > 70 ? '#ffc107' : '#00e676'}; font-size:18px\\\">${statesUsagePercent.toFixed(1)}%</span></div><div class=\\\"summary-item\\\"><span class=\\\"summary-label\\\">Uptime</span><span class=\\\"summary-value\\\">${uptime}</span></div><div class=\\\"summary-item\\\"><span class=\\\"summary-label\\\">Processes</span><span class=\\\"summary-value\\\">${procRun} / ${procTotal}</span></div>`;\n  setText('#summary', summaryHTML);\n\n  const gwSummaryHTML = `<div class=\\\"summary-item\\\"><span class=\\\"summary-label\\\">Gateways Online</span><span class=\\\"summary-value\\\" style=\\\"color:${gwOnline < gwTotal ? '#ffc107' : '#00e676'}\\\">${gwOnline} / ${gwTotal}</span></div><div class=\\\"summary-item\\\"><span class=\\\"summary-label\\\">Raw Status</span><span class=\\\"summary-value\\\" style=\\\"font-size:10px\\\">${gwRaw ?? '--'}</span></div>`;\n  setText('#gateway-summary', gwSummaryHTML);\n\n  const mkGwCard = (g) => { const s = (g.status ?? '').toString(); const isUp = (() => { const clean = s.trim().toLowerCase(); return clean.includes('up') || clean.includes('online') || clean.includes('ok') || clean === '0' || clean === '0.0'; })(); const lossNum = toNum((g.loss ?? '').toString().replace('%','')); const rttNum = toNum((g.rtt ?? '').toString().replace('ms','')); const stddevNum = toNum((g.stddev ?? '').toString().replace('ms','')); let badge = 'up', label = 'ONLINE'; if (!isUp) { badge='down'; label='OFFLINE'; } else if (rttNum > 500) { badge='down'; label='CRITICAL LATENCY'; } else if (lossNum >= 2 || stddevNum > 10 || rttNum > 200) { badge='warn'; label='DEGRADED'; } const lossTxt = g.loss == null ? '--' : (typeof g.loss === 'number' ? `${g.loss.toFixed(1)}%` : String(g.loss)); const rttTxt = g.rtt == null ? '--' : (typeof g.rtt === 'number' ? `${g.rtt.toFixed(1)} ms` : String(g.rtt)); const stddevTxt = g.stddev == null ? '--' : (typeof g.stddev === 'number' ? `${g.stddev.toFixed(1)} ms` : String(g.stddev)); return `<div class=\\\"gateway-card ${badge}\\\" style=\\\"${badge === 'down' && label === 'CRITICAL LATENCY' ? 'border:3px solid #ff1744;box-shadow:0 0 10px rgba(255,23,68,0.5)' : ''}\\\"><div class=\\\"gateway-header\\\"><div class=\\\"interface-name\\\">GW ${g.name}</div><div class=\\\"status-badge ${badge}\\\">${label}</div></div><div class=\\\"metric-row\\\"><span class=\\\"metric-label\\\">Packet Loss</span><span class=\\\"metric-value\\\" style=\\\"color:${lossNum > 2 ? '#ff1744' : '#00e676'}\\\">${lossTxt}</span></div><div class=\\\"metric-row\\\"><span class=\\\"metric-label\\\">RTT</span><span class=\\\"metric-value\\\" style=\\\"color:${rttNum > 500 ? '#ff1744' : rttNum > 200 ? '#ffc107' : '#00e676'}\\\">${rttTxt}</span></div><div class=\\\"metric-row\\\"><span class=\\\"metric-label\\\">Jitter (stddev)</span><span class=\\\"metric-value\\\" style=\\\"color:${stddevNum > 10 ? '#ffc107' : '#888'}\\\">${stddevTxt}</span></div></div>`; };\n  setText('#gateways', gw.map(mkGwCard).join(''));\n\n  const ovpnRe = /^OpenVPN Server (.+) Clients Connected$/i;\n  const ovpnStatusRe = /^OpenVPN Server (.+) Tunnel Status$/i;\n  const ovpnServers = [];\n  const ovpnStatusInfo = (v) => {\n    const s = String(v ?? '').trim().toLowerCase();\n    if (!s) return { level: 'down', isUp: false, label: 'UNKNOWN' };\n    if (s.includes('up') || s.includes('connected') || s.includes('ok') || s.includes('listening')) return { level: 'up', isUp: true, label: 'UP' };\n    if (s.includes('reconnecting')) return { level: 'warn', isUp: false, label: 'RECONNECTING' };\n    if (s.includes('waiting')) return { level: 'warn', isUp: false, label: 'WAITING' };\n    if (s.includes('down') || s.includes('disconnected') || s.includes('fail')) return { level: 'down', isUp: false, label: 'DOWN' };\n    const n = Number(s);\n    if (isFinite(n)) {\n      if (n === 0) return { level: 'down', isUp: false, label: 'DOWN' };\n      if (n === 1) return { level: 'up', isUp: true, label: 'UP' };\n      if (n === 2) return { level: 'warn', isUp: false, label: 'NONE' };\n      if (n === 3) return { level: 'warn', isUp: false, label: 'RECONNECTING' };\n      if (n === 4) return { level: 'warn', isUp: false, label: 'WAITING' };\n      if (n === 5) return { level: 'up', isUp: true, label: 'UP/LISTENING' };\n      return { level: n > 0 ? 'up' : 'down', isUp: n > 0, label: n > 0 ? 'UP' : 'DOWN' };\n    }\n    return { level: 'down', isUp: false, label: 'UNKNOWN' };\n  };\n  for (const s of data.series) { const name = s.name || ''; const m = name.match(ovpnRe); if (!m) continue; const serverName = m[1].trim(); const clients = toNum(last(s)); const statusSeries = data.series.find(x => x.name === `OpenVPN Server ${serverName} Tunnel Status`); const tunnelStatus = statusSeries ? last(statusSeries) : null; ovpnServers.push({ serverName, clients, tunnelStatus }); }\n  ovpnServers.sort((a,b) => b.clients - a.clients);\n  const totalClients = ovpnServers.reduce((acc,x)=>acc+x.clients,0);\n  const tunnelsUp = ovpnServers.filter(x => ovpnStatusInfo(x.tunnelStatus).isUp).length;\n  const vpnSummaryHTML = `<div class=\"summary-item\"><span class=\"summary-label\">Total VPN Clients</span><span class=\"summary-value\" style=\"color:#2196f3\">${totalClients}</span></div><div class=\"summary-item\"><span class=\"summary-label\">Tunnels UP</span><span class=\"summary-value\">${tunnelsUp} / ${ovpnServers.length}</span></div>`;\n  setText('#vpn-summary', vpnSummaryHTML);\n\n  const mkOvpnCard = (o) => { const info = ovpnStatusInfo(o.tunnelStatus); let badge='down', label='DOWN'; if (info.level === 'warn') { badge='warn'; label=info.label; } else if (info.isUp) { if (o.clients > 0) { badge='up'; label='ACTIVE'; } else { badge='warn'; label='IDLE'; } } const tunnelLabel = info.label === 'UNKNOWN' ? (o.tunnelStatus ?? 'unknown') : info.label + (o.tunnelStatus == null ? '' : ' (' + o.tunnelStatus + ')'); return `<div class=\"ovpn-card\"><div class=\"ovpn-header\"><div class=\"ovpn-name\">${o.serverName}</div><div class=\"status-badge ${badge}\">${label}</div></div><div class=\"client-count\">${o.clients}</div><div style=\"text-align:center;font-size:10px;color:#888;margin-top:5px\">CONNECTED CLIENTS</div><div style=\"text-align:center;font-size:9px;color:#666;margin-top:3px\">Tunnel: ${tunnelLabel}</div></div>`; };\n  const topOvpn = ovpnServers;\n  setText('#ovpn-servers', topOvpn.length ? topOvpn.map(mkOvpnCard).join('') : '<div style=\"text-align:center;color:#888;padding:20px\">No VPN servers</div>');\n\n\n  const alerts = [];\n  if (swapUsageAlert) { const severity = swapUsage > 10 ? 'critical' : 'warn'; alerts.push({ severity, msg: `Swap usage detected: ${swapUsage.toFixed(1)}% - Memory pressure!` }); }\n  if (statesUsagePercent > 85) { alerts.push({ severity: 'critical', msg: `STATES TABLE CRITICAL: ${statesUsagePercent.toFixed(1)}% - Risk of connection drops!` }); } else if (statesUsagePercent > 70) { alerts.push({ severity: 'warn', msg: `States table usage high: ${statesUsagePercent.toFixed(1)}% - Monitor closely` }); }\n  if (newVersion && String(newVersion).toLowerCase() !== 'no') { alerts.push({ severity: 'warn', msg: `pfSense update available: ${newVersion}` }); }\n  if (certDays !== null && certDays < 30) { alerts.push({ severity: certDays < 7 ? 'critical' : 'warn', msg: `Certificate expires in ${certDays} days` }); }\n  if (mbufUsage > 80) { alerts.push({ severity: 'critical', msg: `MBUF usage critical: ${mbufUsage.toFixed(1)}%` }); }\n  if (dhcpProblems > 0) { alerts.push({ severity: 'warn', msg: `DHCP Failover issues: ${dhcpProblems}` }); }\n  if (carpStatus && carpExpected && carpStatus !== carpExpected) { alerts.push({ severity: 'critical', msg: `CARP status mismatch: ${carpStatus} (expected ${carpExpected})` }); }\n  if (ipsecStatus && ipsecEnabled !== '1') { const st = String(ipsecStatus).toLowerCase(); if (!st.includes('up') && !st.includes('connected')) { alerts.push({ severity: 'warn', msg: `IPsec VPN CIELO: ${ipsecStatus}` }); } }\n  if (errTotal > 100) { alerts.push({ severity: 'warn', msg: `High interface errors: ${errTotal} total` }); }\n  const alertsHTML = alerts.length === 0 ? '<div class=\\\"summary-item\\\" style=\\\"background:#1a3a1a\\\"><span class=\\\"summary-label\\\">System Status</span><span class=\\\"summary-value\\\" style=\\\"color:#00e676\\\">ALL OK</span></div>' : alerts.map(a => { const color = a.severity === 'critical' ? '#ff1744' : '#ffc107'; return `<div class=\\\"summary-item\\\" style=\\\"border-left:3px solid ${color}\\\"><span class=\\\"summary-label\\\" style=\\\"color:${color}\\\">${a.severity.toUpperCase()}</span><span class=\\\"summary-value\\\" style=\\\"font-size:10px;color:#fff\\\">${a.msg}</span></div>`; }).join('');\n  setText('#alerts', alertsHTML);\n})();",
+        "overflow": "visible",
+        "panelupdateOnMount": true,
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "renderOnMount": true,
+        "rootCSS": "",
+        "svgBaseFix": false,
+        "useGrafanaScrollbar": false
+      },
+      "pluginVersion": "2.2.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Incoming network traffic on WAN"
+          },
+          "queryType": "0",
+          "refId": "A",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Outgoing network traffic on WAN"
+          },
+          "queryType": "0",
+          "refId": "B",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Incoming Errors on WAN"
+          },
+          "queryType": "0",
+          "refId": "C",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Outgoing errors on WAN"
+          },
+          "queryType": "0",
+          "refId": "D",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Incoming network traffic on WAN_CTI"
+          },
+          "queryType": "0",
+          "refId": "E",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Outgoing network traffic on WAN_CTI"
+          },
+          "queryType": "0",
+          "refId": "F",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Incoming Errors on WAN_CTI"
+          },
+          "queryType": "0",
+          "refId": "G",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Outgoing errors on WAN_CTI"
+          },
+          "queryType": "0",
+          "refId": "H",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Incoming network traffic on ANELGOV"
+          },
+          "queryType": "0",
+          "refId": "I",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Outgoing network traffic on ANELGOV"
+          },
+          "queryType": "0",
+          "refId": "J",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Incoming Errors on ANELGOV"
+          },
+          "queryType": "0",
+          "refId": "K",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Outgoing errors on ANELGOV"
+          },
+          "queryType": "0",
+          "refId": "L",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Incoming network traffic on DEFAULT"
+          },
+          "queryType": "0",
+          "refId": "M",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Outgoing network traffic on DEFAULT"
+          },
+          "queryType": "0",
+          "refId": "N",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Incoming Errors on DEFAULT"
+          },
+          "queryType": "0",
+          "refId": "O",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Outgoing errors on DEFAULT"
+          },
+          "queryType": "0",
+          "refId": "P",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Incoming network traffic on DHI"
+          },
+          "queryType": "0",
+          "refId": "Q",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Outgoing network traffic on DHI"
+          },
+          "queryType": "0",
+          "refId": "R",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Incoming Errors on DHI"
+          },
+          "queryType": "0",
+          "refId": "S",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Outgoing errors on DHI"
+          },
+          "queryType": "0",
+          "refId": "T",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Incoming network traffic on DMCS"
+          },
+          "queryType": "0",
+          "refId": "U",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Outgoing network traffic on DMCS"
+          },
+          "queryType": "0",
+          "refId": "V",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Incoming Errors on DMCS"
+          },
+          "queryType": "0",
+          "refId": "W",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Outgoing errors on DMCS"
+          },
+          "queryType": "0",
+          "refId": "X",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Incoming network traffic on DMZ"
+          },
+          "queryType": "0",
+          "refId": "Y",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Outgoing network traffic on DMZ"
+          },
+          "queryType": "0",
+          "refId": "Z",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Incoming Errors on DMZ"
+          },
+          "queryType": "0",
+          "refId": "AA",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Outgoing errors on DMZ"
+          },
+          "queryType": "0",
+          "refId": "AB",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Incoming network traffic on EXTRANET_SFZ"
+          },
+          "queryType": "0",
+          "refId": "AC",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Outgoing network traffic on EXTRANET_SFZ"
+          },
+          "queryType": "0",
+          "refId": "AD",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Incoming Errors on EXTRANET_SFZ"
+          },
+          "queryType": "0",
+          "refId": "AE",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Outgoing errors on EXTRANET_SFZ"
+          },
+          "queryType": "0",
+          "refId": "AF",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Incoming network traffic on INTRANET"
+          },
+          "queryType": "0",
+          "refId": "AG",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Outgoing network traffic on INTRANET"
+          },
+          "queryType": "0",
+          "refId": "AH",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Incoming Errors on INTRANET"
+          },
+          "queryType": "0",
+          "refId": "AI",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Outgoing errors on INTRANET"
+          },
+          "queryType": "0",
+          "refId": "AJ",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Incoming network traffic on PALACIO"
+          },
+          "queryType": "0",
+          "refId": "AK",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Outgoing network traffic on PALACIO"
+          },
+          "queryType": "0",
+          "refId": "AL",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Incoming Errors on PALACIO"
+          },
+          "queryType": "0",
+          "refId": "AM",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Outgoing errors on PALACIO"
+          },
+          "queryType": "0",
+          "refId": "AN",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Incoming network traffic on REDERIS"
+          },
+          "queryType": "0",
+          "refId": "AO",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Outgoing network traffic on REDERIS"
+          },
+          "queryType": "0",
+          "refId": "AP",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Incoming Errors on REDERIS"
+          },
+          "queryType": "0",
+          "refId": "AQ",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Outgoing errors on REDERIS"
+          },
+          "queryType": "0",
+          "refId": "AR",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Incoming network traffic on SRVSINTRANET"
+          },
+          "queryType": "0",
+          "refId": "AS",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Outgoing network traffic on SRVSINTRANET"
+          },
+          "queryType": "0",
+          "refId": "AT",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Incoming Errors on SRVSINTRANET"
+          },
+          "queryType": "0",
+          "refId": "AU",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Outgoing errors on SRVSINTRANET"
+          },
+          "queryType": "0",
+          "refId": "AV",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Incoming network traffic on TCE"
+          },
+          "queryType": "0",
+          "refId": "AW",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Outgoing network traffic on TCE"
+          },
+          "queryType": "0",
+          "refId": "AX",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Incoming Errors on TCE"
+          },
+          "queryType": "0",
+          "refId": "AY",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Outgoing errors on TCE"
+          },
+          "queryType": "0",
+          "refId": "AZ",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Incoming network traffic on em0.20"
+          },
+          "queryType": "0",
+          "refId": "BA",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Outgoing network traffic on em0.20"
+          },
+          "queryType": "0",
+          "refId": "BB",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Incoming Errors on em0.20"
+          },
+          "queryType": "0",
+          "refId": "BC",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Outgoing errors on em0.20"
+          },
+          "queryType": "0",
+          "refId": "BD",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Incoming network traffic on em0.6"
+          },
+          "queryType": "0",
+          "refId": "BE",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Outgoing network traffic on em0.6"
+          },
+          "queryType": "0",
+          "refId": "BF",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Incoming Errors on em0.6"
+          },
+          "queryType": "0",
+          "refId": "BG",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Outgoing errors on em0.6"
+          },
+          "queryType": "0",
+          "refId": "BH",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Incoming network traffic on em0.60"
+          },
+          "queryType": "0",
+          "refId": "BI",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Outgoing network traffic on em0.60"
+          },
+          "queryType": "0",
+          "refId": "BJ",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Incoming Errors on em0.60"
+          },
+          "queryType": "0",
+          "refId": "BK",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Outgoing errors on em0.60"
+          },
+          "queryType": "0",
+          "refId": "BL",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Gateway Status Raw"
+          },
+          "queryType": "0",
+          "refId": "BM",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Gateway GW_DMZ Status"
+          },
+          "queryType": "0",
+          "refId": "BN",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Gateway GW_DMZ Packet  Loss"
+          },
+          "queryType": "0",
+          "refId": "BO",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Gateway GW_DMZ RTT"
+          },
+          "queryType": "0",
+          "refId": "BP",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Gateway GW_DMZ RTT Std Deviation"
+          },
+          "queryType": "0",
+          "refId": "BQ",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Gateway GW_WAN_CTI Status"
+          },
+          "queryType": "0",
+          "refId": "BR",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Gateway GW_WAN_CTI Packet  Loss"
+          },
+          "queryType": "0",
+          "refId": "BS",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Gateway GW_WAN_CTI RTT"
+          },
+          "queryType": "0",
+          "refId": "BT",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Gateway GW_WAN_CTI RTT Std Deviation"
+          },
+          "queryType": "0",
+          "refId": "BU",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Gateway WAN Status"
+          },
+          "queryType": "0",
+          "refId": "BV",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Gateway WAN Packet  Loss"
+          },
+          "queryType": "0",
+          "refId": "BW",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Gateway WAN RTT"
+          },
+          "queryType": "0",
+          "refId": "BX",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Gateway WAN RTT Std Deviation"
+          },
+          "queryType": "0",
+          "refId": "BY",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Gateway defualtvl Status"
+          },
+          "queryType": "0",
+          "refId": "BZ",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Gateway defualtvl Packet  Loss"
+          },
+          "queryType": "0",
+          "refId": "CA",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Gateway defualtvl RTT"
+          },
+          "queryType": "0",
+          "refId": "CB",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Gateway defualtvl RTT Std Deviation"
+          },
+          "queryType": "0",
+          "refId": "CC",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Gateway extranet_ctiGW2 Status"
+          },
+          "queryType": "0",
+          "refId": "CD",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Gateway extranet_ctiGW2 Packet  Loss"
+          },
+          "queryType": "0",
+          "refId": "CE",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Gateway extranet_ctiGW2 RTT"
+          },
+          "queryType": "0",
+          "refId": "CF",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Gateway extranet_ctiGW2 RTT Std Deviation"
+          },
+          "queryType": "0",
+          "refId": "CG",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Gateway extranet_sfzGW Status"
+          },
+          "queryType": "0",
+          "refId": "CH",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Gateway extranet_sfzGW Packet  Loss"
+          },
+          "queryType": "0",
+          "refId": "CI",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Gateway extranet_sfzGW RTT"
+          },
+          "queryType": "0",
+          "refId": "CJ",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Gateway extranet_sfzGW RTT Std Deviation"
+          },
+          "queryType": "0",
+          "refId": "CK",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Gateway intranet Status"
+          },
+          "queryType": "0",
+          "refId": "CL",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Gateway intranet Packet  Loss"
+          },
+          "queryType": "0",
+          "refId": "CM",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Gateway intranet RTT"
+          },
+          "queryType": "0",
+          "refId": "CN",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Gateway intranet RTT Std Deviation"
+          },
+          "queryType": "0",
+          "refId": "CO",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Gateway srvsintranet Status"
+          },
+          "queryType": "0",
+          "refId": "CP",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Gateway srvsintranet Packet  Loss"
+          },
+          "queryType": "0",
+          "refId": "CQ",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Gateway srvsintranet RTT"
+          },
+          "queryType": "0",
+          "refId": "CR",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Gateway srvsintranet RTT Std Deviation"
+          },
+          "queryType": "0",
+          "refId": "CS",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "OpenVPN Server CETIF Clients Connected"
+          },
+          "queryType": "0",
+          "refId": "CT",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "OpenVPN Server CETIF Tunnel Status"
+          },
+          "queryType": "0",
+          "refId": "CU",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "OpenVPN Server DENASUS Clients Connected"
+          },
+          "queryType": "0",
+          "refId": "CV",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "OpenVPN Server DENASUS Tunnel Status"
+          },
+          "queryType": "0",
+          "refId": "CW",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "OpenVPN Server FIPLAN Clients Connected"
+          },
+          "queryType": "0",
+          "refId": "CX",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "OpenVPN Server FIPLAN Tunnel Status"
+          },
+          "queryType": "0",
+          "refId": "CY",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "OpenVPN Server IBROWSE Clients Connected"
+          },
+          "queryType": "0",
+          "refId": "CZ",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "OpenVPN Server IBROWSE Tunnel Status"
+          },
+          "queryType": "0",
+          "refId": "DA",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "OpenVPN Server IBROWSE-CGE Clients Connected"
+          },
+          "queryType": "0",
+          "refId": "DB",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "OpenVPN Server IBROWSE-CGE Tunnel Status"
+          },
+          "queryType": "0",
+          "refId": "DC",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "OpenVPN Server PCIVIL Clients Connected"
+          },
+          "queryType": "0",
+          "refId": "DD",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "OpenVPN Server PCIVIL Tunnel Status"
+          },
+          "queryType": "0",
+          "refId": "DE",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "OpenVPN Server SEFAZ Clients Connected"
+          },
+          "queryType": "0",
+          "refId": "DF",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "OpenVPN Server SEFAZ Tunnel Status"
+          },
+          "queryType": "0",
+          "refId": "DG",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "OpenVPN Server SEFAZ - RECEITA Clients Connected"
+          },
+          "queryType": "0",
+          "refId": "DH",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "OpenVPN Server SEFAZ - RECEITA Tunnel Status"
+          },
+          "queryType": "0",
+          "refId": "DI",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "OpenVPN Server SEPLAN Clients Connected"
+          },
+          "queryType": "0",
+          "refId": "DJ",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "OpenVPN Server SEPLAN Tunnel Status"
+          },
+          "queryType": "0",
+          "refId": "DK",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "OpenVPN Server VPN MATRIZ-JUNDIA Clients Connected"
+          },
+          "queryType": "0",
+          "refId": "DL",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "OpenVPN Server VPN MATRIZ-JUNDIA Tunnel Status"
+          },
+          "queryType": "0",
+          "refId": "DM",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "OpenVPN Server VPN_CARCD Clients Connected"
+          },
+          "queryType": "0",
+          "refId": "DN",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "OpenVPN Server VPN_CARCD Tunnel Status"
+          },
+          "queryType": "0",
+          "refId": "DO",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "OpenVPN Server VPN_LUCIO_MT Clients Connected"
+          },
+          "queryType": "0",
+          "refId": "DP",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "OpenVPN Server VPN_LUCIO_MT Tunnel Status"
+          },
+          "queryType": "0",
+          "refId": "DQ",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "CPU idle time"
+          },
+          "queryType": "0",
+          "refId": "DR",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "CPU user time"
+          },
+          "queryType": "0",
+          "refId": "DS",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "CPU System time"
+          },
+          "queryType": "0",
+          "refId": "DT",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Available memory (percent)"
+          },
+          "queryType": "0",
+          "refId": "DU",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Free disk space on / (percentage)"
+          },
+          "queryType": "0",
+          "refId": "DV",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Free swap space in %"
+          },
+          "queryType": "0",
+          "refId": "DW",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Number of processes"
+          },
+          "queryType": "0",
+          "refId": "DX",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Number of running processes"
+          },
+          "queryType": "0",
+          "refId": "DY",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Host boot time"
+          },
+          "queryType": "0",
+          "refId": "DZ",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Host local time"
+          },
+          "queryType": "0",
+          "refId": "EA",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "IPsec Tunnel 1 VPN CIELO  Phase 1 Status"
+          },
+          "queryType": "0",
+          "refId": "EB",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "IPsec Tunnel 1 VPN CIELO Tunnel Enabled"
+          },
+          "queryType": "0",
+          "refId": "EC",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "CARP Status"
+          },
+          "queryType": "0",
+          "refId": "ED",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Expected CARP Status"
+          },
+          "queryType": "0",
+          "refId": "EE",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Certificates Manager: earliest validTo"
+          },
+          "queryType": "0",
+          "refId": "EF",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "DHCP Failover Pool Problems"
+          },
+          "queryType": "0",
+          "refId": "EG",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "MBUF Total Used (percent)"
+          },
+          "queryType": "0",
+          "refId": "EH",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "States Table Current"
+          },
+          "queryType": "0",
+          "refId": "EJ",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "States Table Current (percent)"
+          },
+          "queryType": "0",
+          "refId": "EK",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "States Table Max"
+          },
+          "queryType": "0",
+          "refId": "EL",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "New Version of pfSense Available"
+          },
+          "queryType": "0",
+          "refId": "EI",
+          "resultFormat": "time_series"
+        }
+      ],
+      "title": "CETIF – pfSense Central Monitoring",
+      "type": "gapit-htmlgraphics-panel"
+    }
+  ],
+  "preload": false,
+  "refresh": "30s",
+  "schemaVersion": 40,
+  "tags": [
+    "pfsense",
+    "zabbix",
+    "CETIF",
+    "monitoring",
+    "production",
+    "noc"
+  ],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-3h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "CETIF – pfSense Central Monitoring (Perplexy-v4)",
+  "uid": "CETIF_pfsense_production-v4",
+  "version": 7,
+  "weekStart": ""
+}

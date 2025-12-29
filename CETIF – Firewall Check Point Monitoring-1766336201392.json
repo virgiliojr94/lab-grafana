@@ -1,0 +1,541 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 105,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "alexanderzobnin-zabbix-datasource",
+        "uid": "aec2bvjiis7pca"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 32,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "SVGBaseFix": true,
+        "add100Percentage": true,
+        "calcsMutation": "standard",
+        "centerAlignContent": false,
+        "codeData": "{}",
+        "css": ":root{\n      --bg:#0a0b0d;\n      --panel:#0f1116cc;\n      --panel2:#0c0e12cc;\n      --stroke:#1e232d;\n      --stroke2:#2a3240;\n      --text:#e7ecf7;\n      --muted:#94a3b8;\n      --ok:#22c55e;\n      --warn:#f59e0b;\n      --bad:#ef4444;\n      --info:#38bdf8;\n      --shadow: 0 18px 50px rgba(0,0,0,.45);\n      --radius: 18px;\n      --radius2: 12px;\n      --gutter: 18px;\n      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, \"Noto Sans\", \"Helvetica Neue\", sans-serif;\n    }\n\n    *{box-sizing:border-box}\n    html,body{height:100%}\n    body{\n      margin:0;\n      color:var(--text);\n      font-family:var(--font);\n      background:\n        radial-gradient(1200px 700px at 20% 20%, rgba(34,197,94,.10), transparent 60%),\n        radial-gradient(900px 600px at 80% 35%, rgba(56,189,248,.08), transparent 55%),\n        radial-gradient(700px 500px at 55% 80%, rgba(245,158,11,.06), transparent 55%),\n        linear-gradient(180deg, #07080a, #0a0b0d 40%, #07080a);\n      overflow-x:hidden;\n    }\n    /* subtle triangles pattern */\n    body::before{\n      content:\"\";\n      position:fixed; inset:0;\n      background-image:\n        linear-gradient(60deg, rgba(255,255,255,.03) 12%, transparent 12% 88%, rgba(255,255,255,.03) 88%),\n        linear-gradient(-60deg, rgba(255,255,255,.02) 12%, transparent 12% 88%, rgba(255,255,255,.02) 88%);\n      background-size: 120px 120px;\n      opacity:.22;\n      pointer-events:none;\n      mix-blend-mode:overlay;\n    }\n\n    .wrap{\n      width:min(1420px, 96vw);\n      margin: 20px auto 34px;\n      position:relative;\n    }\n\n    .panel{\n      background: linear-gradient(180deg, rgba(18,21,28,.88), rgba(10,12,16,.82));\n      border:1px solid rgba(42,50,64,.7);\n      border-top-color: rgba(90,105,130,.28);\n      border-left-color: rgba(90,105,130,.22);\n      border-radius: var(--radius);\n      box-shadow: var(--shadow);\n      overflow:hidden;\n      position:relative;\n    }\n    .panel::after{\n      content:\"\";\n      position:absolute; inset:0;\n      background:\n        radial-gradient(900px 200px at 40% -40px, rgba(255,255,255,.10), transparent 60%),\n        radial-gradient(600px 240px at 110% 30%, rgba(34,197,94,.06), transparent 55%);\n      opacity:.35;\n      pointer-events:none;\n    }\n\n    .topbar{\n      display:flex;\n      align-items:center;\n      justify-content:space-between;\n      padding:18px 22px;\n    }\n    .brand{\n      font-weight:800;\n      letter-spacing:.08em;\n      font-size: 34px;\n      opacity:.95;\n    }\n    .titleBlock{\n      text-align:center;\n      line-height:1.05;\n      margin: 0 14px;\n    }\n    .titleBlock .h1{\n      font-weight:800;\n      letter-spacing:.08em;\n      text-transform:uppercase;\n      font-size: 20px;\n    }\n    .titleBlock .sub{\n      margin-top:4px;\n      font-size:12px;\n      color: var(--muted);\n      letter-spacing:.03em;\n    }\n    .clock{\n      font-variant-numeric: tabular-nums;\n      font-weight:800;\n      letter-spacing:.08em;\n      font-size: 18px;\n      opacity:.95;\n    }\n\n    /* main grid */\n    .grid{\n      display:grid;\n      grid-template-columns: 390px 1fr;\n      gap: var(--gutter);\n      margin-top: var(--gutter);\n    }\n\n    .stack{display:grid; gap:var(--gutter)}\n    .sectionTitle{\n      padding:14px 16px 10px;\n      text-transform:uppercase;\n      font-weight:800;\n      letter-spacing:.12em;\n      color:#dbe4ff;\n      font-size:14px;\n      text-align:center;\n      border-bottom:1px solid rgba(42,50,64,.6);\n      background: linear-gradient(180deg, rgba(255,255,255,.04), transparent);\n      position:relative;\n      z-index:1;\n    }\n\n    .content{\n      padding:14px 16px 16px;\n      position:relative;\n      z-index:1;\n    }\n\n    /* small \"status rows\" */\n    .statusRows{display:grid; gap:10px}\n    .statusRow{\n      display:flex; align-items:center; justify-content:space-between;\n      padding:10px 12px;\n      border-radius: 12px;\n      border:1px solid rgba(42,50,64,.7);\n      background: linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.25));\n    }\n    .left{\n      display:flex; align-items:center; gap:10px;\n      min-width:0;\n    }\n    .pillIcon{\n      width:26px; height:26px; border-radius:10px;\n      border:1px solid rgba(42,50,64,.8);\n      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.12), rgba(0,0,0,.25));\n      display:grid; place-items:center;\n      color:#cbd5e1;\n      flex:0 0 auto;\n    }\n    .label{\n      font-weight:700;\n      letter-spacing:.04em;\n      color:#d6deee;\n      font-size:12px;\n      text-transform:uppercase;\n      white-space:nowrap;\n      overflow:hidden;\n      text-overflow:ellipsis;\n    }\n    .tag{\n      font-weight:900;\n      letter-spacing:.10em;\n      font-size:12px;\n      padding:5px 10px;\n      border-radius:999px;\n      border:1px solid rgba(42,50,64,.8);\n      background: rgba(0,0,0,.25);\n    }\n    .tag.ok{color: var(--ok); box-shadow: 0 0 0 1px rgba(34,197,94,.12) inset}\n    .tag.warn{color: var(--warn)}\n    .tag.bad{color: var(--bad)}\n    .uptime{\n      margin-top:12px;\n      display:flex; align-items:center; justify-content:space-between;\n      padding:10px 12px;\n      border-radius: 12px;\n      border:1px solid rgba(42,50,64,.7);\n      background: linear-gradient(180deg, rgba(245,158,11,.05), rgba(0,0,0,.25));\n    }\n    .uptime .value{\n      font-weight:900;\n      font-variant-numeric: tabular-nums;\n      letter-spacing:.08em;\n      color:#f8d58b;\n    }\n\n    /* \"logo\" box */\n    .cpBox{\n      margin: 10px auto 12px;\n      display:flex;\n      align-items:center;\n      justify-content:center;\n      gap:10px;\n      padding:10px 12px;\n      width: fit-content;\n      border-radius: 999px;\n      border:1px solid rgba(42,50,64,.7);\n      background: rgba(0,0,0,.18);\n      box-shadow: 0 0 0 1px rgba(239,68,68,.06) inset;\n    }\n    .dot{\n      width:12px;height:12px;border-radius:50%;\n      background: radial-gradient(circle at 30% 30%, #ff7aa3, #d10a52);\n      box-shadow: 0 0 22px rgba(236,72,153,.35);\n    }\n    .cpBox span{\n      font-weight:900;\n      letter-spacing:.12em;\n      font-size:12px;\n      opacity:.9;\n    }\n\n    /* Right side: top blocks */\n    .rightTop{\n      display:grid;\n      grid-template-rows: auto 1fr;\n      gap: var(--gutter);\n    }\n\n    .wanGrid{\n      display:grid;\n      grid-template-columns: 1.05fr 1.05fr 0.9fr 1.7fr;\n      gap: var(--gutter);\n      align-items:stretch;\n    }\n\n    .miniBar{\n      height: 164px;\n      display:flex;\n      flex-direction:column;\n    }\n    .miniBar .miniHdr{\n      display:flex; align-items:center; justify-content:space-between;\n      padding:10px 12px;\n      border-bottom:1px solid rgba(42,50,64,.55);\n      position:relative;\n      z-index:1;\n    }\n    .miniHdr .name{\n      font-weight:900;\n      letter-spacing:.10em;\n      font-size:12px;\n      text-transform:uppercase;\n    }\n    .miniHdr .state{\n      font-weight:900;\n      letter-spacing:.10em;\n      font-size:11px;\n      color: var(--ok);\n    }\n    .miniBar .barArea{\n      padding: 12px 12px 10px;\n      flex:1;\n      position:relative;\n      z-index:1;\n      display:flex;\n      align-items:flex-end;\n      gap:10px;\n    }\n    .barFill{\n      width:100%;\n      border-radius: 10px;\n      border:1px solid rgba(42,50,64,.7);\n      background: rgba(0,0,0,.18);\n      overflow:hidden;\n      position:relative;\n      height: 100%;\n      display:flex;\n      align-items:flex-end;\n    }\n    .barFill > i{\n      display:block;\n      width:100%;\n      height:60%;\n      background: linear-gradient(180deg, rgba(34,197,94,.40), rgba(34,197,94,.14));\n      box-shadow: 0 0 0 1px rgba(34,197,94,.08) inset;\n    }\n    .barFill.blue > i{\n      background: linear-gradient(180deg, rgba(56,189,248,.40), rgba(56,189,248,.14));\n      box-shadow: 0 0 0 1px rgba(56,189,248,.10) inset;\n    }\n    .barFill.amber > i{\n      background: linear-gradient(180deg, rgba(245,158,11,.35), rgba(245,158,11,.12));\n      box-shadow: 0 0 0 1px rgba(245,158,11,.10) inset;\n    }\n    .miniBar .miniFtr{\n      padding: 0 12px 12px;\n      color: var(--muted);\n      font-size:12px;\n      position:relative;\n      z-index:1;\n      display:flex; align-items:center; justify-content:flex-end;\n      font-variant-numeric: tabular-nums;\n    }\n\n    /* Chart area (static SVG placeholder) */\n    .chart{\n      height: 164px;\n      display:flex;\n      flex-direction:column;\n    }\n    .chart .chartHdr{\n      padding:10px 12px;\n      border-bottom:1px solid rgba(42,50,64,.55);\n      position:relative;\n      z-index:1;\n      display:flex;\n      justify-content:space-between;\n      align-items:center;\n      gap:12px;\n    }\n    .chartHdr .name{\n      font-weight:900;\n      letter-spacing:.10em;\n      font-size:12px;\n      text-transform:uppercase;\n    }\n    .legend{\n      display:flex;\n      flex-wrap:wrap;\n      gap:10px 12px;\n      justify-content:flex-end;\n      color:var(--muted);\n      font-size:11px;\n    }\n    .legItem{display:flex; align-items:center; gap:6px; white-space:nowrap}\n    .swatch{\n      width:10px;height:10px;border-radius:3px;\n      border:1px solid rgba(42,50,64,.9);\n      background:#22c55e;\n    }\n    .swatch.blue{background:#38bdf8}\n    .swatch.amber{background:#f59e0b}\n    .swatch.red{background:#ef4444}\n    .chart .chartBody{\n      flex:1;\n      padding: 8px 10px 12px;\n      position:relative;\n      z-index:1;\n    }\n    .chartSvg{\n      width:100%;\n      height:100%;\n      border-radius: 14px;\n      border:1px solid rgba(42,50,64,.7);\n      background: linear-gradient(180deg, rgba(0,0,0,.12), rgba(0,0,0,.28));\n    }\n    .gridLine{stroke: rgba(148,163,184,.18); stroke-width:1}\n    .axisText{fill: rgba(148,163,184,.65); font-size:10px; font-family: var(--font)}\n    .lineGreen{stroke:#22c55e; stroke-width:2; fill:none; filter:url(#glowG)}\n    .lineBlue{stroke:#38bdf8; stroke-width:2; fill:none; filter:url(#glowB)}\n    .lineAmber{stroke:#f59e0b; stroke-width:2; fill:none; filter:url(#glowA)}\n    .areaGreen{fill: rgba(34,197,94,.18)}\n    .areaBlue{fill: rgba(56,189,248,.12)}\n\n    /* Mid title spanning right side */\n    .midTitle{\n      grid-column: 1 / -1;\n      text-align:center;\n      padding: 14px 16px;\n      text-transform:uppercase;\n      font-weight:900;\n      letter-spacing:.12em;\n      border-radius: var(--radius);\n      border:1px solid rgba(42,50,64,.7);\n      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,.18));\n      box-shadow: var(--shadow);\n    }\n\n    /* Bottom grid (details) */\n    .detailsGrid{\n      display:grid;\n      grid-template-columns: 1.2fr 1fr 1.6fr;\n      gap: var(--gutter);\n      margin-top: var(--gutter);\n    }\n\n    .kvGrid{\n      display:grid;\n      grid-template-columns: repeat(3, 1fr);\n      gap: 14px;\n      margin-bottom: 14px;\n    }\n    .kv{\n      padding: 12px 12px 10px;\n      border-radius: 14px;\n      border:1px solid rgba(42,50,64,.7);\n      background: linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.25));\n      position:relative;\n      z-index:1;\n      min-height:74px;\n    }\n    .kv .k{\n      color: var(--muted);\n      font-size:11px;\n      letter-spacing:.10em;\n      text-transform:uppercase;\n      margin-bottom:8px;\n      display:flex; align-items:center; gap:8px;\n    }\n    .kv .v{\n      font-weight:900;\n      letter-spacing:.04em;\n      font-size:14px;\n      opacity:.95;\n      white-space:nowrap;\n      overflow:hidden;\n      text-overflow:ellipsis;\n    }\n\n    .ringRow{\n      display:grid;\n      grid-template-columns: repeat(2, 1fr);\n      gap:14px;\n      margin-bottom: 14px;\n    }\n    .ring{\n      padding: 12px;\n      border-radius: 14px;\n      border:1px solid rgba(42,50,64,.7);\n      background: linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.25));\n      position:relative;\n      z-index:1;\n      display:flex;\n      align-items:center;\n      gap:14px;\n      min-height:92px;\n    }\n    .ring svg{flex:0 0 auto}\n    .ring .meta{min-width:0}\n    .ring .meta .k{\n      color: var(--muted);\n      font-size:11px;\n      letter-spacing:.10em;\n      text-transform:uppercase;\n      margin-bottom:6px;\n    }\n    .ring .meta .v{\n      font-weight:900;\n      font-size:14px;\n      letter-spacing:.06em;\n      font-variant-numeric: tabular-nums;\n    }\n\n    .miniCharts{\n      display:grid;\n      grid-template-columns: repeat(2, 1fr);\n      gap: var(--gutter);\n    }\n    .miniChart{\n      height: 190px;\n      display:flex;\n      flex-direction:column;\n    }\n\n    .services{\n      display:grid;\n      grid-template-columns: repeat(2, 1fr);\n      gap:10px;\n    }\n    .svc{\n      display:flex;\n      align-items:center;\n      justify-content:space-between;\n      padding:10px 12px;\n      border-radius: 12px;\n      border:1px solid rgba(42,50,64,.7);\n      background: rgba(0,0,0,.20);\n      position:relative;\n      z-index:1;\n    }\n    .svc .name{\n      font-weight:800;\n      letter-spacing:.06em;\n      font-size:12px;\n      text-transform:uppercase;\n      color:#dbe4ff;\n    }\n    .mark{\n      width:18px;height:18px;border-radius:6px;\n      display:grid; place-items:center;\n      border:1px solid rgba(42,50,64,.85);\n      font-weight:900;\n      font-size:12px;\n    }\n    .mark.ok{color:var(--ok); box-shadow: 0 0 0 1px rgba(34,197,94,.10) inset}\n    .mark.bad{color:var(--bad); box-shadow: 0 0 0 1px rgba(239,68,68,.12) inset}\n\n    .severityRow{\n      display:grid;\n      grid-template-columns: repeat(5, 1fr);\n      gap: 12px;\n      margin-top: var(--gutter);\n    }\n    .sev{\n      min-height: 112px;\n      padding: 12px 12px;\n      border-radius: 16px;\n      border:1px solid rgba(42,50,64,.7);\n      background: linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.28));\n      position:relative;\n      z-index:1;\n      display:flex;\n      flex-direction:column;\n      justify-content:space-between;\n      overflow:hidden;\n    }\n    .sev .n{\n      font-weight:900;\n      font-size: 28px;\n      letter-spacing:.08em;\n      font-variant-numeric: tabular-nums;\n      opacity:.9;\n    }\n    .sev .k{\n      color: var(--muted);\n      text-transform:uppercase;\n      letter-spacing:.12em;\n      font-size:11px;\n      font-weight:800;\n    }\n    .sev::after{\n      content:\"\";\n      height:5px;\n      width:100%;\n      position:absolute;\n      left:0; bottom:0;\n      opacity:.9;\n      background: rgba(148,163,184,.35);\n    }\n    .sev.disaster::after{background: rgba(239,68,68,.85)}\n    .sev.high::after{background: rgba(245,158,11,.9)}\n    .sev.average::after{background: rgba(250,204,21,.9)}\n    .sev.warning::after{background: rgba(56,189,248,.9)}\n    .sev.info::after{background: rgba(34,197,94,.9)}\n\n    /* Responsive */\n    @media (max-width: 1180px){\n      .grid{grid-template-columns: 1fr}\n      .wanGrid{grid-template-columns: 1fr 1fr}\n      .detailsGrid{grid-template-columns: 1fr}\n      .severityRow{grid-template-columns: 1fr 1fr}\n      .kvGrid{grid-template-columns: 1fr}\n      .ringRow{grid-template-columns: 1fr}\n      .miniCharts{grid-template-columns: 1fr}\n    }\n    @media (max-width: 560px){\n      .topbar{flex-direction:column; gap:10px}\n      .wanGrid{grid-template-columns: 1fr}\n      .severityRow{grid-template-columns: 1fr}\n    }",
+        "dynamicData": false,
+        "dynamicFieldDisplayValues": false,
+        "dynamicHtmlGraphics": false,
+        "dynamicProps": false,
+        "fitContentToPanel": true,
+        "html": "<div class=\"wrap\">\n    <!-- TOP BAR -->\n    <div class=\"panel\">\n      <div class=\"topbar\">\n        <div class=\"brand\">CETIF</div>\n\n        <div class=\"titleBlock\">\n          <div class=\"h1\">FIREWALL CHECKPOINT</div>\n          <div class=\"sub\">Informações detalhadas do Firewall</div>\n        </div>\n\n        <div class=\"clock\">18:05:07</div>\n      </div>\n    </div>\n\n    <!-- TOP GRID: LEFT (Disponibilidade) + RIGHT (Links WAN) -->\n    <div class=\"grid\">\n      <!-- LEFT: DISPONIBILIDADE -->\n      <div class=\"panel\">\n        <div class=\"sectionTitle\">DISPONIBILIDADE</div>\n        <div class=\"content\">\n          <div class=\"cpBox\">\n            <span class=\"dot\" aria-hidden=\"true\"></span>\n            <span>CHECK POINT</span>\n          </div>\n\n          <div class=\"statusRows\">\n            <div class=\"statusRow\">\n              <div class=\"left\">\n                <div class=\"pillIcon\" aria-hidden=\"true\">⌁</div>\n                <div class=\"label\">ICMP</div>\n              </div>\n              <div class=\"tag ok\">UP</div>\n            </div>\n\n            <div class=\"statusRow\">\n              <div class=\"left\">\n                <div class=\"pillIcon\" aria-hidden=\"true\">⟲</div>\n                <div class=\"label\">SNMP</div>\n              </div>\n              <div class=\"tag ok\">UP</div>\n            </div>\n          </div>\n\n          <div class=\"uptime\">\n            <div class=\"left\">\n              <div class=\"pillIcon\" aria-hidden=\"true\">⏱</div>\n              <div class=\"label\">UPTIME</div>\n            </div>\n            <div class=\"value\">5D 23H 39M</div>\n          </div>\n        </div>\n      </div>\n\n      <!-- RIGHT: LINKS WAN -->\n      <div class=\"rightTop stack\">\n        <div class=\"panel\">\n          <div class=\"sectionTitle\">LINKS WAN</div>\n          <div class=\"content\">\n            <div class=\"wanGrid\">\n              <!-- Mini bar: WAN 4 (VIVO) -->\n              <div class=\"panel miniBar\" style=\"box-shadow:none;\">\n                <div class=\"miniHdr\">\n                  <div class=\"name\">WAN 4 (VIVO)</div>\n                  <div class=\"state\">UP</div>\n                </div>\n                <div class=\"barArea\">\n                  <div class=\"barFill\"><i style=\"height:64%\"></i></div>\n                </div>\n                <div class=\"miniFtr\">⟲ 2.5 Mb/s</div>\n              </div>\n\n              <!-- Mini bar: WAN 5 (CLARO) -->\n              <div class=\"panel miniBar\" style=\"box-shadow:none;\">\n                <div class=\"miniHdr\">\n                  <div class=\"name\">WAN 5 (CLARO)</div>\n                  <div class=\"state\">UP</div>\n                </div>\n                <div class=\"barArea\">\n                  <div class=\"barFill blue\"><i style=\"height:60%\"></i></div>\n                </div>\n                <div class=\"miniFtr\">⟲ 4.5 Kb/s</div>\n              </div>\n\n              <!-- Mini bar: CAMON -->\n              <div class=\"panel miniBar\" style=\"box-shadow:none;\">\n                <div class=\"miniHdr\">\n                  <div class=\"name\">CAMON</div>\n                  <div class=\"state\">UP</div>\n                </div>\n                <div class=\"barArea\">\n                  <div class=\"barFill amber\"><i style=\"height:56%\"></i></div>\n                </div>\n                <div class=\"miniFtr\">⟲ 215.9 Kb/s</div>\n              </div>\n\n              <!-- Chart: Tráfego de Internet -->\n              <div class=\"panel chart\" style=\"box-shadow:none;\">\n                <div class=\"chartHdr\">\n                  <div class=\"name\">TRÁFEGO DE INTERNET (ISP)</div>\n                  <div class=\"legend\" aria-label=\"Legenda\">\n                    <span class=\"legItem\"><span class=\"swatch red\"></span>VIVO - UPLOAD</span>\n                    <span class=\"legItem\"><span class=\"swatch\"></span>VIVO - DOWNLOAD</span>\n                    <span class=\"legItem\"><span class=\"swatch amber\"></span>CLARO - UPLOAD</span>\n                    <span class=\"legItem\"><span class=\"swatch blue\"></span>CLARO - DOWNLOAD</span>\n                  </div>\n                </div>\n\n                <div class=\"chartBody\">\n                  <!-- static SVG “look alike” -->\n                  <svg class=\"chartSvg\" viewBox=\"0 0 900 240\" preserveAspectRatio=\"none\" role=\"img\" aria-label=\"Gráfico de tráfego (placeholder)\">\n                    <defs>\n                      <filter id=\"glowG\" x=\"-50%\" y=\"-50%\" width=\"200%\" height=\"200%\">\n                        <feGaussianBlur stdDeviation=\"2\" result=\"b\"/>\n                        <feMerge>\n                          <feMergeNode in=\"b\"/>\n                          <feMergeNode in=\"SourceGraphic\"/>\n                        </feMerge>\n                      </filter>\n                      <filter id=\"glowB\" x=\"-50%\" y=\"-50%\" width=\"200%\" height=\"200%\">\n                        <feGaussianBlur stdDeviation=\"2\" result=\"b\"/>\n                        <feMerge>\n                          <feMergeNode in=\"b\"/>\n                          <feMergeNode in=\"SourceGraphic\"/>\n                        </feMerge>\n                      </filter>\n                      <filter id=\"glowA\" x=\"-50%\" y=\"-50%\" width=\"200%\" height=\"200%\">\n                        <feGaussianBlur stdDeviation=\"2\" result=\"b\"/>\n                        <feMerge>\n                          <feMergeNode in=\"b\"/>\n                          <feMergeNode in=\"SourceGraphic\"/>\n                        </feMerge>\n                      </filter>\n                    </defs>\n\n                    <!-- grid -->\n                    <g opacity=\"1\">\n                      <line class=\"gridLine\" x1=\"0\" y1=\"40\" x2=\"900\" y2=\"40\"/>\n                      <line class=\"gridLine\" x1=\"0\" y1=\"80\" x2=\"900\" y2=\"80\"/>\n                      <line class=\"gridLine\" x1=\"0\" y1=\"120\" x2=\"900\" y2=\"120\"/>\n                      <line class=\"gridLine\" x1=\"0\" y1=\"160\" x2=\"900\" y2=\"160\"/>\n                      <line class=\"gridLine\" x1=\"0\" y1=\"200\" x2=\"900\" y2=\"200\"/>\n\n                      <line class=\"gridLine\" x1=\"100\" y1=\"0\" x2=\"100\" y2=\"240\"/>\n                      <line class=\"gridLine\" x1=\"220\" y1=\"0\" x2=\"220\" y2=\"240\"/>\n                      <line class=\"gridLine\" x1=\"340\" y1=\"0\" x2=\"340\" y2=\"240\"/>\n                      <line class=\"gridLine\" x1=\"460\" y1=\"0\" x2=\"460\" y2=\"240\"/>\n                      <line class=\"gridLine\" x1=\"580\" y1=\"0\" x2=\"580\" y2=\"240\"/>\n                      <line class=\"gridLine\" x1=\"700\" y1=\"0\" x2=\"700\" y2=\"240\"/>\n                      <line class=\"gridLine\" x1=\"820\" y1=\"0\" x2=\"820\" y2=\"240\"/>\n\n                      <text class=\"axisText\" x=\"12\" y=\"42\">80 Mb/s</text>\n                      <text class=\"axisText\" x=\"12\" y=\"82\">60</text>\n                      <text class=\"axisText\" x=\"12\" y=\"122\">40</text>\n                      <text class=\"axisText\" x=\"12\" y=\"162\">20</text>\n                      <text class=\"axisText\" x=\"12\" y=\"202\">0</text>\n\n                      <text class=\"axisText\" x=\"95\" y=\"232\">08:00</text>\n                      <text class=\"axisText\" x=\"215\" y=\"232\">10:00</text>\n                      <text class=\"axisText\" x=\"335\" y=\"232\">12:00</text>\n                      <text class=\"axisText\" x=\"455\" y=\"232\">14:00</text>\n                      <text class=\"axisText\" x=\"575\" y=\"232\">16:00</text>\n                      <text class=\"axisText\" x=\"815\" y=\"232\">18:00</text>\n                    </g>\n\n                    <!-- green area + line (download) -->\n                    <path class=\"areaGreen\" d=\"M0,205\n                      C60,205 80,180 120,190\n                      C170,205 175,115 210,135\n                      C250,160 280,55 315,85\n                      C360,120 380,140 420,130\n                      C470,120 495,95 525,115\n                      C565,140 610,175 650,160\n                      C690,150 720,120 760,145\n                      C800,170 840,190 900,182\n                      L900,240 L0,240 Z\"/>\n                    <path class=\"lineGreen\" d=\"M0,205\n                      C60,205 80,180 120,190\n                      C170,205 175,115 210,135\n                      C250,160 280,55 315,85\n                      C360,120 380,140 420,130\n                      C470,120 495,95 525,115\n                      C565,140 610,175 650,160\n                      C690,150 720,120 760,145\n                      C800,170 840,190 900,182\"/>\n\n                    <!-- blue line (other ISP) -->\n                    <path class=\"lineBlue\" d=\"M0,210\n                      C70,205 110,205 160,206\n                      C220,208 270,198 320,204\n                      C360,210 420,210 480,206\n                      C540,202 600,210 650,208\n                      C720,205 780,210 900,209\"/>\n\n                    <!-- amber line (upload spikes) -->\n                    <path class=\"lineAmber\" d=\"M0,220\n                      C90,220 160,220 210,218\n                      C270,214 285,208 310,212\n                      C350,220 410,220 470,218\n                      C520,216 560,214 590,216\n                      C630,220 700,220 900,219\"/>\n                  </svg>\n                </div>\n              </div>\n            </div>\n          </div>\n        </div>\n\n        <!-- MID TITLE (like the screenshot) -->\n        <div class=\"midTitle\">DETALHES DO FIREWALL</div>\n\n        <!-- BOTTOM DETAILS GRID -->\n        <div class=\"detailsGrid\">\n          <!-- LEFT COLUMN: SYSTEM + CPU/MEM + MINI CHARTS -->\n          <div class=\"panel\">\n            <div class=\"content\">\n              <div class=\"kvGrid\">\n                <div class=\"kv\">\n                  <div class=\"k\">🖥️ Nome do sistema</div>\n                  <div class=\"v\">CETIF-DF-FW001</div>\n                </div>\n                <div class=\"kv\">\n                  <div class=\"k\">🧩 Versão</div>\n                  <div class=\"v\">Linux FLOW-DF-FW001 4.x</div>\n                </div>\n                <div class=\"kv\">\n                  <div class=\"k\">🏷️ Modelo</div>\n                  <div class=\"v\">FLOW-DF-FW001</div>\n                </div>\n              </div>\n\n              <div class=\"ringRow\">\n                <div class=\"ring\">\n                  <svg width=\"56\" height=\"56\" viewBox=\"0 0 44 44\" aria-hidden=\"true\">\n                    <circle cx=\"22\" cy=\"22\" r=\"18\" stroke=\"rgba(148,163,184,.25)\" stroke-width=\"6\" fill=\"none\"/>\n                    <circle cx=\"22\" cy=\"22\" r=\"18\" stroke=\"#22c55e\" stroke-width=\"6\" fill=\"none\"\n                      stroke-linecap=\"round\" stroke-dasharray=\"113\" stroke-dashoffset=\"29\"/>\n                    <text x=\"22\" y=\"26\" text-anchor=\"middle\" font-size=\"11\" fill=\"#e7ecf7\" font-weight=\"900\">74%</text>\n                  </svg>\n                  <div class=\"meta\">\n                    <div class=\"k\">CPU</div>\n                    <div class=\"v\">74% (utilização)</div>\n                  </div>\n                </div>\n\n                <div class=\"ring\">\n                  <svg width=\"56\" height=\"56\" viewBox=\"0 0 44 44\" aria-hidden=\"true\">\n                    <circle cx=\"22\" cy=\"22\" r=\"18\" stroke=\"rgba(148,163,184,.25)\" stroke-width=\"6\" fill=\"none\"/>\n                    <circle cx=\"22\" cy=\"22\" r=\"18\" stroke=\"#38bdf8\" stroke-width=\"6\" fill=\"none\"\n                      stroke-linecap=\"round\" stroke-dasharray=\"113\" stroke-dashoffset=\"55\"/>\n                    <text x=\"22\" y=\"26\" text-anchor=\"middle\" font-size=\"11\" fill=\"#e7ecf7\" font-weight=\"900\">51%</text>\n                  </svg>\n                  <div class=\"meta\">\n                    <div class=\"k\">Memória</div>\n                    <div class=\"v\">51% • Total: 3.7 GB</div>\n                  </div>\n                </div>\n              </div>\n\n              <div class=\"miniCharts\">\n                <div class=\"panel miniChart\" style=\"box-shadow:none;\">\n                  <div class=\"chartHdr\">\n                    <div class=\"name\">Utilização de CPU</div>\n                    <div class=\"legend\">\n                      <span class=\"legItem\"><span class=\"swatch\"></span>CPU</span>\n                    </div>\n                  </div>\n                  <div class=\"chartBody\">\n                    <svg class=\"chartSvg\" viewBox=\"0 0 900 240\" preserveAspectRatio=\"none\" aria-label=\"CPU placeholder\">\n                      <line class=\"gridLine\" x1=\"0\" y1=\"60\" x2=\"900\" y2=\"60\"/>\n                      <line class=\"gridLine\" x1=\"0\" y1=\"120\" x2=\"900\" y2=\"120\"/>\n                      <line class=\"gridLine\" x1=\"0\" y1=\"180\" x2=\"900\" y2=\"180\"/>\n                      <path class=\"areaGreen\" d=\"M0,185\n                        C70,150 120,170 170,120\n                        C230,60 300,70 360,55\n                        C440,35 520,55 600,45\n                        C700,35 780,55 900,40\n                        L900,240 L0,240 Z\"/>\n                      <path class=\"lineGreen\" d=\"M0,185\n                        C70,150 120,170 170,120\n                        C230,60 300,70 360,55\n                        C440,35 520,55 600,45\n                        C700,35 780,55 900,40\"/>\n                      <text class=\"axisText\" x=\"10\" y=\"232\">09:00</text>\n                      <text class=\"axisText\" x=\"430\" y=\"232\">12:00</text>\n                      <text class=\"axisText\" x=\"820\" y=\"232\">18:00</text>\n                    </svg>\n                  </div>\n                </div>\n\n                <div class=\"panel miniChart\" style=\"box-shadow:none;\">\n                  <div class=\"chartHdr\">\n                    <div class=\"name\">Memory utilization</div>\n                    <div class=\"legend\">\n                      <span class=\"legItem\"><span class=\"swatch blue\"></span>MEM</span>\n                    </div>\n                  </div>\n                  <div class=\"chartBody\">\n                    <svg class=\"chartSvg\" viewBox=\"0 0 900 240\" preserveAspectRatio=\"none\" aria-label=\"Memória placeholder\">\n                      <line class=\"gridLine\" x1=\"0\" y1=\"60\" x2=\"900\" y2=\"60\"/>\n                      <line class=\"gridLine\" x1=\"0\" y1=\"120\" x2=\"900\" y2=\"120\"/>\n                      <line class=\"gridLine\" x1=\"0\" y1=\"180\" x2=\"900\" y2=\"180\"/>\n                      <path class=\"areaBlue\" d=\"M0,150\n                        C120,150 210,150 300,148\n                        C420,146 510,146 600,145\n                        C720,145 810,144 900,144\n                        L900,240 L0,240 Z\"/>\n                      <path class=\"lineBlue\" d=\"M0,150\n                        C120,150 210,150 300,148\n                        C420,146 510,146 600,145\n                        C720,145 810,144 900,144\"/>\n                      <text class=\"axisText\" x=\"10\" y=\"232\">09:00</text>\n                      <text class=\"axisText\" x=\"430\" y=\"232\">12:00</text>\n                      <text class=\"axisText\" x=\"820\" y=\"232\">18:00</text>\n                    </svg>\n                  </div>\n                </div>\n              </div>\n            </div>\n          </div>\n\n          <!-- MIDDLE COLUMN: SERVICES + LOAD AVERAGE -->\n          <div class=\"panel\">\n            <div class=\"content\">\n              <div class=\"kv\" style=\"margin-bottom:14px;\">\n                <div class=\"k\">🧰 Serviços</div>\n                <div class=\"services\">\n                  <div class=\"svc\"><span class=\"name\">Firewall</span><span class=\"mark ok\">✓</span></div>\n                  <div class=\"svc\"><span class=\"name\">Threat</span><span class=\"mark bad\">✕</span></div>\n                  <div class=\"svc\"><span class=\"name\">Anti-Spam</span><span class=\"mark bad\">✕</span></div>\n                  <div class=\"svc\"><span class=\"name\">IPS</span><span class=\"mark bad\">✕</span></div>\n                  <div class=\"svc\"><span class=\"name\">URL Filt</span><span class=\"mark ok\">✓</span></div>\n                  <div class=\"svc\"><span class=\"name\">IPSec VPN</span><span class=\"mark ok\">✓</span></div>\n                  <div class=\"svc\"><span class=\"name\">App Ctrl</span><span class=\"mark ok\">✓</span></div>\n                  <div class=\"svc\"><span class=\"name\">Anti-Virus</span><span class=\"mark bad\">✕</span></div>\n                </div>\n              </div>\n\n              <div class=\"panel chart\" style=\"box-shadow:none; height: 310px;\">\n                <div class=\"chartHdr\">\n                  <div class=\"name\">Load Average</div>\n                  <div class=\"legend\">\n                    <span class=\"legItem\"><span class=\"swatch\"></span>1m</span>\n                    <span class=\"legItem\"><span class=\"swatch blue\"></span>5m</span>\n                    <span class=\"legItem\"><span class=\"swatch amber\"></span>15m</span>\n                  </div>\n                </div>\n                <div class=\"chartBody\">\n                  <svg class=\"chartSvg\" viewBox=\"0 0 900 240\" preserveAspectRatio=\"none\" aria-label=\"Load average placeholder\">\n                    <line class=\"gridLine\" x1=\"0\" y1=\"40\" x2=\"900\" y2=\"40\"/>\n                    <line class=\"gridLine\" x1=\"0\" y1=\"80\" x2=\"900\" y2=\"80\"/>\n                    <line class=\"gridLine\" x1=\"0\" y1=\"120\" x2=\"900\" y2=\"120\"/>\n                    <line class=\"gridLine\" x1=\"0\" y1=\"160\" x2=\"900\" y2=\"160\"/>\n                    <line class=\"gridLine\" x1=\"0\" y1=\"200\" x2=\"900\" y2=\"200\"/>\n\n                    <path class=\"lineGreen\" d=\"M0,190\n                      C90,160 140,175 220,140\n                      C300,105 360,120 430,95\n                      C520,65 560,85 630,70\n                      C720,55 780,85 900,78\"/>\n\n                    <path class=\"lineBlue\" d=\"M0,200\n                      C100,175 160,185 240,160\n                      C340,130 390,140 470,118\n                      C560,92 610,105 690,95\n                      C780,85 820,110 900,104\"/>\n\n                    <path class=\"lineAmber\" d=\"M0,210\n                      C110,195 170,200 260,180\n                      C360,160 420,165 500,150\n                      C600,132 650,145 730,140\n                      C820,132 850,150 900,148\"/>\n\n                    <text class=\"axisText\" x=\"10\" y=\"232\">08:00</text>\n                    <text class=\"axisText\" x=\"320\" y=\"232\">12:00</text>\n                    <text class=\"axisText\" x=\"620\" y=\"232\">16:00</text>\n                    <text class=\"axisText\" x=\"820\" y=\"232\">18:00</text>\n                  </svg>\n                </div>\n              </div>\n            </div>\n          </div>\n\n          <!-- RIGHT COLUMN: LAN/VLAN/DMZ TRAFFIC + SEVERITY BOXES -->\n          <div class=\"panel\">\n            <div class=\"content\">\n              <div class=\"panel chart\" style=\"box-shadow:none; height: 310px;\">\n                <div class=\"chartHdr\">\n                  <div class=\"name\">TRÁFEGO REDE INTERNA (LAN/VLAN/DMZ)</div>\n                  <div class=\"legend\">\n                    <span class=\"legItem\"><span class=\"swatch\"></span>PPPo - UP</span>\n                    <span class=\"legItem\"><span class=\"swatch red\"></span>PPPo - DOWN</span>\n                    <span class=\"legItem\"><span class=\"swatch blue\"></span>LAN2.60 - DOWN</span>\n                    <span class=\"legItem\"><span class=\"swatch amber\"></span>LAN1.50 - UP</span>\n                  </div>\n                </div>\n\n                <div class=\"chartBody\">\n                  <svg class=\"chartSvg\" viewBox=\"0 0 900 240\" preserveAspectRatio=\"none\" aria-label=\"Tráfego interno placeholder\">\n                    <line class=\"gridLine\" x1=\"0\" y1=\"40\" x2=\"900\" y2=\"40\"/>\n                    <line class=\"gridLine\" x1=\"0\" y1=\"80\" x2=\"900\" y2=\"80\"/>\n                    <line class=\"gridLine\" x1=\"0\" y1=\"120\" x2=\"900\" y2=\"120\"/>\n                    <line class=\"gridLine\" x1=\"0\" y1=\"160\" x2=\"900\" y2=\"160\"/>\n                    <line class=\"gridLine\" x1=\"0\" y1=\"200\" x2=\"900\" y2=\"200\"/>\n\n                    <!-- upload (green-ish) -->\n                    <path class=\"lineGreen\" d=\"M0,195\n                      C120,188 180,190 260,175\n                      C340,150 390,165 460,140\n                      C540,110 600,150 680,145\n                      C760,140 820,155 900,150\"/>\n\n                    <!-- download (red-ish) -->\n                    <path class=\"lineAmber\" d=\"M0,205\n                      C140,210 220,205 300,214\n                      C380,225 410,220 500,230\n                      C600,235 660,225 740,232\n                      C820,236 860,232 900,235\"/>\n\n                    <!-- other vlan (blue) -->\n                    <path class=\"lineBlue\" d=\"M0,210\n                      C150,205 230,200 310,206\n                      C390,212 470,204 560,208\n                      C650,214 740,205 900,212\"/>\n\n                    <text class=\"axisText\" x=\"10\" y=\"232\">08:00</text>\n                    <text class=\"axisText\" x=\"320\" y=\"232\">12:00</text>\n                    <text class=\"axisText\" x=\"620\" y=\"232\">16:00</text>\n                    <text class=\"axisText\" x=\"820\" y=\"232\">18:00</text>\n                  </svg>\n                </div>\n              </div>\n\n              <div class=\"severityRow\">\n                <div class=\"sev disaster\">\n                  <div class=\"n\">0</div>\n                  <div class=\"k\">DISASTER</div>\n                </div>\n                <div class=\"sev high\">\n                  <div class=\"n\">0</div>\n                  <div class=\"k\">HIGH</div>\n                </div>\n                <div class=\"sev average\">\n                  <div class=\"n\">0</div>\n                  <div class=\"k\">AVERAGE</div>\n                </div>\n                <div class=\"sev warning\">\n                  <div class=\"n\">0</div>\n                  <div class=\"k\">WARNING</div>\n                </div>\n                <div class=\"sev info\">\n                  <div class=\"n\">0</div>\n                  <div class=\"k\">INFORMATION</div>\n                </div>\n              </div>\n            </div>\n          </div>\n        </div> <!-- /detailsGrid -->\n      </div> <!-- /rightTop -->\n    </div> <!-- /grid -->\n  </div> <!-- /wrap -->",
+        "onInit": "",
+        "onInitOnResize": false,
+        "onRender": "(() => {\n  if (!htmlNode || !data || !data.series) return;\n\n  const el = (q) => htmlNode.querySelector(q);\n  const setText = (q, v) => { const n = el(q); if(n) n.innerHTML = v; };\n\n  const last = (series) => {\n    const n = series.fields.find(f => f.type === 'number');\n    if (n && n.values.length) return n.values.get(n.values.length - 1);\n    const s = series.fields.find(f => f.type === 'string');\n    if (s && s.values.length) return s.values.get(s.values.length - 1);\n    return null;\n  };\n\n  const findLastByName = (name) => {\n    const s = data.series.find(x => x.name === name);\n    return s ? last(s) : null;\n  };\n\n  const toNum = (v) => (isFinite(Number(v)) ? Number(v) : 0);\n\n  const bps = (v) => {\n    const x = Number(v ?? 0);\n    if (!isFinite(x) || x < 0) return '0 b/s';\n    const units = ['b/s','Kb/s','Mb/s','Gb/s','Tb/s'];\n    let i=0, val=x;\n    while (val >= 1024 && i < units.length-1){ val/=1024; i++; }\n    return `${val.toFixed(val >= 100 ? 0 : val >= 10 ? 1 : 2)} ${units[i]}`;\n  };\n\n  // Update clock\n  const updateClock = () => {\n    const now = new Date();\n    const h = String(now.getHours()).padStart(2, '0');\n    const m = String(now.getMinutes()).padStart(2, '0');\n    const s = String(now.getSeconds()).padStart(2, '0');\n    const clockEl = el('.clock');\n    if (clockEl) clockEl.innerHTML = `${h}:${m}:${s}`;\n  };\n  updateClock();\n  setInterval(updateClock, 1000);\n\n  // Atualizar dados do dashboard Check Point\n  const cpuUsage = findLastByName('CPU utilization');\n  const memUsage = findLastByName('Memory utilization');\n  const uptime = findLastByName('System uptime');\n  const icmpStatus = findLastByName('ICMP ping');\n  const snmpStatus = findLastByName('SNMP agent availability');\n\n  // Atualizar CPU\n  const cpuEl = el('.cpu-value');\n  if (cpuEl && cpuUsage !== null) {\n    cpuEl.innerHTML = `${toNum(cpuUsage).toFixed(0)}%`;\n  }\n\n  // Atualizar Memória\n  const memEl = el('.mem-value');\n  if (memEl && memUsage !== null) {\n    memEl.innerHTML = `${toNum(memUsage).toFixed(0)}%`;\n  }\n\n  // Atualizar status ICMP\n  const icmpEl = el('.icmp-status');\n  if (icmpEl && icmpStatus !== null) {\n    icmpEl.innerHTML = toNum(icmpStatus) === 1 ? 'UP' : 'DOWN';\n    icmpEl.className = toNum(icmpStatus) === 1 ? 'status-badge up' : 'status-badge down';\n  }\n\n  // Atualizar status SNMP\n  const snmpEl = el('.snmp-status');\n  if (snmpEl && snmpStatus !== null) {\n    snmpEl.innerHTML = toNum(snmpStatus) === 1 ? 'UP' : 'DOWN';\n    snmpEl.className = toNum(snmpStatus) === 1 ? 'status-badge up' : 'status-badge down';\n  }\n\n  // Atualizar uptime\n  const uptimeEl = el('.uptime-value');\n  if (uptimeEl && uptime !== null) {\n    const seconds = toNum(uptime);\n    const days = Math.floor(seconds / 86400);\n    const hours = Math.floor((seconds % 86400) / 3600);\n    const minutes = Math.floor((seconds % 3600) / 60);\n    uptimeEl.innerHTML = `${days}D ${hours}H ${minutes}M`;\n  }\n\n  // Processar interfaces WAN\n  const rxRe = /^Interface (.+): Bits received$/i;\n  const txRe = /^Interface (.+): Bits sent$/i;\n\n  const byIf = new Map();\n  const ensure = (ifn) => {\n    if (!byIf.has(ifn)) byIf.set(ifn, { rx:0, tx:0, status:'UP' });\n    return byIf.get(ifn);\n  };\n\n  for (const s of data.series) {\n    const name = s.name || '';\n    let m;\n    if ((m = name.match(rxRe))) ensure(m[1].trim()).rx = toNum(last(s));\n    else if ((m = name.match(txRe))) ensure(m[1].trim()).tx = toNum(last(s));\n  }\n\n  // Atualizar WAN Links\n  const wanInterfaces = ['WAN 4 (VIVO)', 'WAN 5 (CLARO)', 'CAMON'];\n  wanInterfaces.forEach((wanName, idx) => {\n    const data = byIf.get(wanName);\n    if (data) {\n      const speedEl = el(`.wan-speed-${idx}`);\n      if (speedEl) speedEl.innerHTML = bps(data.rx + data.tx);\n    }\n  });\n\n})();",
+        "overflow": "visible",
+        "panelupdateOnMount": true,
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "renderOnMount": true,
+        "rootCSS": "",
+        "svgBaseFix": false,
+        "useGrafanaScrollbar": false
+      },
+      "pluginVersion": "2.2.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "CETIF-DF-FW001"
+          },
+          "item": {
+            "filter": "CPU utilization"
+          },
+          "queryType": "0",
+          "refId": "A",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "CETIF-DF-FW001"
+          },
+          "item": {
+            "filter": "Memory utilization"
+          },
+          "queryType": "0",
+          "refId": "B",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "CETIF-DF-FW001"
+          },
+          "item": {
+            "filter": "System uptime"
+          },
+          "queryType": "0",
+          "refId": "C",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "CETIF-DF-FW001"
+          },
+          "item": {
+            "filter": "ICMP ping"
+          },
+          "queryType": "0",
+          "refId": "D",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "CETIF-DF-FW001"
+          },
+          "item": {
+            "filter": "SNMP agent availability"
+          },
+          "queryType": "0",
+          "refId": "E",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "CETIF-DF-FW001"
+          },
+          "item": {
+            "filter": "Interface WAN 4 (VIVO): Bits received"
+          },
+          "queryType": "0",
+          "refId": "F",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "CETIF-DF-FW001"
+          },
+          "item": {
+            "filter": "Interface WAN 4 (VIVO): Bits sent"
+          },
+          "queryType": "0",
+          "refId": "G",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "CETIF-DF-FW001"
+          },
+          "item": {
+            "filter": "Interface WAN 5 (CLARO): Bits received"
+          },
+          "queryType": "0",
+          "refId": "H",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "CETIF-DF-FW001"
+          },
+          "item": {
+            "filter": "Interface WAN 5 (CLARO): Bits sent"
+          },
+          "queryType": "0",
+          "refId": "I",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "CETIF-DF-FW001"
+          },
+          "item": {
+            "filter": "Interface CAMON: Bits received"
+          },
+          "queryType": "0",
+          "refId": "J",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "CETIF-DF-FW001"
+          },
+          "item": {
+            "filter": "Interface CAMON: Bits sent"
+          },
+          "queryType": "0",
+          "refId": "K",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "CETIF-DF-FW001"
+          },
+          "item": {
+            "filter": "Interface PPPo: Bits received"
+          },
+          "queryType": "0",
+          "refId": "L",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "CETIF-DF-FW001"
+          },
+          "item": {
+            "filter": "Interface PPPo: Bits sent"
+          },
+          "queryType": "0",
+          "refId": "M",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "CETIF-DF-FW001"
+          },
+          "item": {
+            "filter": "Interface LAN2.60: Bits received"
+          },
+          "queryType": "0",
+          "refId": "N",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "CETIF-DF-FW001"
+          },
+          "item": {
+            "filter": "Interface LAN2.60: Bits sent"
+          },
+          "queryType": "0",
+          "refId": "O",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "CETIF-DF-FW001"
+          },
+          "item": {
+            "filter": "Interface LAN1.50: Bits received"
+          },
+          "queryType": "0",
+          "refId": "P",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "CETIF-DF-FW001"
+          },
+          "item": {
+            "filter": "Interface LAN1.50: Bits sent"
+          },
+          "queryType": "0",
+          "refId": "Q",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "CETIF-DF-FW001"
+          },
+          "item": {
+            "filter": "Service Firewall status"
+          },
+          "queryType": "0",
+          "refId": "R",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "CETIF-DF-FW001"
+          },
+          "item": {
+            "filter": "Service IPS status"
+          },
+          "queryType": "0",
+          "refId": "S",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "CETIF-DF-FW001"
+          },
+          "item": {
+            "filter": "Service Anti-Virus status"
+          },
+          "queryType": "0",
+          "refId": "T",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "CETIF-DF-FW001"
+          },
+          "item": {
+            "filter": "Service IPSec VPN status"
+          },
+          "queryType": "0",
+          "refId": "U",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "CETIF-DF-FW001"
+          },
+          "item": {
+            "filter": "Load average (1m avg)"
+          },
+          "queryType": "0",
+          "refId": "V",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "CETIF-DF-FW001"
+          },
+          "item": {
+            "filter": "Load average (5m avg)"
+          },
+          "queryType": "0",
+          "refId": "W",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "CETIF-DF-FW001"
+          },
+          "item": {
+            "filter": "Load average (15m avg)"
+          },
+          "queryType": "0",
+          "refId": "X",
+          "resultFormat": "time_series"
+        }
+      ],
+      "title": "CETIF – Firewall Check Point Monitoring",
+      "type": "gapit-htmlgraphics-panel"
+    }
+  ],
+  "preload": false,
+  "refresh": "30s",
+  "schemaVersion": 40,
+  "tags": [
+    "checkpoint",
+    "firewall",
+    "zabbix",
+    "CETIF",
+    "monitoring"
+  ],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-3h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "CETIF – Firewall Check Point Monitoring",
+  "uid": "CETIF_checkpoint_v1",
+  "version": 1,
+  "weekStart": ""
+}

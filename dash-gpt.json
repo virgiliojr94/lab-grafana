@@ -1,0 +1,341 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": { "type": "grafana", "uid": "-- Grafana --" },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "type": "gapit-htmlgraphics-panel",
+      "title": "PFSENSE – NETWORK OVERVIEW (Cards)",
+      "gridPos": { "h": 13, "w": 24, "x": 0, "y": 0 },
+      "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "aec2bvjiis7pca" },
+      "options": {
+        "fitContentToPanel": true,
+        "centerAlignContent": false,
+        "overflow": "scrollbar",
+        "svgBaseFix": false,
+        "rootCss": "",
+        "css": "*{font-family:Inter,system-ui,Segoe UI,Arial}\n.dash{\n  background:#0b0d10;\n  color:#e7eefc;\n  border:1px solid #293241;\n  border-radius:16px;\n  padding:14px;\n}\n.hdr{\n  display:flex;align-items:center;justify-content:space-between;\n  border-bottom:1px solid #293241;\n  padding-bottom:10px;margin-bottom:14px;\n}\n.brand{font-weight:900;letter-spacing:.12em;font-size:26px}\n.ttl{text-align:center;line-height:1.1}\n.h1{font-weight:900;letter-spacing:.14em;font-size:14px}\n.sub{color:#93a4c7;font-size:11px;margin-top:4px}\n.clk{font-variant-numeric:tabular-nums;font-weight:900;letter-spacing:.12em}\n\n.row{display:grid;grid-template-columns: 320px 1fr;gap:14px}\n.card{\n  background:rgba(14,17,23,.85);\n  border:1px solid #293241;\n  border-radius:16px;\n  padding:12px;\n}\n.card.wide{min-height:220px}\n.cardTitle{\n  text-align:center;\n  font-weight:900;\n  letter-spacing:.14em;\n  font-size:12px;\n  margin-bottom:10px;\n  color:#d7e3ff;\n}\n.kv{\n  display:flex;align-items:center;justify-content:space-between;\n  padding:10px 10px;\n  border:1px solid #293241;\n  border-radius:12px;\n  background:rgba(0,0,0,.2);\n  margin-bottom:8px;\n}\n.kv span{color:#93a4c7;font-weight:800;letter-spacing:.08em;font-size:11px}\n.kv b{font-weight:900;letter-spacing:.06em}\n\n.gridCards{\n  display:grid;\n  grid-template-columns: repeat(3, 1fr);\n  gap:12px;\n}\n@media (max-width: 1100px){\n  .row{grid-template-columns:1fr}\n  .gridCards{grid-template-columns: repeat(2,1fr)}\n}\n@media (max-width: 700px){\n  .gridCards{grid-template-columns:1fr}\n}\n\n.ifc{\n  border:1px solid #293241;border-radius:14px;padding:10px;background:rgba(0,0,0,.18)\n}\n.ifTop{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}\n.ifName{font-weight:900;letter-spacing:.10em;font-size:12px;color:#d7e3ff}\n.badge{\n  padding:4px 10px;border-radius:999px;border:1px solid #293241;\n  background:rgba(0,0,0,.25);font-weight:900;letter-spacing:.10em;font-size:11px;\n}\n.badge.up{color:#22c55e}\n.badge.down{color:#ef4444}\n.badge.warn{color:#f59e0b}\n\n.miniRow{display:flex;justify-content:space-between;gap:10px;margin:6px 0}\n.miniRow span{color:#93a4c7;font-size:11px;font-weight:800;letter-spacing:.06em}\n.miniRow b{font-variant-numeric:tabular-nums;font-size:12px;letter-spacing:.06em}\n\n.bar{height:10px;border-radius:999px;background:#1b2230;overflow:hidden;border:1px solid #293241;margin-top:8px}\n.bar i{display:block;height:100%;width:0%;background:linear-gradient(90deg, rgba(56,189,248,.9), rgba(56,189,248,.18))}\n.bar i.out{background:linear-gradient(90deg, rgba(34,197,94,.9), rgba(34,197,94,.18))}\n\n.hint{margin-top:10px;color:#93a4c7;font-size:11px;line-height:1.35}\n.dim{color:#93a4c7}\n",
+        "html": "<div class=\"dash\">\n  <div class=\"hdr\">\n    <div class=\"brand\">FLOWBIX</div>\n    <div class=\"ttl\">\n      <div class=\"h1\">PFSENSE \u2013 NETWORK OVERVIEW</div>\n      <div class=\"sub\">Dados reais via Zabbix datasource</div>\n    </div>\n    <div class=\"clk\" id=\"clock\">--:--:--</div>\n  </div>\n\n  <div class=\"row\">\n    <div class=\"card\">\n      <div class=\"cardTitle\">RESUMO</div>\n      <div class=\"kv\"><span>WANs monitoradas</span><b id=\"wanCount\">--</b></div>\n      <div class=\"kv\"><span>Interfaces exibidas</span><b id=\"ifCount\">--</b></div>\n      <div class=\"kv\"><span>Erros (total)</span><b id=\"errTotal\">--</b></div>\n      <div class=\"hint\">\n        *Este painel monta os cards automaticamente a partir das s\u00e9ries:\n        \u201cIncoming/Outgoing network traffic on X\u201d e \u201cIncoming/Outgoing errors on X\u201d.\n      </div>\n    </div>\n\n    <div class=\"card wide\">\n      <div class=\"cardTitle\">LINKS WAN</div>\n      <div class=\"gridCards\" id=\"wanCards\"></div>\n    </div>\n  </div>\n\n  <div class=\"card\" style=\"margin-top:14px;\">\n    <div class=\"cardTitle\">LAN / VLAN / DMZ (TOP por tr\u00e1fego)</div>\n    <div class=\"gridCards\" id=\"lanCards\"></div>\n  </div>\n</div>\n",
+        "onRender": "(() => {\n  if (!htmlNode || !data || !data.series) return;\n\n  const el = (q) => htmlNode.querySelector(q);\n  const setText = (q, v) => { const n = el(q); if(n) n.textContent = v; };\n\n  const last = (series) => {\n    const n = series.fields.find(f => f.type === 'number');\n    if (n && n.values.length) return n.values.get(n.values.length - 1);\n    const s = series.fields.find(f => f.type === 'string');\n    if (s && s.values.length) return s.values.get(s.values.length - 1);\n    return null;\n  };\n\n  const bps = (v) => {\n    const x = Number(v ?? 0);\n    if (!isFinite(x) || x < 0) return '0 b/s';\n    const units = ['b/s','Kb/s','Mb/s','Gb/s','Tb/s'];\n    let i=0, val=x;\n    while (val >= 1024 && i < units.length-1){ val/=1024; i++; }\n    return `${val.toFixed(val >= 100 ? 0 : val >= 10 ? 1 : 2)} ${units[i]}`;\n  };\n\n  const toNum = (v) => {\n    const x = Number(v);\n    return isFinite(x) ? x : 0;\n  };\n\n  const rxRe = /^Incoming network traffic on (.+)$/i;\n  const txRe = /^Outgoing network traffic on (.+)$/i;\n  const rxErrRe = /^Incoming errors on (.+)$/i;\n  const txErrRe = /^Outgoing errors on (.+)$/i;\n\n  const byIf = new Map();\n  const ensure = (ifn) => {\n    if (!byIf.has(ifn)) byIf.set(ifn, { rx:0, tx:0, rxErr:0, txErr:0 });\n    return byIf.get(ifn);\n  };\n\n  for (const s of data.series) {\n    const name = s.name || '';\n    let m;\n    if ((m = name.match(rxRe))) ensure(m[1].trim()).rx = toNum(last(s));\n    else if ((m = name.match(txRe))) ensure(m[1].trim()).tx = toNum(last(s));\n    else if ((m = name.match(rxErrRe))) ensure(m[1].trim()).rxErr = toNum(last(s));\n    else if ((m = name.match(txErrRe))) ensure(m[1].trim()).txErr = toNum(last(s));\n  }\n\n  const isWan = (n) => /^WAN($|[_-])/i.test(n) || n === 'WAN_CTI';\n\n  const items = [...byIf.entries()].map(([ifName, v]) => ({ ifName, ...v }));\n  const wan = items.filter(x => isWan(x.ifName));\n  const lan = items\n    .filter(x => !isWan(x.ifName))\n    .filter(x => !x.ifName.toLowerCase().startsWith('ovpns'))\n    .sort((a,b) => (b.rx+b.tx) - (a.rx+a.tx));\n\n  const TOP_LAN = 9;\n  const lanTop = lan.slice(0, TOP_LAN);\n\n  const errTotal = items.reduce((acc, x) => acc + x.rxErr + x.txErr, 0);\n\n  setText('#clock', new Date().toLocaleTimeString('pt-BR', { hour12:false }));\n  setText('#wanCount', String(wan.length));\n  setText('#ifCount', String(items.length));\n  setText('#errTotal', String(errTotal));\n\n  const mkCard = (x) => {\n    const total = x.rx + x.tx;\n    const hasTraffic = total > 0;\n    const hasErr = (x.rxErr + x.txErr) > 0;\n\n    let status = 'up', label = 'UP';\n    if (hasErr) { status = 'warn'; label = 'WARN'; }\n    else if (!hasTraffic) { status = 'down'; label = 'DOWN'; }\n\n    const rxPct = total > 0 ? (x.rx / total) * 100 : 0;\n    const txPct = total > 0 ? (x.tx / total) * 100 : 0;\n\n    return `\n      <div class=\"ifc\">\n        <div class=\"ifTop\">\n          <div class=\"ifName\">${x.ifName}</div>\n          <div class=\"badge ${status}\">${label}</div>\n        </div>\n\n        <div class=\"miniRow\"><span>IN</span><b>${bps(x.rx)}</b></div>\n        <div class=\"bar\"><i style=\"width:${rxPct.toFixed(0)}%\"></i></div>\n\n        <div class=\"miniRow\"><span>OUT</span><b>${bps(x.tx)}</b></div>\n        <div class=\"bar\"><i class=\"out\" style=\"width:${txPct.toFixed(0)}%\"></i></div>\n\n        <div class=\"miniRow\">\n          <span>ERR IN/OUT</span>\n          <b class=\"${hasErr ? '' : 'dim'}\">${x.rxErr} / ${x.txErr}</b>\n        </div>\n      </div>\n    `;\n  };\n\n  const wanNode = el('#wanCards');\n  const lanNode = el('#lanCards');\n\n  if (wanNode) wanNode.innerHTML = wan.map(mkCard).join('');\n  if (lanNode) lanNode.innerHTML = lanTop.map(mkCard).join('');\n})();\n"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "group": { "filter": "SRVINTRANET" },
+          "host": { "filter": "PFSENSE" },
+          "item": { "filter": "Incoming network traffic on WAN" },
+          "queryType": "0",
+          "resultFormat": "time_series",
+          "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "aec2bvjiis7pca" }
+        },
+        {
+          "refId": "B",
+          "group": { "filter": "SRVINTRANET" },
+          "host": { "filter": "PFSENSE" },
+          "item": { "filter": "Outgoing network traffic on WAN" },
+          "queryType": "0",
+          "resultFormat": "time_series",
+          "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "aec2bvjiis7pca" }
+        },
+        {
+          "refId": "C",
+          "group": { "filter": "SRVINTRANET" },
+          "host": { "filter": "PFSENSE" },
+          "item": { "filter": "Incoming errors on WAN" },
+          "queryType": "0",
+          "resultFormat": "time_series",
+          "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "aec2bvjiis7pca" }
+        },
+        {
+          "refId": "D",
+          "group": { "filter": "SRVINTRANET" },
+          "host": { "filter": "PFSENSE" },
+          "item": { "filter": "Outgoing errors on WAN" },
+          "queryType": "0",
+          "resultFormat": "time_series",
+          "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "aec2bvjiis7pca" }
+        },
+
+        {
+          "refId": "E",
+          "group": { "filter": "SRVINTRANET" },
+          "host": { "filter": "PFSENSE" },
+          "item": { "filter": "Incoming network traffic on WAN_CTI" },
+          "queryType": "0",
+          "resultFormat": "time_series",
+          "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "aec2bvjiis7pca" }
+        },
+        {
+          "refId": "F",
+          "group": { "filter": "SRVINTRANET" },
+          "host": { "filter": "PFSENSE" },
+          "item": { "filter": "Outgoing network traffic on WAN_CTI" },
+          "queryType": "0",
+          "resultFormat": "time_series",
+          "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "aec2bvjiis7pca" }
+        },
+        {
+          "refId": "G",
+          "group": { "filter": "SRVINTRANET" },
+          "host": { "filter": "PFSENSE" },
+          "item": { "filter": "Incoming errors on WAN_CTI" },
+          "queryType": "0",
+          "resultFormat": "time_series",
+          "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "aec2bvjiis7pca" }
+        },
+        {
+          "refId": "H",
+          "group": { "filter": "SRVINTRANET" },
+          "host": { "filter": "PFSENSE" },
+          "item": { "filter": "Outgoing errors on WAN_CTI" },
+          "queryType": "0",
+          "resultFormat": "time_series",
+          "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "aec2bvjiis7pca" }
+        },
+
+        {
+          "refId": "I",
+          "group": { "filter": "SRVINTRANET" },
+          "host": { "filter": "PFSENSE" },
+          "item": { "filter": "Incoming network traffic on INTRANET" },
+          "queryType": "0",
+          "resultFormat": "time_series",
+          "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "aec2bvjiis7pca" }
+        },
+        {
+          "refId": "J",
+          "group": { "filter": "SRVINTRANET" },
+          "host": { "filter": "PFSENSE" },
+          "item": { "filter": "Outgoing network traffic on INTRANET" },
+          "queryType": "0",
+          "resultFormat": "time_series",
+          "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "aec2bvjiis7pca" }
+        },
+        {
+          "refId": "K",
+          "group": { "filter": "SRVINTRANET" },
+          "host": { "filter": "PFSENSE" },
+          "item": { "filter": "Incoming network traffic on EXTRANET_SFZ" },
+          "queryType": "0",
+          "resultFormat": "time_series",
+          "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "aec2bvjiis7pca" }
+        },
+        {
+          "refId": "L",
+          "group": { "filter": "SRVINTRANET" },
+          "host": { "filter": "PFSENSE" },
+          "item": { "filter": "Outgoing network traffic on EXTRANET_SFZ" },
+          "queryType": "0",
+          "resultFormat": "time_series",
+          "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "aec2bvjiis7pca" }
+        },
+        {
+          "refId": "M",
+          "group": { "filter": "SRVINTRANET" },
+          "host": { "filter": "PFSENSE" },
+          "item": { "filter": "Incoming network traffic on DMZ" },
+          "queryType": "0",
+          "resultFormat": "time_series",
+          "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "aec2bvjiis7pca" }
+        },
+        {
+          "refId": "N",
+          "group": { "filter": "SRVINTRANET" },
+          "host": { "filter": "PFSENSE" },
+          "item": { "filter": "Outgoing network traffic on DMZ" },
+          "queryType": "0",
+          "resultFormat": "time_series",
+          "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "aec2bvjiis7pca" }
+        },
+        {
+          "refId": "O",
+          "group": { "filter": "SRVINTRANET" },
+          "host": { "filter": "PFSENSE" },
+          "item": { "filter": "Incoming network traffic on SRVSINTRANET" },
+          "queryType": "0",
+          "resultFormat": "time_series",
+          "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "aec2bvjiis7pca" }
+        },
+        {
+          "refId": "P",
+          "group": { "filter": "SRVINTRANET" },
+          "host": { "filter": "PFSENSE" },
+          "item": { "filter": "Outgoing network traffic on SRVSINTRANET" },
+          "queryType": "0",
+          "resultFormat": "time_series",
+          "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "aec2bvjiis7pca" }
+        }
+      ]
+    },
+
+    {
+      "type": "timeseries",
+      "title": "WAN Traffic (WAN + WAN_CTI) – IN/OUT",
+      "gridPos": { "h": 9, "w": 12, "x": 0, "y": 13 },
+      "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "aec2bvjiis7pca" },
+      "targets": [
+        {
+          "refId": "A",
+          "group": { "filter": "SRVINTRANET" },
+          "host": { "filter": "PFSENSE" },
+          "item": { "filter": "Incoming network traffic on WAN" },
+          "queryType": "0",
+          "resultFormat": "time_series",
+          "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "aec2bvjiis7pca" }
+        },
+        {
+          "refId": "B",
+          "group": { "filter": "SRVINTRANET" },
+          "host": { "filter": "PFSENSE" },
+          "item": { "filter": "Outgoing network traffic on WAN" },
+          "queryType": "0",
+          "resultFormat": "time_series",
+          "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "aec2bvjiis7pca" }
+        },
+        {
+          "refId": "C",
+          "group": { "filter": "SRVINTRANET" },
+          "host": { "filter": "PFSENSE" },
+          "item": { "filter": "Incoming network traffic on WAN_CTI" },
+          "queryType": "0",
+          "resultFormat": "time_series",
+          "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "aec2bvjiis7pca" }
+        },
+        {
+          "refId": "D",
+          "group": { "filter": "SRVINTRANET" },
+          "host": { "filter": "PFSENSE" },
+          "item": { "filter": "Outgoing network traffic on WAN_CTI" },
+          "queryType": "0",
+          "resultFormat": "time_series",
+          "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "aec2bvjiis7pca" }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bps",
+          "min": 0,
+          "custom": { "drawStyle": "line", "lineInterpolation": "smooth", "showPoints": "never" }
+        },
+        "overrides": []
+      },
+      "options": { "legend": { "displayMode": "table", "placement": "bottom" } }
+    },
+
+    {
+      "type": "timeseries",
+      "title": "LAN Core Traffic – IN/OUT (INTRANET/EXTRANET/DMZ/SRVSINTRANET)",
+      "gridPos": { "h": 9, "w": 12, "x": 12, "y": 13 },
+      "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "aec2bvjiis7pca" },
+      "targets": [
+        {
+          "refId": "A",
+          "group": { "filter": "SRVINTRANET" },
+          "host": { "filter": "PFSENSE" },
+          "item": { "filter": "Incoming network traffic on INTRANET" },
+          "queryType": "0",
+          "resultFormat": "time_series",
+          "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "aec2bvjiis7pca" }
+        },
+        {
+          "refId": "B",
+          "group": { "filter": "SRVINTRANET" },
+          "host": { "filter": "PFSENSE" },
+          "item": { "filter": "Outgoing network traffic on INTRANET" },
+          "queryType": "0",
+          "resultFormat": "time_series",
+          "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "aec2bvjiis7pca" }
+        },
+        {
+          "refId": "C",
+          "group": { "filter": "SRVINTRANET" },
+          "host": { "filter": "PFSENSE" },
+          "item": { "filter": "Incoming network traffic on EXTRANET_SFZ" },
+          "queryType": "0",
+          "resultFormat": "time_series",
+          "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "aec2bvjiis7pca" }
+        },
+        {
+          "refId": "D",
+          "group": { "filter": "SRVINTRANET" },
+          "host": { "filter": "PFSENSE" },
+          "item": { "filter": "Outgoing network traffic on EXTRANET_SFZ" },
+          "queryType": "0",
+          "resultFormat": "time_series",
+          "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "aec2bvjiis7pca" }
+        },
+        {
+          "refId": "E",
+          "group": { "filter": "SRVINTRANET" },
+          "host": { "filter": "PFSENSE" },
+          "item": { "filter": "Incoming network traffic on DMZ" },
+          "queryType": "0",
+          "resultFormat": "time_series",
+          "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "aec2bvjiis7pca" }
+        },
+        {
+          "refId": "F",
+          "group": { "filter": "SRVINTRANET" },
+          "host": { "filter": "PFSENSE" },
+          "item": { "filter": "Outgoing network traffic on DMZ" },
+          "queryType": "0",
+          "resultFormat": "time_series",
+          "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "aec2bvjiis7pca" }
+        },
+        {
+          "refId": "G",
+          "group": { "filter": "SRVINTRANET" },
+          "host": { "filter": "PFSENSE" },
+          "item": { "filter": "Incoming network traffic on SRVSINTRANET" },
+          "queryType": "0",
+          "resultFormat": "time_series",
+          "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "aec2bvjiis7pca" }
+        },
+        {
+          "refId": "H",
+          "group": { "filter": "SRVINTRANET" },
+          "host": { "filter": "PFSENSE" },
+          "item": { "filter": "Outgoing network traffic on SRVSINTRANET" },
+          "queryType": "0",
+          "resultFormat": "time_series",
+          "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "aec2bvjiis7pca" }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bps",
+          "min": 0,
+          "custom": { "drawStyle": "line", "lineInterpolation": "smooth", "showPoints": "never" }
+        },
+        "overrides": []
+      },
+      "options": { "legend": { "displayMode": "table", "placement": "bottom" } }
+    }
+  ],
+  "refresh": "20s",
+  "schemaVersion": 39,
+  "style": "dark",
+  "tags": ["pfsense", "zabbix", "flowbix", "sefaz"],
+  "templating": { "list": [] },
+  "time": { "from": "now-3h", "to": "now" },
+  "timepicker": {},
+  "timezone": "",
+  "title": "FLOWBIX – pfSense (Real Data)",
+  "uid": null,
+  "version": 1
+}

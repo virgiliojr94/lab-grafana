@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIREWALL CHECKPOINT - Dashboard Visual</title>
+    <style>
+        /* RESET E ESTILOS GLOBAIS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(135deg, #0a0e27 0%, #16213e 50%, #0f3460 100%);
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 14px;
+        }
+
+        /* CONTAINER PRINCIPAL */
+        .container {
+            display: grid;
+            grid-template-columns: repeat(24, 1fr);
+            grid-template-rows: auto;
+            gap: 12px;
+            padding: 20px;
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+
+        /* HEADER */
+        .header {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: rgba(25, 35, 65, 0.5);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 3px;
+            color: #fff;
+        }
+
+        .title-section {
+            text-align: center;
+            flex: 1;
+        }
+
+        .title-section h1 {
+            font-size: 24px;
+            color: #fff;
+            margin: 0;
+        }
+
+        .title-section p {
+            font-size: 12px;
+            color: #888;
+            letter-spacing: 2px;
+            margin: 5px 0 0 0;
+        }
+
+        .clock {
+            font-size: 20px;
+            color: #fff;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* CARDS */
+        .card {
+            background: rgba(25, 35, 65, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+        }
+
+        .card.status-up {
+            border-left: 3px solid #00ff00;
+        }
+
+        .card.status-down {
+            border-left: 3px solid #ff3333;
+        }
+
+        .card.status-warning {
+            border-left: 3px solid #ffaa00;
+        }
+
+        .card-title {
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: #aaa;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .card-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #fff;
+            text-align: center;
+        }
+
+        .card-unit {
+            font-size: 12px;
+            color: #888;
+            margin-top: 4px;
+        }
+
+        .card-status {
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 8px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .status-up {
+            color: #00ff00;
+            background: rgba(0, 255, 0, 0.1);
+        }
+
+        .status-down {
+            color: #ff3333;
+            background: rgba(255, 51, 51, 0.1);
+        }
+
+        /* GRÁFICOS */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chart {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            height: 80%;
+            gap: 4px;
+            margin-top: 10px;
+        }
+
+        .chart-bar {
+            flex: 1;
+            background: linear-gradient(to top, #00ff00, #ffaa00);
+            border-radius: 4px 4px 0 0;
+            min-height: 5px;
+            position: relative;
+            transition: height 0.3s ease;
+            opacity: 0.8;
+        }
+
+        .chart-bar:hover {
+            opacity: 1;
+        }
+
+        /* SECTIONS */
+        .section-title {
+            grid-column: 1 / -1;
+            font-size: 18px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            color: #fff;
+            padding: 10px 0;
+            border-bottom: 2px solid rgba(0, 255, 255, 0.3);
+            margin-top: 10px;
+        }
+
+        /* LAYOUT DAS SEÇÕES */
+        .section-disponibilidade {
+            grid-column: 1 / 7;
+            grid-row: 2;
+            min-height: 300px;
+        }
+
+        .section-wan {
+            grid-column: 7 / -1;
+            grid-row: 2;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .wan-card {
+            background: rgba(25, 35, 65, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .wan-title {
+            font-size: 12px;
+            font-weight: bold;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .wan-status {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .wan-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #00ff00;
+            box-shadow: 0 0 10px #00ff00;
+        }
+
+        .wan-indicator.down {
+            background: #ff3333;
+            box-shadow: 0 0 10px #ff3333;
+        }
+
+        .wan-chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            height: 40px;
+            margin-top: 5px;
+        }
+
+        .wan-bar {
+            flex: 1;
+            background: linear-gradient(to top, #00aaff, #0099ff);
+            border-radius: 2px;
+            min-height: 2px;
+            opacity: 0.7;
+        }
+
+        /* EVENTOS */
+        .events-container {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .event-box {
+            background: rgba(25, 35, 65, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            border-left: 3px solid;
+        }
+
+        .event-box.disaster {
+            border-left-color: #ff3333;
+            background: rgba(255, 51, 51, 0.1);
+        }
+
+        .event-box.error {
+            border-left-color: #ffaa00;
+            background: rgba(255, 170, 0, 0.1);
+        }
+
+        .event-box.warning {
+            border-left-color: #ffff00;
+            background: rgba(255, 255, 0, 0.1);
+        }
+
+        .event-box.info {
+            border-left-color: #00aaff;
+            background: rgba(0, 170, 255, 0.1);
+        }
+
+        .event-title {
+            font-size: 11px;
+            font-weight: bold;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .event-count {
+            font-size: 36px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        /* RECURSOS */
+        .resources-container {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .resource-card {
+            background: rgba(25, 35, 65, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        .resource-title {
+            font-size: 12px;
+            font-weight: bold;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .resource-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff00, #ffaa00, #ff3333);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        /* TRÁFEGO */
+        .traffic-container {
+            grid-column: 1 / -1;
+            background: rgba(25, 35, 65, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 10px;
+        }
+
+        .traffic-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        .traffic-chart {
+            width: 100%;
+            height: 150px;
+            display: flex;
+            align-items: flex-end;
+            gap: 3px;
+            position: relative;
+        }
+
+        .traffic-bar {
+            flex: 1;
+            background: linear-gradient(to top, #00ff00, #00aaff);
+            border-radius: 2px;
+            min-height: 2px;
+            opacity: 0.7;
+            transition: height 0.2s ease;
+        }
+
+        /* RESPONSIVIDADE */
+        @media (max-width: 1920px) {
+            .container {
+                grid-template-columns: repeat(12, 1fr);
+            }
+
+            .section-disponibilidade {
+                grid-column: 1 / 7;
+            }
+
+            .section-wan {
+                grid-column: 7 / -1;
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .wan-card {
+                grid-column: auto;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: repeat(6, 1fr);
+                padding: 10px;
+                gap: 8px;
+            }
+
+            .section-disponibilidade {
+                grid-column: 1 / -1;
+            }
+
+            .section-wan {
+                grid-column: 1 / -1;
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .events-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .card-value {
+                font-size: 24px;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+
+        /* ANIMAÇÕES */
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        @keyframes glow {
+
+            0%,
+            100% {
+                box-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+            }
+
+            50% {
+                box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+            }
+        }
+
+        .animate-pulse {
+            animation: pulse 2s infinite;
+        }
+
+        .animate-glow {
+            animation: glow 2s infinite;
+        }
+
+        /* LOADING STATE */
+        .loading {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(90deg,
+                    transparent,
+                    transparent 10px,
+                    rgba(255, 255, 255, 0.1) 10px,
+                    rgba(255, 255, 255, 0.1) 20px);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        /* SCROLLBAR */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 255, 255, 0.3);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 255, 255, 0.6);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <div class="logo">FLOWBIX</div>
+            <div class="title-section">
+                <h1>FIREWALL CHECKPOINT</h1>
+                <p>Informações detalhadas de Firewall</p>
+            </div>
+            <div class="clock" id="clock">18:05:07</div>
+        </div>
+
+        <!-- SEÇÃO DISPONIBILIDADE -->
+        <div class="section-disponibilidade">
+            <h2 class="section-title">DISPONIBILIDADE</h2>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 12px;">
+                <div class="card card-status-up">
+                    <div class="card-title">CHECK POINT</div>
+                    <div class="card-value" id="checkpoint-status">UP</div>
+                    <div class="card-status status-up">● ATIVO</div>
+                </div>
+                <div class="card card-status-up">
+                    <div class="card-title">ICMP</div>
+                    <div class="card-value" id="icmp-status">UP</div>
+                    <div class="card-status status-up">● RESPONDENDO</div>
+                </div>
+                <div class="card card-status-up">
+                    <div class="card-title">SNMP</div>
+                    <div class="card-value" id="snmp-status">UP</div>
+                    <div class="card-status status-up">● ATIVO</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">UPTIME</div>
+                    <div class="card-value" id="uptime-value">5d 23h</div>
+                    <div class="card-unit">Sistema ativo</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEÇÃO WAN LINKS -->
+        <div class="section-wan">
+            <h2 class="section-title" style="grid-column: 1 / -1;">LINKS WAN</h2>
+
+            <div class="wan-card">
+                <div class="wan-title">WAN 4 (VIVO)</div>
+                <div class="wan-status">
+                    <div class="wan-indicator" id="vivo-indicator"></div>
+                    <span id="vivo-status">UP</span>
+                </div>
+                <div style="margin-bottom: 8px;">
+                    <div class="card-title">THROUGHPUT</div>
+                    <div class="card-value" id="vivo-speed">2.1</div>
+                    <div class="card-unit">Mb/s</div>
+                </div>
+                <div class="wan-chart" id="vivo-chart"></div>
+            </div>
+
+            <div class="wan-card">
+                <div class="wan-title">WAN 5 (CLARO)</div>
+                <div class="wan-status">
+                    <div class="wan-indicator" id="claro-indicator"></div>
+                    <span id="claro-status">UP</span>
+                </div>
+                <div style="margin-bottom: 8px;">
+                    <div class="card-title">THROUGHPUT</div>
+                    <div class="card-value" id="claro-speed">1.8</div>
+                    <div class="card-unit">Mb/s</div>
+                </div>
+                <div class="wan-chart" id="claro-chart"></div>
+            </div>
+
+            <div class="wan-card">
+                <div class="wan-title">CAMÓN</div>
+                <div class="wan-status">
+                    <div class="wan-indicator" id="camon-indicator"></div>
+                    <span id="camon-status">UP</span>
+                </div>
+                <div style="margin-bottom: 8px;">
+                    <div class="card-title">THROUGHPUT</div>
+                    <div class="card-value" id="camon-speed">0.5</div>
+                    <div class="card-unit">Mb/s</div>
+                </div>
+                <div class="wan-chart" id="camon-chart"></div>
+            </div>
+        </div>
+
+        <!-- SEÇÃO RECURSOS -->
+        <h2 class="section-title" style="grid-column: 1 / -1;">RECURSOS DO SISTEMA</h2>
+        <div class="resources-container">
+            <div class="resource-card">
+                <div class="resource-title">CPU UTILIZATION</div>
+                <div class="resource-value" id="cpu-value">74%</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="cpu-progress" style="width: 74%;"></div>
+                </div>
+                <div style="font-size: 11px; color: #888; margin-top: 8px;">Carga média alta</div>
+            </div>
+
+            <div class="resource-card">
+                <div class="resource-title">MEMORY UTILIZATION</div>
+                <div class="resource-value" id="memory-value">51%</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="memory-progress" style="width: 51%;"></div>
+                </div>
+                <div style="font-size: 11px; color: #888; margin-top: 8px;">RAM disponível</div>
+            </div>
+
+            <div class="resource-card">
+                <div class="resource-title">STORAGE AVAILABLE</div>
+                <div class="resource-value" id="storage-value">4.2GB</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="storage-progress" style="width: 8%;"></div>
+                </div>
+                <div style="font-size: 11px; color: #ff3333; margin-top: 8px;">⚠ CRÍTICO - <100MB< /div>
+                </div>
+            </div>
+
+            <!-- SEÇÃO TRÁFEGO -->
+            <h2 class="section-title" style="grid-column: 1 / -1;">TRÁFEGO DE INTERNET (ISP)</h2>
+            <div class="traffic-container">
+                <div class="traffic-title">Última Hora - Variação de Throughput</div>
+                <div class="traffic-chart" id="main-traffic-chart"></div>
+            </div>
+
+            <!-- SEÇÃO EVENTOS -->
+            <h2 class="section-title" style="grid-column: 1 / -1;">EVENTOS & ALERTAS</h2>
+            <div class="events-container">
+                <div class="event-box disaster">
+                    <div class="event-title">DISASTER</div>
+                    <div class="event-count" id="disaster-count">5</div>
+                </div>
+                <div class="event-box error">
+                    <div class="event-title">ERROR</div>
+                    <div class="event-count" id="error-count">8</div>
+                </div>
+                <div class="event-box warning">
+                    <div class="event-title">WARNING</div>
+                    <div class="event-count" id="warning-count">12</div>
+                </div>
+                <div class="event-box info">
+                    <div class="event-title">INFORMATION</div>
+                    <div class="event-count" id="info-count">24</div>
+                </div>
+                <div class="event-box">
+                    <div class="event-title">LAST UPDATE</div>
+                    <div class="event-count" id="last-update" style="font-size: 16px;">now</div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // CLASSE PARA GERENCIAR API DO ZABBIX
+            class ZabbixAPIClient {
+                constructor(url, token) {
+                    this.url = url;
+                    this.token = token;
+                }
+
+                async getLatestData(itemIds) {
+                    try {
+                        const response = await fetch(`${this.url}/api_jsonrpc.php`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json-rpc',
+                                'Authorization': `Bearer ${this.token}`
+                            },
+                            body: JSON.stringify({
+                                jsonrpc: '2.0',
+                                method: 'history.get',
+                                params: {
+                                    itemids: itemIds,
+                                    history: 0,
+                                    limit: 1,
+                                    sortfield: 'clock',
+                                    sortorder: 'DESC'
+                                },
+                                id: 1
+                            })
+                        });
+
+                        return await response.json();
+                    } catch (error) {
+                        console.error('Erro ao buscar dados do Zabbix:', error);
+                        return null;
+                    }
+                }
+
+                async getHostStatus(hostid) {
+                    try {
+                        const response = await fetch(`${this.url}/api_jsonrpc.php`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json-rpc',
+                                'Authorization': `Bearer ${this.token}`
+                            },
+                            body: JSON.stringify({
+                                jsonrpc: '2.0',
+                                method: 'host.get',
+                                params: {
+                                    hostids: [hostid],
+                                    selectInterfaces: 'extend',
+                                    selectGroups: 'extend'
+                                },
+                                id: 1
+                            })
+                        });
+
+                        return await response.json();
+                    } catch (error) {
+                        console.error('Erro ao buscar status do host:', error);
+                        return null;
+                    }
+                }
+            }
+
+            // INICIALIZAÇÃO E FUNÇÕES DE ATUALIZAÇÃO
+            const updateClock = () => {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString('pt-BR', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+                document.getElementById('clock').textContent = timeString;
+            };
+
+            const generateRandomChart = (elementId, count = 12) => {
+                const container = document.getElementById(elementId);
+                if (!container) return;
+
+                container.innerHTML = '';
+                for (let i = 0; i < count; i++) {
+                    const bar = document.createElement('div');
+                    const height = Math.random() * 100;
+                    bar.className = count > 20 ? 'traffic-bar' : 'wan-bar';
+                    bar.style.height = height + '%';
+                    container.appendChild(bar);
+                }
+            };
+
+            const updateWANCharts = () => {
+                generateRandomChart('vivo-chart', 12);
+                generateRandomChart('claro-chart', 12);
+                generateRandomChart('camon-chart', 12);
+                generateRandomChart('main-traffic-chart', 60);
+            };
+
+            const updateMetrics = () => {
+                // Simular atualização de métricas
+                const cpuValue = Math.floor(Math.random() * 100);
+                const memoryValue = Math.floor(Math.random() * 100);
+                const vivoSpeed = (Math.random() * 5).toFixed(2);
+                const claroSpeed = (Math.random() * 5).toFixed(2);
+                const camonSpeed = (Math.random() * 5).toFixed(2);
+
+                document.getElementById('cpu-value').textContent = cpuValue + '%';
+                document.getElementById('cpu-progress').style.width = cpuValue + '%';
+
+                document.getElementById('memory-value').textContent = memoryValue + '%';
+                document.getElementById('memory-progress').style.width = memoryValue + '%';
+
+                document.getElementById('vivo-speed').textContent = vivoSpeed;
+                document.getElementById('claro-speed').textContent = claroSpeed;
+                document.getElementById('camon-speed').textContent = camonSpeed;
+
+                // Atualizar cores baseado em thresholds
+                updateCardColor('cpu-value', cpuValue, [0, 60, 80, 100]);
+                updateCardColor('memory-value', memoryValue, [0, 70, 90, 100]);
+            };
+
+            const updateCardColor = (elementId, value, thresholds) => {
+                const element = document.getElementById(elementId);
+                if (!element) return;
+
+                let color = '#00ff00'; // green
+                if (value >= thresholds[2]) color = '#ff3333'; // red
+                else if (value >= thresholds[1]) color = '#ffaa00'; // yellow
+
+                element.style.color = color;
+            };
+
+            const updateEvents = () => {
+                const events = {
+                    disaster: Math.floor(Math.random() * 8),
+                    error: Math.floor(Math.random() * 15),
+                    warning: Math.floor(Math.random() * 20),
+                    info: Math.floor(Math.random() * 30)
+                };
+
+                document.getElementById('disaster-count').textContent = events.disaster;
+                document.getElementById('error-count').textContent = events.error;
+                document.getElementById('warning-count').textContent = events.warning;
+                document.getElementById('info-count').textContent = events.info;
+
+                // Atualizar timestamp
+                const now = new Date();
+                const seconds = now.getSeconds();
+                document.getElementById('last-update').textContent = `${seconds}s ago`;
+            };
+
+            const initDashboard = () => {
+                // Update inicial
+                updateClock();
+                updateWANCharts();
+                updateMetrics();
+                updateEvents();
+
+                // Atualizar periodicamente
+                setInterval(updateClock, 1000); // a cada segundo
+                setInterval(updateWANCharts, 3000); // a cada 3 segundos
+                setInterval(updateMetrics, 5000); // a cada 5 segundos
+                setInterval(updateEvents, 2000); // a cada 2 segundos
+            };
+
+            // INICIAR QUANDO DOCUMENTO CARREGA
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initDashboard);
+            } else {
+                initDashboard();
+            }
+
+            // FUNÇÃO PARA INTEGRAÇÃO COM ZABBIX (quando disponível)
+            const integrateZabbixData = async () => {
+                // Configurar com suas credenciais do Zabbix
+                const ZABBIX_URL = 'https://seu-zabbix.com';
+                const ZABBIX_TOKEN = 'seu-token-aqui';
+                const HOST_ID = '10084';
+
+                const client = new ZabbixAPIClient(ZABBIX_URL, ZABBIX_TOKEN);
+
+                // Mapa de item IDs para elementos do dashboard
+                const itemMapping = {
+                    '23310': { element: 'cpu-value', suffix: '%' },
+                    '23311': { element: 'memory-value', suffix: '%' },
+                    '23298': { element: 'uptime-value', suffix: '' },
+                    '23300': { element: 'vivo-speed', suffix: '' },
+                    '23302': { element: 'claro-speed', suffix: '' },
+                    '23304': { element: 'camon-speed', suffix: '' },
+                    '23312': { element: 'storage-value', suffix: 'GB' }
+                };
+
+                // Buscar dados quando integrado com Zabbix real
+                // const data = await client.getLatestData(Object.keys(itemMapping));
+            };
+
+            // Descomenta a linha abaixo quando quiser integrar com Zabbix real
+            // integrateZabbixData();
+        </script>
+</body>
+
+</html>

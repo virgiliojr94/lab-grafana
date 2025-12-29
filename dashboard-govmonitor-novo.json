@@ -1,0 +1,343 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "Monitoramos os sites do Governo de Roraima em tempo real e informamos se estão fora do ar ou com problemas.",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 166,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "alexanderzobnin-zabbix-datasource",
+        "uid": "aec2bvjiis7pca"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 37,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "SVGBaseFix": true,
+        "add100Percentage": true,
+        "calcsMutation": "standard",
+        "centerAlignContent": true,
+        "codeData": "{\n  \"text\": \"GovMonitor RR\"\n}",
+        "css": "",
+        "dynamicData": false,
+        "dynamicFieldDisplayValues": false,
+        "dynamicHtmlGraphics": false,
+        "dynamicProps": false,
+        "html": "",
+        "onInit": "",
+        "onInitOnResize": false,
+        "onRender": "/********************************************************************************************\n * GovMonitor RR - Dashboard de Status dos Serviços Governamentais\n * Adaptado do layout DownDetector para Grafana HTML Graphics Panel\n * Data: 2025-12-26\n ********************************************************************************************/\n(() => {\n  if (!htmlNode) return;\n\n  const styles = `\n    <style>\n      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');\n\n      * {\n        margin: 0;\n        padding: 0;\n        box-sizing: border-box;\n      }\n\n      .govmonitor-container {\n        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;\n        background-color: #f6f6f6;\n        color: #212529;\n        min-height: 100vh;\n      }\n\n      .navbar {\n        background-color: #fff;\n        border-bottom: 1px solid #e3e3e3;\n        padding: 15px 20px;\n      }\n\n      .navbar-content {\n        max-width: 1320px;\n        margin: 0 auto;\n        display: flex;\n        align-items: center;\n        justify-content: space-between;\n      }\n\n      .logo {\n        font-size: 24px;\n        font-weight: bold;\n        color: #e94334;\n      }\n\n      .logo-subtitle {\n        font-size: 12px;\n        color: #666;\n        font-weight: normal;\n      }\n\n      .last-update {\n        font-size: 14px;\n        color: #666;\n      }\n\n      .hero {\n        background-color: #f6f6f6;\n        padding: 40px 20px 30px;\n        text-align: center;\n      }\n\n      .hero h1 {\n        font-size: 2rem;\n        font-weight: 300;\n        margin-bottom: 15px;\n        color: #2b2c30;\n      }\n\n      .hero p {\n        font-size: 1rem;\n        font-weight: 300;\n        color: #555;\n        max-width: 800px;\n        margin: 0 auto;\n      }\n\n      .main-content {\n        padding: 30px 20px 40px;\n        max-width: 1320px;\n        margin: 0 auto;\n      }\n\n      .section-title {\n        font-size: 1.5rem;\n        font-weight: 500;\n        color: #2b2c30;\n        margin-bottom: 25px;\n        margin-top: 20px;\n      }\n\n      .service-grid {\n        display: grid;\n        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));\n        gap: 20px;\n      }\n\n      .service-card {\n        background: #fff;\n        border: 1px solid #eee;\n        padding: 20px 10px;\n        text-align: center;\n        transition: transform 0.2s, box-shadow 0.2s;\n        cursor: pointer;\n        min-height: 200px;\n        display: flex;\n        flex-direction: column;\n        border-radius: 4px;\n      }\n\n      .service-card:hover {\n        transform: translateY(-2px);\n        box-shadow: 0 4px 12px rgba(0,0,0,0.1);\n      }\n\n      .service-card.status-down-card {\n        border-left: 4px solid #c62828;\n      }\n\n      .service-card.status-degraded-card {\n        border-left: 4px solid #e65100;\n      }\n\n      .logo-wrapper {\n        height: 80px;\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        margin-bottom: 15px;\n        font-size: 48px;\n      }\n\n      .service-name {\n        font-size: 18px;\n        font-weight: 600;\n        color: #2b2c30;\n        margin-bottom: 8px;\n      }\n\n      .service-url {\n        font-size: 11px;\n        color: #999;\n        margin-bottom: 15px;\n      }\n\n      .sparkline-container {\n        width: 76%;\n        margin: 0 auto;\n        height: 40px;\n        display: flex;\n        align-items: flex-end;\n        justify-content: space-between;\n        gap: 2px;\n        margin-top: auto;\n      }\n\n      .sparkline-empty {\n        width: 100%;\n        text-align: center;\n        font-size: 10px;\n        color: #bbb;\n        align-self: center;\n      }\n\n      .sparkline-bar {\n        flex: 1;\n        background: linear-gradient(180deg, #4CAF50 0%, #45a049 100%);\n        border-radius: 2px 2px 0 0;\n        min-height: 3px;\n        transition: all 0.3s;\n      }\n\n      .sparkline-bar.warning {\n        background: linear-gradient(180deg, #ff9800 0%, #f57c00 100%);\n      }\n\n      .sparkline-bar.danger {\n        background: linear-gradient(180deg, #f44336 0%, #d32f2f 100%);\n      }\n\n      .status-badge {\n        display: inline-block;\n        padding: 4px 12px;\n        border-radius: 12px;\n        font-size: 11px;\n        font-weight: 600;\n        text-transform: uppercase;\n        margin-top: 10px;\n      }\n\n      .status-operational {\n        background: #e8f5e9;\n        color: #2e7d32;\n      }\n\n      .status-degraded {\n        background: #fff3e0;\n        color: #e65100;\n      }\n\n      .status-down {\n        background: #ffebee;\n        color: #c62828;\n      }\n\n      .footer {\n        background-color: #3c4043;\n        color: #bdc1c6;\n        padding: 20px;\n        text-align: center;\n        font-size: 14px;\n        margin-top: 30px;\n      }\n\n      .footer a {\n        color: #eee;\n        text-decoration: none;\n      }\n\n      .footer a:hover {\n        color: #e94334;\n      }\n\n      @media (max-width: 768px) {\n        .hero h1 {\n          font-size: 1.5rem;\n        }\n        .service-grid {\n          grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));\n          gap: 15px;\n        }\n      }\n\n      @media (min-width: 1400px) {\n        .service-grid {\n          grid-template-columns: repeat(6, 1fr);\n        }\n      }\n\n      @media (min-width: 1920px) {\n        .main-content {\n          max-width: 1800px;\n        }\n        .service-grid {\n          grid-template-columns: repeat(8, 1fr);\n        }\n        .hero h1 {\n          font-size: 2.5rem;\n        }\n        .service-name {\n          font-size: 20px;\n        }\n      }\n    </style>\n  `;\n\n  // Parse data from Grafana\n  const panelData = (typeof data !== 'undefined' && data) || (typeof panel !== 'undefined' && panel.data) || null;\n  const series = panelData && Array.isArray(panelData.series) ? panelData.series : [];\n\n  const toNumber = (value) => {\n    if (value == null) return null;\n    if (typeof value === 'number') return Number.isFinite(value) ? value : null;\n    if (typeof value === 'string' && value.trim() !== '') {\n      const num = Number(value);\n      return Number.isFinite(num) ? num : null;\n    }\n    return null;\n  };\n\n  const getLastValue = (frame) => {\n    if (!frame || !frame.fields) return null;\n    const valueField = frame.fields.find(f => f.type === 'number') || frame.fields[1];\n    if (!valueField) return null;\n    const vals = valueField.values;\n    if (vals && typeof vals.get === 'function') {\n      const len = typeof vals.length === 'number' ? vals.length : (typeof vals.toArray === 'function' ? vals.toArray().length : 0);\n      return len ? vals.get(len - 1) : null;\n    }\n    if (Array.isArray(vals)) return vals.length ? vals[vals.length - 1] : null;\n    return null;\n  };\n\n  const getAllValues = (frame) => {\n    if (!frame || !frame.fields) return [];\n    const valueField = frame.fields.find(f => f.type === 'number') || frame.fields[1];\n    if (!valueField) return [];\n    const vals = valueField.values;\n    if (vals && typeof vals.toArray === 'function') return vals.toArray();\n    if (Array.isArray(vals)) return vals;\n    return [];\n  };\n\n  const getHost = (frame) => {\n    const f = frame && frame.fields ? frame.fields[1] : null;\n    const labels = (f && f.labels) || frame.labels || (frame.meta && frame.meta.custom) || {};\n    const byLabel = labels.host || labels.Host || labels.hostname || null;\n    if (byLabel) return byLabel.replace(/:+$/, '').trim();\n\n    let name = String(frame && frame.name ? frame.name : '');\n    const sslMatch = name.match(/^(SITE\\s+)?(.+?):\\s*(Expires on|Valid from)/i);\n    if (sslMatch) return 'SITE ' + sslMatch[2].trim();\n    const websiteMatch = name.match(/^(SITE\\s+)?(.+?):\\s*Website/i);\n    if (websiteMatch) return 'SITE ' + websiteMatch[2].trim();\n    const simpleMatch = name.match(/^(SITE\\s+)?([A-Z\\s]+)/i);\n    if (simpleMatch && simpleMatch[2]) return 'SITE ' + simpleMatch[2].trim().replace(/:+$/, '');\n    return 'UNKNOWN';\n  };\n\n  const byRef = {};\n  series.forEach(s => {\n    const ref = s.refId || 'unknown';\n    (byRef[ref] = byRef[ref] || []).push(s);\n  });\n\n  const indexByHost = (frames, getAllVals = false) => {\n    const map = {};\n    (frames || []).forEach(f => {\n      const h = getHost(f);\n      if (h && h !== 'UNKNOWN') {\n        if (getAllVals) {\n          map[h] = getAllValues(f).map(v => toNumber(v)).filter(v => v != null);\n        } else {\n          let v = getLastValue(f);\n          v = toNumber(v) ?? v;\n          if (v != null) map[h] = v;\n        }\n      }\n    });\n    return map;\n  };\n\n  // Get metrics\n  const ping = indexByHost(byRef['A']);\n  const status = indexByHost(byRef['B']);\n  const httpRt = indexByHost(byRef['C']);\n  const httpRtHistory = indexByHost(byRef['C'], true);\n  const navLoad = indexByHost(byRef['F']);\n  const navLoadHistory = indexByHost(byRef['F'], true);\n\n  // Service configuration with emojis\n  const serviceConfig = {\n    'SITE SEFAZ': { name: 'SEFAZ', fullName: 'Secretaria da Fazenda', url: 'sefaz.rr.gov.br', emoji: '💰' },\n    'SITE SESP': { name: 'SESP', fullName: 'Secretaria de Segurança Pública', url: 'sesp.rr.gov.br', emoji: '🛡️' },\n    'SITE EDUCACAO': { name: 'EDUCAÇÃO', fullName: 'Secretaria de Educação', url: 'educacao.rr.gov.br', emoji: '📚' },\n    'SITE OUVIDORIA': { name: 'OUVIDORIA', fullName: 'Ouvidoria do Estado', url: 'ouvidoria.rr.gov.br', emoji: '📢' },\n    'SITE SEINF': { name: 'SEINF', fullName: 'Secretaria de Infraestrutura', url: 'seinf.rr.gov.br', emoji: '🏗️' },\n    'SITE SETRABES': { name: 'SETRABES', fullName: 'Secretaria do Trabalho', url: 'setrabes.rr.gov.br', emoji: '🤝' },\n    'SITE FAPERR': { name: 'FAPERR', fullName: 'Fundação de Amparo à Pesquisa', url: 'faperr.rr.gov.br', emoji: '🔬' },\n    'SITE SEPLAN': { name: 'SEPLAN', fullName: 'Secretaria de Planejamento', url: 'seplan.rr.gov.br', emoji: '📊' },\n    'SITE SEED': { name: 'SEED', fullName: 'Secretaria de Desenvolvimento', url: 'seed.rr.gov.br', emoji: '📈' },\n    'SITE POLICIA CIVIL': { name: 'POLÍCIA CIVIL', fullName: 'Polícia Civil de Roraima', url: 'policiacivil.rr.gov.br', emoji: '👮' },\n    'SITE PGE': { name: 'PGE', fullName: 'Procuradoria Geral do Estado', url: 'www.pge.rr.gov.br', emoji: '⚖️' },\n    'SITE SECULT': { name: 'SECULT', fullName: 'Secretaria de Cultura', url: 'secult.rr.gov.br', emoji: '🎭' },\n    'SITE TRANSPARENCIA': { name: 'TRANSPARÊNCIA', fullName: 'Portal da Transparência', url: 'www.transparencia.rr.gov.br', emoji: '🔍' },\n    'SITE ADERR': { name: 'ADERR', fullName: 'Agência de Desenvolvimento', url: 'www.aderr.rr.gov.br', emoji: '🌱' },\n    'SITE CODESAIMA': { name: 'CODESAIMA', fullName: 'Companhia de Desenvolvimento', url: 'codesaima.rr.gov.br', emoji: '🌳' },\n    'SITE IPEM': { name: 'IPEM', fullName: 'Instituto de Pesos e Medidas', url: 'ipem.rr.gov.br', emoji: '⚖️' },\n    'Imprensa Oficial': { name: 'IMPRENSA OFICIAL', fullName: 'Imprensa Oficial', url: 'imprensaoficial.rr.gov.br', emoji: '📰' }\n  };\n\n  // Build services list\n  const hosts = new Set();\n  [ping, status, httpRt, navLoad].forEach(m => {\n    Object.keys(m || {}).forEach(h => hosts.add(h));\n  });\n\n  let services = Array.from(hosts).map(h => {\n    const config = serviceConfig[h] || { \n      name: h.replace(/^SITE\\s+/i, ''), \n      fullName: h.replace(/^SITE\\s+/i, ''),\n      url: '', \n      emoji: '🏛️' \n    };\n\n    const pingVal = toNumber(ping[h]);\n    const statusVal = toNumber(status[h]);\n    const hasPing = pingVal != null;\n    const hasStatus = statusVal != null;\n    const isUp = (hasPing && pingVal > 0) || (hasStatus && statusVal >= 200 && statusVal < 400);\n\n    const respTimeRaw = toNumber(httpRt[h]) || 0;\n    const respTime = Math.round(respTimeRaw * 1000);\n    const loadTimeRaw = toNumber(navLoad[h]) || 0;\n    const loadTime = Math.round(loadTimeRaw * 1000);\n\n    // Determine status\n    let statusLabel = 'operational';\n    if (!isUp && (hasPing || hasStatus)) {\n      statusLabel = 'down';\n    } else if (loadTime > 5000 || respTime > 3000) {\n      statusLabel = 'degraded';\n    }\n\n    // Get history for sparkline (last 12 points)\n    let history = navLoadHistory[h] || httpRtHistory[h] || [];\n    history = history.slice(-12);\n\n    return {\n      host: h,\n      name: config.name,\n      fullName: config.fullName,\n      url: config.url,\n      emoji: config.emoji,\n      status: statusLabel,\n      isUp: statusLabel === 'operational',\n      isDegraded: statusLabel === 'degraded',\n      isDown: statusLabel === 'down',\n      respTime: respTime,\n      loadTime: loadTime,\n      history: history\n    };\n  }).filter(s => s.host !== 'UNKNOWN');\n\n  // Sort: DOWN first, then DEGRADED, then UP\n  services.sort((a, b) => {\n    const order = { 'down': 0, 'degraded': 1, 'operational': 2 };\n    return order[a.status] - order[b.status];\n  });\n\n  const now = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });\n\n  // Generate sparkline bars\n  const generateSparkline = (history, isDown) => {\n    if (!history || history.length === 0) {\n      return '<div class=\"sparkline-empty\">Sem dados</div>';\n    }\n    const maxVal = Math.max(...history, 0.001);\n    return history.map((val, idx) => {\n      const height = Math.max((val / maxVal) * 100, 10);\n      let barClass = '';\n      if (isDown) {\n        barClass = 'danger';\n      } else if (val > maxVal * 0.7) {\n        barClass = 'warning';\n      }\n      return `<div class=\"sparkline-bar ${barClass}\" style=\"height: ${height}%\"></div>`;\n    }).join('');\n  };\n\n  // Render services\n  const servicesHtml = services.length > 0 ? services.map(s => {\n    const cardClass = s.isDown ? 'status-down-card' : (s.isDegraded ? 'status-degraded-card' : '');\n    const badgeClass = s.isDown ? 'status-down' : (s.isDegraded ? 'status-degraded' : 'status-operational');\n    const badgeText = s.isDown ? '✗ Fora do Ar' : (s.isDegraded ? '⚠ Degradado' : '✓ Operacional');\n\n    return `\n      <div class=\"service-card ${cardClass}\" onclick=\"window.open('https://${s.url}', '_blank')\">\n        <div class=\"logo-wrapper\">\n          ${s.emoji}\n        </div>\n        <div class=\"service-name\">${s.name}</div>\n        <div class=\"service-url\">${s.url}</div>\n\n        <div class=\"sparkline-container\">\n          ${generateSparkline(s.history, s.isDown)}\n        </div>\n\n        <div class=\"status-badge ${badgeClass}\">\n          ${badgeText}\n        </div>\n      </div>\n    `;\n  }).join('') : `\n    <div style=\"grid-column: 1/-1; text-align: center; padding: 60px; color: #6c757d;\">\n      <div style=\"font-size: 48px; margin-bottom: 16px;\">📡</div>\n      <h3 style=\"color: #212529; margin-bottom: 8px;\">Aguardando dados...</h3>\n      <p>Os dados dos serviços serão exibidos assim que estiverem disponíveis.</p>\n    </div>\n  `;\n\n  htmlNode.innerHTML = styles + `\n    <div class=\"govmonitor-container\">\n      <nav class=\"navbar\">\n        <div class=\"navbar-content\">\n          <div class=\"logo\">\n            GovMonitor RR\n            <div class=\"logo-subtitle\">Status dos Serviços Governamentais</div>\n          </div>\n          <div class=\"last-update\">\n            Última atualização: ${now}\n          </div>\n        </div>\n      </nav>\n\n      <section class=\"hero\">\n        <h1>Status em tempo real dos serviços governamentais</h1>\n        <p>Monitoramos os sites do Governo de Roraima em tempo real e informamos se estão fora do ar ou com problemas.</p>\n      </section>\n\n      <main class=\"main-content\">\n        \n        <div class=\"service-grid\">\n          ${servicesHtml}\n        </div>\n      </main>\n\n      <footer class=\"footer\">\n        <p>&copy; 2024 Governo do Estado de Roraima - Monitoramento Interno</p>\n        <p style=\"margin-top: 10px;\">Atualização automática via Grafana</p>\n      </footer>\n    </div>\n  `;\n})();",
+        "overflow": "visible",
+        "panelupdateOnMount": true,
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull",
+            "last",
+            "firstNotNull",
+            "first",
+            "min",
+            "max",
+            "mean",
+            "sum",
+            "count",
+            "range",
+            "delta",
+            "step",
+            "diff",
+            "logmin",
+            "allIsZero",
+            "allIsNull",
+            "diffperc"
+          ]
+        },
+        "renderOnMount": true,
+        "rootCSS": "",
+        "useGrafanaScrollbar": true
+      },
+      "pluginVersion": "2.2.3",
+      "targets": [
+        {
+          "application": {
+            "filter": ""
+          },
+          "countTriggersBy": "",
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "${DS_ZABBIX}"
+          },
+          "evaltype": "0",
+          "functions": [],
+          "group": {
+            "filter": "SITES GOVERNAMENTAIS"
+          },
+          "hide": false,
+          "host": {
+            "filter": "/.*/"
+          },
+          "item": {
+            "filter": "/^Website \\{\\$SITE_URL\\} HTTP Ping Check$/"
+          },
+          "itemTag": {
+            "filter": ""
+          },
+          "macro": {
+            "filter": ""
+          },
+          "options": {
+            "count": false,
+            "disableDataAlignment": false,
+            "showDisabledItems": false,
+            "skipEmptyValues": false,
+            "useTrends": "default",
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": "0",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "textFilter": "",
+          "trigger": {
+            "filter": ""
+          }
+        },
+        {
+          "application": {
+            "filter": ""
+          },
+          "countTriggersBy": "",
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "${DS_ZABBIX}"
+          },
+          "evaltype": "0",
+          "functions": [],
+          "group": {
+            "filter": "SITES GOVERNAMENTAIS"
+          },
+          "hide": false,
+          "host": {
+            "filter": "/.*/"
+          },
+          "item": {
+            "filter": "/^Website \\{\\$SITE_URL\\} HTTP Status Code$/"
+          },
+          "itemTag": {
+            "filter": ""
+          },
+          "macro": {
+            "filter": ""
+          },
+          "options": {
+            "count": false,
+            "disableDataAlignment": false,
+            "showDisabledItems": false,
+            "skipEmptyValues": false,
+            "useTrends": "default",
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": "0",
+          "refId": "B",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "textFilter": "",
+          "trigger": {
+            "filter": ""
+          }
+        },
+        {
+          "application": {
+            "filter": ""
+          },
+          "countTriggersBy": "",
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "${DS_ZABBIX}"
+          },
+          "evaltype": "0",
+          "functions": [],
+          "group": {
+            "filter": "SITES GOVERNAMENTAIS"
+          },
+          "hide": false,
+          "host": {
+            "filter": "/.*/"
+          },
+          "item": {
+            "filter": "/^Website \\{\\$SITE_URL\\} HTTP Response Time$/"
+          },
+          "itemTag": {
+            "filter": ""
+          },
+          "macro": {
+            "filter": ""
+          },
+          "options": {
+            "count": false,
+            "disableDataAlignment": false,
+            "showDisabledItems": false,
+            "skipEmptyValues": false,
+            "useTrends": "default",
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": "0",
+          "refId": "C",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "textFilter": "",
+          "trigger": {
+            "filter": ""
+          }
+        },
+        {
+          "application": {
+            "filter": ""
+          },
+          "countTriggersBy": "",
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "${DS_ZABBIX}"
+          },
+          "evaltype": "0",
+          "functions": [],
+          "group": {
+            "filter": "SITES GOVERNAMENTAIS"
+          },
+          "hide": false,
+          "host": {
+            "filter": "/.*/"
+          },
+          "item": {
+            "filter": "/^Website \\{\\$SITE_URL\\} Navigation load event time$/"
+          },
+          "itemTag": {
+            "filter": ""
+          },
+          "macro": {
+            "filter": ""
+          },
+          "options": {
+            "count": false,
+            "disableDataAlignment": false,
+            "showDisabledItems": false,
+            "skipEmptyValues": false,
+            "useTrends": "default",
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": "0",
+          "refId": "F",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "textFilter": "",
+          "trigger": {
+            "filter": ""
+          }
+        }
+      ],
+      "title": "",
+      "type": "gapit-htmlgraphics-panel"
+    }
+  ],
+  "preload": false,
+  "refresh": "5m",
+  "schemaVersion": 40,
+  "tags": [
+    "govmonitor",
+    "downdetector",
+    "roraima",
+    "sites",
+    "monitoring"
+  ],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "GovMonitor RR - Status dos Serviços Governamentais v3",
+  "uid": "govmonitor-rr-status-dashboard",
+  "version": 7,
+  "weekStart": ""
+}

@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Status dos Serviços Governamentais - Roraima</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f6f6f6;
+            color: #212529;
+        }
+
+        .navbar {
+            background-color: #fff;
+            border-bottom: 1px solid #e3e3e3;
+            padding: 15px 20px;
+        }
+
+        .container {
+            max-width: 1320px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .navbar .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #e94334;
+        }
+
+        .logo-subtitle {
+            font-size: 12px;
+            color: #666;
+            font-weight: normal;
+        }
+
+        .last-update {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .hero {
+            background-color: #f6f6f6;
+            padding: 60px 20px 40px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 15px;
+            color: #2b2c30;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            font-weight: 300;
+            color: #555;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        main {
+            padding: 40px 20px 60px;
+        }
+
+        .service-mosaic {
+            margin-bottom: 50px;
+        }
+
+        .service-mosaic h3 {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: #2b2c30;
+            margin-bottom: 30px;
+            margin-top: 40px;
+        }
+
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .service-card {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 20px 10px;
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .service-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .logo-wrapper {
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .logo-wrapper img {
+            max-width: 76%;
+            max-height: 90px;
+            height: auto;
+        }
+
+        .service-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2b2c30;
+            margin-bottom: 10px;
+        }
+
+        .service-url {
+            font-size: 11px;
+            color: #999;
+            margin-bottom: 15px;
+        }
+
+        .sparkline-container {
+            width: 76%;
+            margin: 0 auto;
+            height: 40px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 2px;
+            margin-top: auto;
+        }
+
+        .sparkline-bar {
+            flex: 1;
+            background: linear-gradient(180deg, #4CAF50 0%, #45a049 100%);
+            border-radius: 2px 2px 0 0;
+            min-height: 3px;
+            transition: all 0.3s;
+        }
+
+        .sparkline-bar.warning {
+            background: linear-gradient(180deg, #ff9800 0%, #f57c00 100%);
+        }
+
+        .sparkline-bar.danger {
+            background: linear-gradient(180deg, #f44336 0%, #d32f2f 100%);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-top: 10px;
+        }
+
+        .status-operational {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .status-degraded {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .status-down {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        footer {
+            background-color: #3c4043;
+            color: #bdc1c6;
+            padding: 30px 20px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        footer a {
+            color: #eee;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: #e94334;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 1.75rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .service-grid {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+                gap: 15px;
+            }
+
+            .service-card {
+                min-height: 180px;
+            }
+        }
+
+        @media (min-width: 1400px) {
+            .service-grid {
+                grid-template-columns: repeat(6, 1fr);
+            }
+        }
+
+        /* Telão - Grid maior */
+        @media (min-width: 1920px) {
+            .container {
+                max-width: 1800px;
+            }
+
+            .service-grid {
+                grid-template-columns: repeat(8, 1fr);
+            }
+
+            .hero h1 {
+                font-size: 3.5rem;
+            }
+
+            .service-card {
+                min-height: 220px;
+            }
+
+            .service-name {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                GovMonitor RR
+                <div class="logo-subtitle">Status dos Serviços Governamentais</div>
+            </div>
+            <div class="last-update">
+                Última atualização: <span id="updateTime">--:--:--</span>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1>Status em tempo real dos serviços governamentais</h1>
+        <p>Monitoramos os sites do Governo de Roraima em tempo real e informamos se estão fora do ar ou com problemas.</p>
+    </section>
+
+    <main>
+        <div class="container service-mosaic">
+            <h3>Serviços Governamentais de Roraima</h3>
+            <div class="service-grid" id="serviceGrid">
+                <!-- Services will be injected here -->
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Governo do Estado de Roraima - Monitoramento Interno</p>
+            <p style="margin-top: 10px;">Atualização automática a cada 30 segundos</p>
+        </div>
+    </footer>
+
+    <script>
+        const services = [
+            { name: 'SEFAZ', fullName: 'Secretaria da Fazenda', url: 'sefaz.rr.gov.br', logo: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ctext y="50" font-size="40" fill="%23e94334"%3E💰%3C/text%3E%3C/svg%3E' },
+            { name: 'SESP', fullName: 'Secretaria de Segurança Pública', url: 'sesp.rr.gov.br', logo: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ctext y="50" font-size="40" fill="%23e94334"%3E🛡️%3C/text%3E%3C/svg%3E' },
+            { name: 'EDUCAÇÃO', fullName: 'Secretaria de Educação', url: 'educacao.rr.gov.br', logo: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ctext y="50" font-size="40" fill="%23e94334"%3E📚%3C/text%3E%3C/svg%3E' },
+            { name: 'OUVIDORIA', fullName: 'Ouvidoria do Estado', url: 'ouvidoria.rr.gov.br', logo: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ctext y="50" font-size="40" fill="%23e94334"%3E📢%3C/text%3E%3C/svg%3E' },
+            { name: 'SEINF', fullName: 'Secretaria de Infraestrutura', url: 'seinf.rr.gov.br', logo: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ctext y="50" font-size="40" fill="%23e94334"%3E🏗️%3C/text%3E%3C/svg%3E' },
+            { name: 'SETRABES', fullName: 'Secretaria do Trabalho e Bem-Estar Social', url: 'setrabes.rr.gov.br', logo: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ctext y="50" font-size="40" fill="%23e94334"%3E🤝%3C/text%3E%3C/svg%3E' },
+            { name: 'FAPERR', fullName: 'Fundação de Amparo à Pesquisa', url: 'faperr.rr.gov.br', logo: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ctext y="50" font-size="40" fill="%23e94334"%3E🔬%3C/text%3E%3C/svg%3E' },
+            { name: 'SEPLAN', fullName: 'Secretaria de Planejamento', url: 'seplan.rr.gov.br', logo: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ctext y="50" font-size="40" fill="%23e94334"%3E📊%3C/text%3E%3C/svg%3E' },
+            { name: 'SEED', fullName: 'Secretaria de Desenvolvimento Econômico', url: 'seed.rr.gov.br', logo: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ctext y="50" font-size="40" fill="%23e94334"%3E📈%3C/text%3E%3C/svg%3E' },
+            { name: 'POLÍCIA CIVIL', fullName: 'Polícia Civil de Roraima', url: 'policiacivil.rr.gov.br', logo: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ctext y="50" font-size="40" fill="%23e94334"%3E👮%3C/text%3E%3C/svg%3E' },
+            { name: 'PGE', fullName: 'Procuradoria Geral do Estado', url: 'www.pge.rr.gov.br', logo: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ctext y="50" font-size="40" fill="%23e94334"%3E⚖️%3C/text%3E%3C/svg%3E' },
+            { name: 'SECULT', fullName: 'Secretaria de Cultura', url: 'secult.rr.gov.br', logo: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ctext y="50" font-size="40" fill="%23e94334"%3E🎭%3C/text%3E%3C/svg%3E' },
+            { name: 'TRANSPARÊNCIA', fullName: 'Portal da Transparência', url: 'www.transparencia.rr.gov.br', logo: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ctext y="50" font-size="40" fill="%23e94334"%3E🔍%3C/text%3E%3C/svg%3E' },
+            { name: 'ADERR', fullName: 'Agência de Desenvolvimento', url: 'www.aderr.rr.gov.br', logo: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ctext y="50" font-size="40" fill="%23e94334"%3E🌱%3C/text%3E%3C/svg%3E' },
+            { name: 'CODESAIMA', fullName: 'Companhia de Desenvolvimento', url: 'codesaima.rr.gov.br', logo: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ctext y="50" font-size="40" fill="%23e94334"%3E🌳%3C/text%3E%3C/svg%3E' },
+            { name: 'IPEM', fullName: 'Instituto de Pesos e Medidas', url: 'ipem.rr.gov.br', logo: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ctext y="50" font-size="40" fill="%23e94334"%3E⚖️%3C/text%3E%3C/svg%3E' },
+            { name: 'IMPRENSA OFICIAL', fullName: 'Imprensa Oficial', url: 'imprensaoficial.rr.gov.br', logo: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ctext y="50" font-size="40" fill="%23e94334"%3E📰%3C/text%3E%3C/svg%3E' }
+        ];
+
+        // Simular dados de status e latência
+        function generateServiceData() {
+            return services.map(service => {
+                const rand = Math.random();
+                let status = 'operational';
+                let sparklineData = [];
+
+                // Gerar 12 barras de sparkline (representando 12 horas)
+                for (let i = 0; i < 12; i++) {
+                    const value = Math.random() * 100;
+                    let barStatus = 'ok';
+                    
+                    if (rand > 0.9) { // 10% chance de problemas
+                        status = 'down';
+                        barStatus = value > 50 ? 'danger' : 'warning';
+                    } else if (rand > 0.8) { // 10% degradado
+                        status = 'degraded';
+                        barStatus = value > 70 ? 'warning' : 'ok';
+                    }
+
+                    sparklineData.push({
+                        height: Math.max(value, 10),
+                        status: barStatus
+                    });
+                }
+
+                return {
+                    ...service,
+                    status,
+                    sparklineData
+                };
+            });
+        }
+
+        function renderServices() {
+            const grid = document.getElementById('serviceGrid');
+            const servicesData = generateServiceData();
+
+            grid.innerHTML = servicesData.map(service => `
+                <div class="service-card" onclick="window.open('https://${service.url}', '_blank')">
+                    <div class="logo-wrapper">
+                        <img src="${service.logo}" alt="${service.name}">
+                    </div>
+                    <div class="service-name">${service.name}</div>
+                    <div class="service-url">${service.url}</div>
+                    
+                    <div class="sparkline-container">
+                        ${service.sparklineData.map(bar => `
+                            <div class="sparkline-bar ${bar.status === 'danger' ? 'danger' : bar.status === 'warning' ? 'warning' : ''}" 
+                                 style="height: ${bar.height}%">
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="status-badge status-${service.status}">
+                        ${service.status === 'operational' ? '✓ Operacional' : 
+                          service.status === 'degraded' ? '⚠ Degradado' : 
+                          '✗ Fora do Ar'}
+                    </div>
+                </div>
+            `).join('');
+
+            updateTime();
+        }
+
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('updateTime').textContent = now.toLocaleTimeString('pt-BR');
+        }
+
+        // Inicializar
+        renderServices();
+
+        // Auto-refresh a cada 30 segundos
+        setInterval(() => {
+            renderServices();
+        }, 30000);
+    </script>
+</body>
+</html>

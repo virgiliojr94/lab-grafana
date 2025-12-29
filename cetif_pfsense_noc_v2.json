@@ -1,0 +1,228 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "alexanderzobnin-zabbix-datasource",
+        "uid": "${DS_ZABBIX}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 34,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "SVGBaseFix": true,
+        "add100Percentage": true,
+        "calcsMutation": "standard",
+        "centerAlignContent": false,
+        "codeData": "{}",
+        "css": ":root{--bg:#0a0b0d;--panel:#0f1116cc;--panel2:#0c0e12cc;--stroke:#1e232d;--stroke2:#2a3240;--text:#e7ecf7;--muted:#94a3b8;--ok:#22c55e;--warn:#f59e0b;--bad:#ef4444;--info:#38bdf8;--shadow:0 18px 50px rgba(0,0,0,.45);--radius:18px;--radius2:12px;--gutter:18px;--font:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif}*{box-sizing:border-box;margin:0;padding:0}html,body{height:100%}body{margin:0;color:var(--text);font-family:var(--font);background:radial-gradient(1200px 700px at 20% 20%,rgba(34,197,94,.10),transparent 60%),radial-gradient(900px 600px at 80% 35%,rgba(56,189,248,.08),transparent 55%),radial-gradient(700px 500px at 55% 80%,rgba(245,158,11,.06),transparent 55%),linear-gradient(180deg,#07080a,#0a0b0d 40%,#07080a);overflow-x:hidden}body::before{content:\"\";position:fixed;inset:0;background-image:linear-gradient(60deg,rgba(255,255,255,.03) 12%,transparent 12% 88%,rgba(255,255,255,.03) 88%),linear-gradient(-60deg,rgba(255,255,255,.02) 12%,transparent 12% 88%,rgba(255,255,255,.02) 88%);background-size:120px 120px;opacity:.22;pointer-events:none;mix-blend-mode:overlay}.wrap{width:min(1420px,96vw);margin:20px auto 34px;position:relative}.panel{background:linear-gradient(180deg,rgba(18,21,28,.88),rgba(10,12,16,.82));border:1px solid rgba(42,50,64,.7);border-top-color:rgba(90,105,130,.28);border-left-color:rgba(90,105,130,.22);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;position:relative}.panel::after{content:\"\";position:absolute;inset:0;background:radial-gradient(900px 200px at 40% -40px,rgba(255,255,255,.10),transparent 60%),radial-gradient(600px 240px at 110% 30%,rgba(34,197,94,.06),transparent 55%);opacity:.35;pointer-events:none}.topbar{display:flex;align-items:center;justify-content:space-between;padding:18px 22px}.brand{font-weight:800;letter-spacing:.08em;font-size:34px;opacity:.95}.titleBlock{text-align:center;line-height:1.05;margin:0 14px}.titleBlock .h1{font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:20px}.titleBlock .sub{margin-top:4px;font-size:12px;color:var(--muted);letter-spacing:.03em}.clock{font-variant-numeric:tabular-nums;font-weight:800;letter-spacing:.08em;font-size:18px;opacity:.95}.grid{display:grid;grid-template-columns:390px 1fr;gap:var(--gutter);margin-top:var(--gutter)}.stack{display:grid;gap:var(--gutter)}.sectionTitle{padding:14px 16px 10px;text-transform:uppercase;font-weight:800;letter-spacing:.12em;color:#dbe4ff;font-size:14px;text-align:center;border-bottom:1px solid rgba(42,50,64,.6);background:linear-gradient(180deg,rgba(255,255,255,.04),transparent);position:relative;z-index:1}.content{padding:14px 16px 16px;position:relative;z-index:1}.statusRows{display:grid;gap:10px}.statusRow{display:block;padding:10px 12px;border-radius:12px;border:1px solid rgba(42,50,64,.7);background:linear-gradient(180deg,rgba(0,0,0,.10),rgba(0,0,0,.25))}.left{display:flex;align-items:center;gap:10px;min-width:0}.pillIcon{width:26px;height:26px;border-radius:10px;border:1px solid rgba(42,50,64,.8);background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.12),rgba(0,0,0,.25));display:grid;place-items:center;color:#cbd5e1;flex:0 0 auto}.label{font-weight:700;letter-spacing:.04em;color:#d6deee;font-size:11px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tag{font-weight:900;letter-spacing:.10em;font-size:12px;padding:5px 10px;border-radius:999px;border:1px solid rgba(42,50,64,.8);background:rgba(0,0,0,.25)}.tag.ok{color:var(--ok);box-shadow:0 0 0 1px rgba(34,197,94,.12) inset}.tag.warn{color:var(--warn)}.tag.bad{color:var(--bad)}.pfBox{margin:10px auto 12px;display:flex;align-items:center;justify-content:center;gap:10px;padding:10px 12px;width:fit-content;border-radius:999px;border:1px solid rgba(42,50,64,.7);background:rgba(0,0,0,.18);box-shadow:0 0 0 1px rgba(56,189,248,.08) inset}.dot{width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#38bdf8,#0284c7);box-shadow:0 0 22px rgba(56,189,248,.35)}.pfBox span{font-weight:900;letter-spacing:.12em;font-size:12px;opacity:.9}.uptime{margin-top:12px;display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:12px;border:1px solid rgba(42,50,64,.7);background:linear-gradient(180deg,rgba(245,158,11,.05),rgba(0,0,0,.25))}.uptime .value{font-weight:900;font-variant-numeric:tabular-nums;letter-spacing:.08em;color:#f8d58b}.rightTop{display:grid;grid-template-rows:auto 1fr;gap:var(--gutter)}.wanGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:var(--gutter);align-items:stretch}.wanCard{height:164px;display:flex;flex-direction:column}.wanCard .miniHdr{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid rgba(42,50,64,.55);position:relative;z-index:1}.miniHdr .name{font-weight:900;letter-spacing:.10em;font-size:12px;text-transform:uppercase}.miniHdr .state{font-weight:900;letter-spacing:.10em;font-size:11px;color:var(--ok)}.miniHdr .state.down{color:var(--bad)}.miniHdr .state.warn{color:var(--warn)}.wanCard .barArea{padding:12px 12px 10px;flex:1;position:relative;z-index:1;display:flex;flex-direction:column;gap:8px}.trafficBar{display:flex;align-items:center;gap:8px;font-size:10px}.trafficBar .lbl{color:var(--muted);min-width:35px;font-weight:700;letter-spacing:.08em}.barWrap{flex:1;height:18px;border-radius:8px;border:1px solid rgba(42,50,64,.7);background:rgba(0,0,0,.18);overflow:hidden;position:relative}.barFill{height:100%;transition:width .3s ease;border-radius:6px}.barFill.in{background:linear-gradient(90deg,rgba(34,197,94,.45),rgba(34,197,94,.18));box-shadow:0 0 0 1px rgba(34,197,94,.10) inset}.barFill.out{background:linear-gradient(90deg,rgba(245,158,11,.40),rgba(245,158,11,.15));box-shadow:0 0 0 1px rgba(245,158,11,.10) inset}.trafficBar .val{min-width:65px;text-align:right;font-weight:900;color:#fff;font-variant-numeric:tabular-nums}.wanCard .miniFtr{padding:0 12px 12px;color:var(--muted);font-size:10px;position:relative;z-index:1;text-align:right;font-variant-numeric:tabular-nums}.midTitle{grid-column:1/-1;text-align:center;padding:14px 16px;text-transform:uppercase;font-weight:900;letter-spacing:.12em;border-radius:var(--radius);border:1px solid rgba(42,50,64,.7);background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(0,0,0,.18));box-shadow:var(--shadow)}.detailsGrid{display:grid;grid-template-columns:1fr 1fr 1.2fr;gap:var(--gutter);margin-top:var(--gutter)}.kvGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:14px}.kv{padding:12px 12px 10px;border-radius:14px;border:1px solid rgba(42,50,64,.7);background:linear-gradient(180deg,rgba(0,0,0,.10),rgba(0,0,0,.25));position:relative;z-index:1;min-height:74px}.kv .k{color:var(--muted);font-size:11px;letter-spacing:.10em;text-transform:uppercase;margin-bottom:8px}.kv .v{font-weight:900;letter-spacing:.04em;font-size:14px;opacity:.95;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.gwGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:14px}.gwCard{padding:12px;border-radius:14px;border:1px solid rgba(42,50,64,.7);background:linear-gradient(180deg,rgba(0,0,0,.10),rgba(0,0,0,.25));position:relative;z-index:1;min-height:100px}.gwCard .gwHdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.gwCard .gwName{font-weight:900;font-size:11px;letter-spacing:.10em;text-transform:uppercase;color:#dbe4ff}.gwCard .gwStatus{font-size:10px;font-weight:900;letter-spacing:.08em;padding:3px 8px;border-radius:999px;background:rgba(0,0,0,.3);border:1px solid rgba(42,50,64,.8)}.gwCard .gwStatus.up{color:var(--ok)}.gwCard .gwStatus.down{color:var(--bad)}.gwMetric{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(42,50,64,.4);font-size:10px}.gwMetric:last-child{border:none}.gwMetric .mLabel{color:var(--muted);font-weight:600}.gwMetric .mValue{color:#fff;font-weight:900;font-variant-numeric:tabular-nums}.vpnGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.vpnCard{padding:10px 12px;border-radius:12px;border:1px solid rgba(42,50,64,.7);background:rgba(0,0,0,.20);border-top:3px solid #2196f3;position:relative;z-index:1;display:flex;flex-direction:column;gap:8px}.vpnCard .vpnHdr{display:flex;justify-content:space-between;align-items:center}.vpnCard .vpnName{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#dbe4ff}.vpnCard .vpnClients{font-size:20px;font-weight:900;color:#2196f3;text-align:center}.vpnCard .vpnLabel{font-size:9px;color:var(--muted);text-align:center;letter-spacing:.08em;text-transform:uppercase}.services{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}.svc{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:12px;border:1px solid rgba(42,50,64,.7);background:rgba(0,0,0,.20);position:relative;z-index:1}.svc .name{font-weight:800;letter-spacing:.06em;font-size:12px;text-transform:uppercase;color:#dbe4ff}.mark{width:18px;height:18px;border-radius:6px;display:grid;place-items:center;border:1px solid rgba(42,50,64,.85);font-weight:900;font-size:12px}.mark.ok{color:var(--ok);box-shadow:0 0 0 1px rgba(34,197,94,.10) inset}.mark.bad{color:var(--bad);box-shadow:0 0 0 1px rgba(239,68,68,.12) inset}.lanGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}.lanCard{padding:12px;border-radius:12px;border:1px solid rgba(42,50,64,.7);background:linear-gradient(180deg,rgba(0,0,0,.10),rgba(0,0,0,.25));position:relative;z-index:1}.lanCard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#38bdf8,#0284c7)}.lanCard .lanHdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.lanCard .lanName{font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#fff}.lanCard .lanStatus{font-size:10px;font-weight:900;letter-spacing:.08em;padding:3px 8px;border-radius:999px;background:rgba(0,0,0,.3);border:1px solid rgba(42,50,64,.8);color:var(--ok)}.lanTraffic{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;font-size:10px}.lanTraffic .tLabel{color:var(--muted);font-weight:600}.lanTraffic .tValue{font-weight:900;color:#fff;font-variant-numeric:tabular-nums}.lanBar{height:6px;background:#0d1117;border-radius:10px;overflow:hidden;margin-bottom:8px;border:1px solid rgba(42,50,64,.5)}.lanBar .fill{height:100%;transition:width .3s ease;border-radius:8px}.lanBar .fill.rx{background:linear-gradient(90deg,#667eea,#764ba2)}.lanBar .fill.tx{background:linear-gradient(90deg,#00e676,#00c853)}@media (max-width:1180px){.grid{grid-template-columns:1fr}.wanGrid{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}.detailsGrid{grid-template-columns:1fr}.kvGrid,.gwGrid,.vpnGrid,.services{grid-template-columns:1fr}.lanGrid{grid-template-columns:1fr}}@media (max-width:560px){.topbar{flex-direction:column;gap:10px}.wanGrid{grid-template-columns:1fr}}",
+        "dynamicData": false,
+        "dynamicFieldDisplayValues": false,
+        "dynamicHtmlGraphics": false,
+        "dynamicProps": false,
+        "fitContentToPanel": true,
+        "html": "<div class=\"dashboard\"><div class=\"wrap\"><div class=\"panel\"><div class=\"topbar\"><div class=\"brand\">CETIF</div><div class=\"titleBlock\"><div class=\"h1\">PFSENSE FIREWALL</div><div class=\"sub\">NOC - Monitoramento Central de Segurança</div></div><div class=\"clock\" id=\"clock\">00:00:00</div></div></div><div class=\"grid\"><div class=\"panel\"><div class=\"sectionTitle\">SAÚDE DO HARDWARE</div><div class=\"content\"><div class=\"pfBox\"><span class=\"dot\"></span><span>PFSENSE</span></div><div class=\"statusRows\" id=\"system-status\"></div><div class=\"uptime\" id=\"uptime-display\"></div></div></div><div class=\"rightTop stack\"><div class=\"panel\"><div class=\"sectionTitle\">LINKS WAN (TRAFFIC)</div><div class=\"content\"><div class=\"wanGrid\" id=\"wan-interfaces\"></div></div></div><div class=\"midTitle\">GATEWAYS E VPN</div><div class=\"detailsGrid\"><div class=\"panel\"><div class=\"content\"><div class=\"sectionTitle\" style=\"margin:-14px -16px 14px;padding:12px 16px;font-size:13px\">GATEWAYS</div><div class=\"gwGrid\" id=\"gateways\"></div></div></div><div class=\"panel\"><div class=\"content\"><div class=\"sectionTitle\" style=\"margin:-14px -16px 14px;padding:12px 16px;font-size:13px\">SERVIÇOS</div><div class=\"services\" id=\"services\"></div></div></div><div class=\"panel\"><div class=\"content\"><div class=\"sectionTitle\" style=\"margin:-14px -16px 14px;padding:12px 16px;font-size:13px\">OPENVPN</div><div class=\"vpnGrid\" id=\"vpn-servers\"></div></div></div></div></div></div><div class=\"panel\" style=\"margin-top:var(--gutter)\"><div class=\"sectionTitle\">INTERFACES LAN / VLAN / DMZ</div><div class=\"content\"><div class=\"lanGrid\" id=\"lan-interfaces\"></div></div></div></div></div>",
+        "onInit": "",
+        "onInitOnResize": false,
+        "onRender": "(() => {\n  if (!htmlNode || !data || !data.series) return;\n\n  const el = (q) => htmlNode.querySelector(q);\n  const setText = (q, v) => { const n = el(q); if(n) n.innerHTML = v; };\n\n  // --- HELPERS ---\n  const getVal = (refId) => {\n    const s = data.series.find(x => x.refId === refId);\n    if (!s || !s.fields) return null;\n    const f = s.fields.find(f => f.type === 'number');\n    if (f && f.values.length) {\n        // Pega o ultimo valor valido\n        for (let i = f.values.length - 1; i >= 0; i--) {\n             if (f.values.get(i) != null) return f.values.get(i);\n        }\n    }\n    return 0;\n  };\n\n  const toNum = (v) => (isFinite(Number(v)) ? Number(v) : 0);\n  \n  const bps = (v) => {\n    const x = Number(v ?? 0);\n    if (!isFinite(x) || x < 0) return '0 b/s';\n    const units = ['b/s','Kb/s','Mb/s','Gb/s','Tb/s'];\n    let i=0, val=x;\n    while (val >= 1024 && i < units.length-1){ val/=1024; i++; }\n    return `${val.toFixed(val >= 100 ? 0 : val >= 10 ? 1 : 2)} ${units[i]}`;\n  };\n\n  const formatUptime = (sec) => {\n    const s = toNum(sec);\n    if (s <= 0) return 'INIT...';\n    const d = Math.floor(s / 86400);\n    const h = Math.floor((s % 86400) / 3600);\n    const m = Math.floor((s % 3600) / 60);\n    return `${d}d, ${h}h ${m}m`;\n  };\n\n  // --- CLOCK ---\n  const updateClock = () => {\n    const now = new Date();\n    setText('#clock', now.toLocaleTimeString('pt-BR'));\n  };\n  updateClock();\n\n  // --- SYSTEM HEALTH (NOC STYLE) ---\n  // CPU: Invert Idle (If idle is 90, usage is 10)\n  const cpuIdle = toNum(getVal('SYS_CPU'));\n  const cpuVal = (cpuIdle > 0 && cpuIdle <= 100) ? (100 - cpuIdle) : 0;\n  \n  // RAM: Invert Available % (If avail is 70, usage is 30)\n  const ramAvailP = toNum(getVal('SYS_MEM'));\n  const ramVal = (ramAvailP > 0 && ramAvailP <= 100) ? (100 - ramAvailP) : 0;\n  \n  const stateVal = toNum(getVal('SYS_STA'));\n  const mbufVal = toNum(getVal('SYS_BUF'));\n  \n  const resBar = (label, val, icon) => {\n    // Cores baseadas em severidade\n    let color = '#22c55e'; // Green\n    if(val > 60) color = '#f59e0b'; // Orange\n    if(val > 85) color = '#ef4444'; // Red\n    \n    return `\n      <div class=\"statusRow\" style=\"display:block; padding:8px 12px\">\n        <div style=\"display:flex;justify-content:space-between;margin-bottom:4px;font-size:11px\">\n          <div class=\"left\"><span style=\"margin-right:6px\">${icon}</span><span class=\"label\">${label}</span></div>\n          <div style=\"font-weight:900;color:${color}\">${val.toFixed(1)}%</div>\n        </div>\n        <div class=\"lanBar\" style=\"height:4px;margin:0;background:rgba(255,255,255,0.1)\">\n          <div class=\"fill\" style=\"width:${Math.min(val, 100)}%;background:${color}\"></div>\n        </div>\n      </div>\n    `;\n  };\n\n  const sysHtml = `\n    ${resBar('CPU LOAD', cpuVal, '🧠')}\n    ${resBar('RAM USAGE', ramVal, '💾')}\n    ${resBar('STATE TABLE', stateVal, '🗃️')}\n    ${resBar('MBUF USAGE', mbufVal, '📦')}\n  `;\n  setText('#system-status', sysHtml);\n\n  setText('#uptime-display', `\n    <div class=\"left\"><div class=\"pillIcon\">⏱️</div><div class=\"label\">UPTIME</div></div>\n    <div class=\"value\" style=\"font-size:14px\">${formatUptime(getVal('SYS_UPT'))}</div>\n  `);\n\n  // --- SERVICES (REAL STATUS) ---\n  const services = [\n    { name: 'DNS (Dnsmasq)', id: 'SVC_DNS' },\n    { name: 'DHCP (Kea)', id: 'SVC_DHCP' },\n    { name: 'NTP Clock', id: 'SVC_NTP' },\n    { name: 'Snort IDS', id: 'SVC_SNORT' },\n    { name: 'Squid Proxy', id: 'SVC_SQUID' },\n    { name: 'SSH Daemon', id: 'SVC_SSH' },\n    { name: 'Zabbix Agt', id: 'SVC_ZAB' }\n  ];\n\n  const svcHtml = services.map(s => {\n    const status = toNum(getVal(s.id)); \n    // Geralmente 1 = Running no Zabbix para proc ou service\n    const isUp = status === 1; \n    return `\n      <div class=\"svc\">\n        <span class=\"name\">${s.name}</span>\n        <span class=\"mark ${isUp ? 'ok' : 'bad'}\">${isUp ? '✓' : 'X'}</span>\n      </div>\n    `;\n  }).join('');\n  setText('#services', svcHtml);\n\n  // --- WAN INTERFACES ---\n  const wanList = [\n      { name: 'WAN', rx: 'A', tx: 'B', errIn: 'C', errOut: 'D' },\n      { name: 'WAN_CTI', rx: 'E', tx: 'F', errIn: 'G', errOut: 'H' }\n  ];\n\n  const wanHtml = wanList.map(w => {\n    const rx = toNum(getVal(w.rx));\n    const tx = toNum(getVal(w.tx));\n    const err = toNum(getVal(w.errIn)) + toNum(getVal(w.errOut));\n    \n    const total = rx + tx;\n    const isUp = total > 10; // Considera UP se tiver minimo de tráfego\n    const rxPct = total > 0 ? (rx/total)*100 : 0;\n    const txPct = total > 0 ? (tx/total)*100 : 0;\n\n    return `\n      <div class=\"panel wanCard\" style=\"box-shadow:none\">\n        <div class=\"miniHdr\">\n          <div class=\"name\">${w.name}</div>\n          <div class=\"state ${isUp?'ok':'down'}\">${isUp?'UP':'DOWN'}</div>\n        </div>\n        <div class=\"barArea\">\n          <div class=\"trafficBar\">\n            <div class=\"lbl\">⬇ IN</div>\n            <div class=\"barWrap\"><div class=\"barFill in\" style=\"width:${rxPct.toFixed(1)}%\"></div></div>\n            <div class=\"val\">${bps(rx)}</div>\n          </div>\n          <div class=\"trafficBar\">\n            <div class=\"lbl\">⬆ OUT</div>\n            <div class=\"barWrap\"><div class=\"barFill out\" style=\"width:${txPct.toFixed(1)}%\"></div></div>\n            <div class=\"val\">${bps(tx)}</div>\n          </div>\n        </div>\n        <div class=\"miniFtr\" style=\"color:${err>0?'#ef4444':'inherit'}\">Erros: ${err}</div>\n      </div>\n    `;\n  }).join('');\n  setText('#wan-interfaces', wanHtml);\n\n  // --- GATEWAYS ---\n  const gwList = [\n    { name: 'WAN_GW', st: 'R', loss: 'S', rtt: 'T' },\n    { name: 'WAN_CTI_GW', st: 'U', loss: 'V', rtt: 'W' }\n  ];\n\n  const gwHtml = gwList.map(g => {\n    // Status pode vir como string ou numero dependendo do item zabbix\n    // Vamos assumir logica segura\n    const stRaw = getVal(g.st);\n    // Se for numero: 1=Up. Se for texto: procurar 'online' ou 'up'\n    let isUp = false;\n    if (typeof stRaw === 'number') isUp = (stRaw === 1);\n    else if (typeof stRaw === 'string') isUp = /up|online/i.test(stRaw);\n    \n    const loss = toNum(getVal(g.loss));\n    const rtt = toNum(getVal(g.rtt));\n    \n    return `\n      <div class=\"gwCard\">\n        <div class=\"gwHdr\">\n          <div class=\"gwName\">${g.name}</div>\n          <div class=\"gwStatus ${isUp ? 'up' : 'down'}\">${isUp ? 'ONLINE' : 'OFFLINE'}</div>\n        </div>\n        <div class=\"gwMetric\">\n          <span class=\"mLabel\">Packet Loss</span>\n          <span class=\"mValue\" style=\"color:${loss > 5 ? '#ef4444' : '#22c55e'}\">${loss.toFixed(1)}%</span>\n        </div>\n        <div class=\"gwMetric\">\n          <span class=\"mLabel\">Latency (RTT)</span>\n          <span class=\"mValue\">${rtt.toFixed(1)} ms</span>\n        </div>\n      </div>\n    `;\n  }).join('');\n  setText('#gateways', gwHtml);\n\n  // --- LAN INTERFACES ---\n  const lanList = [\n      { name: 'INTRANET', rx: 'I', tx: 'J' },\n      { name: 'EXTRANET', rx: 'K', tx: 'L' },\n      { name: 'DMZ', rx: 'M', tx: 'N' },\n      { name: 'SRVS_INTRA', rx: 'O', tx: 'P' }\n  ];\n  \n  const lanHtml = lanList.map(l => {\n      const rx = toNum(getVal(l.rx));\n      const tx = toNum(getVal(l.tx));\n      return `\n      <div class=\"lanCard\">\n        <div class=\"lanHdr\"><div class=\"lanName\">${l.name}</div><div class=\"lanStatus\">MONITORED</div></div>\n        <div class=\"lanTraffic\"><span class=\"tLabel\">⬇ INBOUND</span><span class=\"tValue\">${bps(rx)}</span></div>\n        <div class=\"lanBar\"><div class=\"fill rx\" style=\"width:100%\"></div></div>\n        <div class=\"lanTraffic\"><span class=\"tLabel\">⬆ OUTBOUND</span><span class=\"tValue\">${bps(tx)}</span></div>\n        <div class=\"lanBar\"><div class=\"fill tx\" style=\"width:100%\"></div></div>\n      </div>\n      `;\n  }).join('');\n  setText('#lan-interfaces', lanHtml);\n\n  // --- OPENVPN CLIENTS (DYNAMIC) ---\n  // Regex para achar series do OpenVPN\n  const vpnData = [];\n  data.series.forEach(s => {\n      if (s.refId === 'X') {\n          // Tenta extrair nome do servidor\n          // Ex: \"OpenVPN Server: VPN_HOME Clients Connected\"\n          let name = 'VPN';\n          if (s.name) {\n             const m = s.name.match(/OpenVPN Server (.+) Clients/i);\n             if (m) name = m[1].replace(/[:]/g,'').trim();\n             else name = s.name;\n          }\n          \n          // Pega valor\n          let val = 0;\n          if(s.fields){\n              const f = s.fields.find(x=>x.type==='number');\n              if(f && f.values.length) val = f.values.get(f.values.length-1);\n          }\n          \n          vpnData.push({ name, val: toNum(val) });\n      }\n  });\n  // Sort by connected clients\n  vpnData.sort((a,b) => b.val - a.val);\n  \n  const vpnHtml = vpnData.slice(0,6).map(v => `\n    <div class=\"vpnCard\">\n      <div class=\"vpnHdr\">\n        <div class=\"vpnName\">${v.name}</div>\n      </div>\n      <div class=\"vpnClients\">${v.val}</div>\n      <div class=\"vpnLabel\">Clientes Conectados</div>\n    </div>\n  `).join('');\n  \n  setText('#vpn-servers', vpnHtml || '<div style=\"grid-column:1/-1;text-align:center;color:#666;padding:20px\">Nenhuma VPN ativa</div>');\n\n})();",
+        "overflow": "visible",
+        "panelupdateOnMount": true,
+        "reduceOptions": {
+          "calcs": ["lastNotNull"]
+        },
+        "renderOnMount": true,
+        "rootCSS": "",
+        "svgBaseFix": false,
+        "useGrafanaScrollbar": false
+      },
+      "pluginVersion": "2.2.3",
+      "targets": [
+        { "refId": "A", "datasource": { "uid": "${DS_ZABBIX}" }, "item": { "filter": "Incoming network traffic on WAN" }, "host": { "filter": "$host" } },
+        { "refId": "B", "datasource": { "uid": "${DS_ZABBIX}" }, "item": { "filter": "Outgoing network traffic on WAN" }, "host": { "filter": "$host" } },
+        { "refId": "C", "datasource": { "uid": "${DS_ZABBIX}" }, "item": { "filter": "Incoming errors on WAN" }, "host": { "filter": "$host" } },
+        { "refId": "D", "datasource": { "uid": "${DS_ZABBIX}" }, "item": { "filter": "Outgoing errors on WAN" }, "host": { "filter": "$host" } },
+        
+        { "refId": "E", "datasource": { "uid": "${DS_ZABBIX}" }, "item": { "filter": "Incoming network traffic on WAN_CTI" }, "host": { "filter": "$host" } },
+        { "refId": "F", "datasource": { "uid": "${DS_ZABBIX}" }, "item": { "filter": "Outgoing network traffic on WAN_CTI" }, "host": { "filter": "$host" } },
+        { "refId": "G", "datasource": { "uid": "${DS_ZABBIX}" }, "item": { "filter": "Incoming errors on WAN_CTI" }, "host": { "filter": "$host" } },
+        { "refId": "H", "datasource": { "uid": "${DS_ZABBIX}" }, "item": { "filter": "Outgoing errors on WAN_CTI" }, "host": { "filter": "$host" } },
+        
+        { "refId": "I", "datasource": { "uid": "${DS_ZABBIX}" }, "item": { "filter": "Incoming network traffic on INTRANET" }, "host": { "filter": "$host" } },
+        { "refId": "J", "datasource": { "uid": "${DS_ZABBIX}" }, "item": { "filter": "Outgoing network traffic on INTRANET" }, "host": { "filter": "$host" } },
+        
+        { "refId": "K", "datasource": { "uid": "${DS_ZABBIX}" }, "item": { "filter": "Incoming network traffic on EXTRANET_SFZ" }, "host": { "filter": "$host" } },
+        { "refId": "L", "datasource": { "uid": "${DS_ZABBIX}" }, "item": { "filter": "Outgoing network traffic on EXTRANET_SFZ" }, "host": { "filter": "$host" } },
+        
+        { "refId": "M", "datasource": { "uid": "${DS_ZABBIX}" }, "item": { "filter": "Incoming network traffic on DMZ" }, "host": { "filter": "$host" } },
+        { "refId": "N", "datasource": { "uid": "${DS_ZABBIX}" }, "item": { "filter": "Outgoing network traffic on DMZ" }, "host": { "filter": "$host" } },
+        
+        { "refId": "O", "datasource": { "uid": "${DS_ZABBIX}" }, "item": { "filter": "Incoming network traffic on SRVSINTRANET" }, "host": { "filter": "$host" } },
+        { "refId": "P", "datasource": { "uid": "${DS_ZABBIX}" }, "item": { "filter": "Outgoing network traffic on SRVSINTRANET" }, "host": { "filter": "$host" } },
+        
+        { "refId": "R", "datasource": { "uid": "${DS_ZABBIX}" }, "item": { "filter": "Gateway WAN Status" }, "host": { "filter": "$host" } },
+        { "refId": "S", "datasource": { "uid": "${DS_ZABBIX}" }, "item": { "filter": "Gateway WAN Packet Loss" }, "host": { "filter": "$host" } },
+        { "refId": "T", "datasource": { "uid": "${DS_ZABBIX}" }, "item": { "filter": "Gateway WAN RTT" }, "host": { "filter": "$host" } },
+        
+        { "refId": "U", "datasource": { "uid": "${DS_ZABBIX}" }, "item": { "filter": "Gateway GW_WAN_CTI Status" }, "host": { "filter": "$host" } },
+        { "refId": "V", "datasource": { "uid": "${DS_ZABBIX}" }, "item": { "filter": "Gateway GW_WAN_CTI Packet Loss" }, "host": { "filter": "$host" } },
+        { "refId": "W", "datasource": { "uid": "${DS_ZABBIX}" }, "item": { "filter": "Gateway GW_WAN_CTI RTT" }, "host": { "filter": "$host" } },
+        
+        { "refId": "X", "datasource": { "uid": "${DS_ZABBIX}" }, "item": { "filter": "/^OpenVPN Server .* Clients Connected$/" }, "queryType": "0", "host": { "filter": "$host" } },
+        
+        { "refId": "SYS_CPU", "datasource": { "uid": "${DS_ZABBIX}" }, "item": { "filter": "system.cpu.util[,idle]" }, "host": { "filter": "$host" } },
+        { "refId": "SYS_MEM", "datasource": { "uid": "${DS_ZABBIX}" }, "item": { "filter": "vm.memory.size[pavailable]" }, "host": { "filter": "$host" } },
+        { "refId": "SYS_UPT", "datasource": { "uid": "${DS_ZABBIX}" }, "item": { "filter": "system.uptime" }, "host": { "filter": "$host" } },
+        { "refId": "SYS_STA", "datasource": { "uid": "${DS_ZABBIX}" }, "item": { "filter": "pfsense.states.pused" }, "host": { "filter": "$host" } },
+        { "refId": "SYS_BUF", "datasource": { "uid": "${DS_ZABBIX}" }, "item": { "filter": "pfsense.mbuf.ptotal" }, "host": { "filter": "$host" } },
+        
+        { "refId": "SVC_DNS", "datasource": { "uid": "${DS_ZABBIX}" }, "item": { "filter": "pfsense.value[service_value,dnsmasq,status]" }, "host": { "filter": "$host" } },
+        { "refId": "SVC_DHCP", "datasource": { "uid": "${DS_ZABBIX}" }, "item": { "filter": "pfsense.value[service_value,kea-dhcp4,status]" }, "host": { "filter": "$host" } },
+        { "refId": "SVC_NTP", "datasource": { "uid": "${DS_ZABBIX}" }, "item": { "filter": "pfsense.value[service_value,ntpd,status]" }, "host": { "filter": "$host" } },
+        { "refId": "SVC_SNORT", "datasource": { "uid": "${DS_ZABBIX}" }, "item": { "filter": "pfsense.value[service_value,snort,status]" }, "host": { "filter": "$host" } },
+        { "refId": "SVC_SQUID", "datasource": { "uid": "${DS_ZABBIX}" }, "item": { "filter": "pfsense.value[service_value,squid,status]" }, "host": { "filter": "$host" } },
+        { "refId": "SVC_SSH", "datasource": { "uid": "${DS_ZABBIX}" }, "item": { "filter": "pfsense.value[service_value,sshd,status]" }, "host": { "filter": "$host" } },
+        { "refId": "SVC_ZAB", "datasource": { "uid": "${DS_ZABBIX}" }, "item": { "filter": "pfsense.value[service_value,zabbix_agentd,status]" }, "host": { "filter": "$host" } }
+      ],
+      "title": "CETIF – pfSense NOC Master Dashboard",
+      "type": "gapit-htmlgraphics-panel"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 40,
+  "tags": ["pfsense", "zabbix", "CETIF", "NOC"],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "Zabbix",
+          "value": "aec2bvjiis7pca"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Data Source",
+        "multi": false,
+        "name": "DS_ZABBIX",
+        "options": [],
+        "query": "alexanderzobnin-zabbix-datasource",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "SRVINTRANET",
+          "value": "SRVINTRANET"
+        },
+        "datasource": {
+          "type": "alexanderzobnin-zabbix-datasource",
+          "uid": "${DS_ZABBIX}"
+        },
+        "definition": "Zabbix - group",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Group",
+        "multi": false,
+        "name": "group",
+        "options": [],
+        "query": {
+          "application": "",
+          "group": "/.*/",
+          "host": "",
+          "item": "",
+          "itemTag": "",
+          "queryType": "group"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "PFSENSE",
+          "value": "PFSENSE"
+        },
+        "datasource": {
+          "type": "alexanderzobnin-zabbix-datasource",
+          "uid": "${DS_ZABBIX}"
+        },
+        "definition": "Zabbix - host",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Host",
+        "multi": false,
+        "name": "host",
+        "options": [],
+        "query": {
+          "application": "",
+          "group": "$group",
+          "host": "/.*/",
+          "item": "",
+          "itemTag": "",
+          "queryType": "host"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-3h",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": ["10s", "30s", "1m", "5m", "15m", "30m", "1h"]
+  },
+  "timezone": "browser",
+  "title": "CETIF – pfSense NOC Monitor - GEMINI",
+  "uid": "cetif_pfsense_noc_v2",
+  "version": 2,
+  "weekStart": ""
+}

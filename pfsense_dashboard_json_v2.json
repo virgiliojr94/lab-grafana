@@ -1,0 +1,794 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "alexanderzobnin-zabbix-datasource",
+        "uid": "${DS_ZABBIX}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 34,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "SVGBaseFix": true,
+        "add100Percentage": true,
+        "calcsMutation": "standard",
+        "centerAlignContent": false,
+        "codeData": "{}",
+        "css": ":root{--bg:#0a0b0d;--panel:#0f1116cc;--panel2:#0c0e12cc;--stroke:#1e232d;--stroke2:#2a3240;--text:#e7ecf7;--muted:#94a3b8;--ok:#22c55e;--warn:#f59e0b;--bad:#ef4444;--info:#38bdf8;--shadow:0 18px 50px rgba(0,0,0,.45);--radius:18px;--radius2:12px;--gutter:18px;--font:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif}*{box-sizing:border-box;margin:0;padding:0}html,body{height:100%}body{margin:0;color:var(--text);font-family:var(--font);background:radial-gradient(1200px 700px at 20% 20%,rgba(34,197,94,.10),transparent 60%),radial-gradient(900px 600px at 80% 35%,rgba(56,189,248,.08),transparent 55%),radial-gradient(700px 500px at 55% 80%,rgba(245,158,11,.06),transparent 55%),linear-gradient(180deg,#07080a,#0a0b0d 40%,#07080a);overflow-x:hidden}body::before{content:\"\";position:fixed;inset:0;background-image:linear-gradient(60deg,rgba(255,255,255,.03) 12%,transparent 12% 88%,rgba(255,255,255,.03) 88%),linear-gradient(-60deg,rgba(255,255,255,.02) 12%,transparent 12% 88%,rgba(255,255,255,.02) 88%);background-size:120px 120px;opacity:.22;pointer-events:none;mix-blend-mode:overlay}.wrap{width:min(1420px,96vw);margin:20px auto 34px;position:relative}.panel{background:linear-gradient(180deg,rgba(18,21,28,.88),rgba(10,12,16,.82));border:1px solid rgba(42,50,64,.7);border-top-color:rgba(90,105,130,.28);border-left-color:rgba(90,105,130,.22);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;position:relative}.panel::after{content:\"\";position:absolute;inset:0;background:radial-gradient(900px 200px at 40% -40px,rgba(255,255,255,.10),transparent 60%),radial-gradient(600px 240px at 110% 30%,rgba(34,197,94,.06),transparent 55%);opacity:.35;pointer-events:none}.topbar{display:flex;align-items:center;justify-content:space-between;padding:18px 22px}.brand{font-weight:800;letter-spacing:.08em;font-size:34px;opacity:.95}.titleBlock{text-align:center;line-height:1.05;margin:0 14px}.titleBlock .h1{font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:20px}.titleBlock .sub{margin-top:4px;font-size:12px;color:var(--muted);letter-spacing:.03em}.clock{font-variant-numeric:tabular-nums;font-weight:800;letter-spacing:.08em;font-size:18px;opacity:.95}.grid{display:grid;grid-template-columns:390px 1fr;gap:var(--gutter);margin-top:var(--gutter)}.stack{display:grid;gap:var(--gutter)}.sectionTitle{padding:14px 16px 10px;text-transform:uppercase;font-weight:800;letter-spacing:.12em;color:#dbe4ff;font-size:14px;text-align:center;border-bottom:1px solid rgba(42,50,64,.6);background:linear-gradient(180deg,rgba(255,255,255,.04),transparent);position:relative;z-index:1}.content{padding:14px 16px 16px;position:relative;z-index:1}.statusRows{display:grid;gap:10px}.statusRow{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:12px;border:1px solid rgba(42,50,64,.7);background:linear-gradient(180deg,rgba(0,0,0,.10),rgba(0,0,0,.25))}.left{display:flex;align-items:center;gap:10px;min-width:0}.pillIcon{width:26px;height:26px;border-radius:10px;border:1px solid rgba(42,50,64,.8);background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.12),rgba(0,0,0,.25));display:grid;place-items:center;color:#cbd5e1;flex:0 0 auto}.label{font-weight:700;letter-spacing:.04em;color:#d6deee;font-size:12px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tag{font-weight:900;letter-spacing:.10em;font-size:12px;padding:5px 10px;border-radius:999px;border:1px solid rgba(42,50,64,.8);background:rgba(0,0,0,.25)}.tag.ok{color:var(--ok);box-shadow:0 0 0 1px rgba(34,197,94,.12) inset}.tag.warn{color:var(--warn)}.tag.bad{color:var(--bad)}.pfBox{margin:10px auto 12px;display:flex;align-items:center;justify-content:center;gap:10px;padding:10px 12px;width:fit-content;border-radius:999px;border:1px solid rgba(42,50,64,.7);background:rgba(0,0,0,.18);box-shadow:0 0 0 1px rgba(56,189,248,.08) inset}.dot{width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#38bdf8,#0284c7);box-shadow:0 0 22px rgba(56,189,248,.35)}.pfBox span{font-weight:900;letter-spacing:.12em;font-size:12px;opacity:.9}.uptime{margin-top:12px;display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:12px;border:1px solid rgba(42,50,64,.7);background:linear-gradient(180deg,rgba(245,158,11,.05),rgba(0,0,0,.25))}.uptime .value{font-weight:900;font-variant-numeric:tabular-nums;letter-spacing:.08em;color:#f8d58b}.rightTop{display:grid;grid-template-rows:auto 1fr;gap:var(--gutter)}.wanGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:var(--gutter);align-items:stretch}.wanCard{height:164px;display:flex;flex-direction:column}.wanCard .miniHdr{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid rgba(42,50,64,.55);position:relative;z-index:1}.miniHdr .name{font-weight:900;letter-spacing:.10em;font-size:12px;text-transform:uppercase}.miniHdr .state{font-weight:900;letter-spacing:.10em;font-size:11px;color:var(--ok)}.miniHdr .state.down{color:var(--bad)}.miniHdr .state.warn{color:var(--warn)}.wanCard .barArea{padding:12px 12px 10px;flex:1;position:relative;z-index:1;display:flex;flex-direction:column;gap:8px}.trafficBar{display:flex;align-items:center;gap:8px;font-size:10px}.trafficBar .lbl{color:var(--muted);min-width:35px;font-weight:700;letter-spacing:.08em}.barWrap{flex:1;height:18px;border-radius:8px;border:1px solid rgba(42,50,64,.7);background:rgba(0,0,0,.18);overflow:hidden;position:relative}.barFill{height:100%;transition:width .3s ease;border-radius:6px}.barFill.in{background:linear-gradient(90deg,rgba(34,197,94,.45),rgba(34,197,94,.18));box-shadow:0 0 0 1px rgba(34,197,94,.10) inset}.barFill.out{background:linear-gradient(90deg,rgba(245,158,11,.40),rgba(245,158,11,.15));box-shadow:0 0 0 1px rgba(245,158,11,.10) inset}.trafficBar .val{min-width:65px;text-align:right;font-weight:900;color:#fff;font-variant-numeric:tabular-nums}.wanCard .miniFtr{padding:0 12px 12px;color:var(--muted);font-size:10px;position:relative;z-index:1;text-align:right;font-variant-numeric:tabular-nums}.midTitle{grid-column:1/-1;text-align:center;padding:14px 16px;text-transform:uppercase;font-weight:900;letter-spacing:.12em;border-radius:var(--radius);border:1px solid rgba(42,50,64,.7);background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(0,0,0,.18));box-shadow:var(--shadow)}.detailsGrid{display:grid;grid-template-columns:1fr 1fr 1.2fr;gap:var(--gutter);margin-top:var(--gutter)}.kvGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:14px}.kv{padding:12px 12px 10px;border-radius:14px;border:1px solid rgba(42,50,64,.7);background:linear-gradient(180deg,rgba(0,0,0,.10),rgba(0,0,0,.25));position:relative;z-index:1;min-height:74px}.kv .k{color:var(--muted);font-size:11px;letter-spacing:.10em;text-transform:uppercase;margin-bottom:8px}.kv .v{font-weight:900;letter-spacing:.04em;font-size:14px;opacity:.95;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.gwGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:14px}.gwCard{padding:12px;border-radius:14px;border:1px solid rgba(42,50,64,.7);background:linear-gradient(180deg,rgba(0,0,0,.10),rgba(0,0,0,.25));position:relative;z-index:1;min-height:100px}.gwCard .gwHdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.gwCard .gwName{font-weight:900;font-size:11px;letter-spacing:.10em;text-transform:uppercase;color:#dbe4ff}.gwCard .gwStatus{font-size:10px;font-weight:900;letter-spacing:.08em;padding:3px 8px;border-radius:999px;background:rgba(0,0,0,.3);border:1px solid rgba(42,50,64,.8)}.gwCard .gwStatus.up{color:var(--ok)}.gwCard .gwStatus.down{color:var(--bad)}.gwMetric{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(42,50,64,.4);font-size:10px}.gwMetric:last-child{border:none}.gwMetric .mLabel{color:var(--muted);font-weight:600}.gwMetric .mValue{color:#fff;font-weight:900;font-variant-numeric:tabular-nums}.vpnGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.vpnCard{padding:10px 12px;border-radius:12px;border:1px solid rgba(42,50,64,.7);background:rgba(0,0,0,.20);border-top:3px solid #2196f3;position:relative;z-index:1;display:flex;flex-direction:column;gap:8px}.vpnCard .vpnHdr{display:flex;justify-content:space-between;align-items:center}.vpnCard .vpnName{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#dbe4ff}.vpnCard .vpnClients{font-size:20px;font-weight:900;color:#2196f3;text-align:center}.vpnCard .vpnLabel{font-size:9px;color:var(--muted);text-align:center;letter-spacing:.08em;text-transform:uppercase}.services{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}.svc{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:12px;border:1px solid rgba(42,50,64,.7);background:rgba(0,0,0,.20);position:relative;z-index:1}.svc .name{font-weight:800;letter-spacing:.06em;font-size:12px;text-transform:uppercase;color:#dbe4ff}.mark{width:18px;height:18px;border-radius:6px;display:grid;place-items:center;border:1px solid rgba(42,50,64,.85);font-weight:900;font-size:12px}.mark.ok{color:var(--ok);box-shadow:0 0 0 1px rgba(34,197,94,.10) inset}.mark.bad{color:var(--bad);box-shadow:0 0 0 1px rgba(239,68,68,.12) inset}.lanGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}.lanCard{padding:12px;border-radius:12px;border:1px solid rgba(42,50,64,.7);background:linear-gradient(180deg,rgba(0,0,0,.10),rgba(0,0,0,.25));position:relative;z-index:1}.lanCard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#38bdf8,#0284c7)}.lanCard .lanHdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.lanCard .lanName{font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#fff}.lanCard .lanStatus{font-size:10px;font-weight:900;letter-spacing:.08em;padding:3px 8px;border-radius:999px;background:rgba(0,0,0,.3);border:1px solid rgba(42,50,64,.8);color:var(--ok)}.lanTraffic{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;font-size:10px}.lanTraffic .tLabel{color:var(--muted);font-weight:600}.lanTraffic .tValue{font-weight:900;color:#fff;font-variant-numeric:tabular-nums}.lanBar{height:6px;background:#0d1117;border-radius:10px;overflow:hidden;margin-bottom:8px;border:1px solid rgba(42,50,64,.5)}.lanBar .fill{height:100%;transition:width .3s ease;border-radius:8px}.lanBar .fill.rx{background:linear-gradient(90deg,#667eea,#764ba2)}.lanBar .fill.tx{background:linear-gradient(90deg,#00e676,#00c853)}@media (max-width:1180px){.grid{grid-template-columns:1fr}.wanGrid{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}.detailsGrid{grid-template-columns:1fr}.kvGrid,.gwGrid,.vpnGrid,.services{grid-template-columns:1fr}.lanGrid{grid-template-columns:1fr}}@media (max-width:560px){.topbar{flex-direction:column;gap:10px}.wanGrid{grid-template-columns:1fr}}",
+        "dynamicData": false,
+        "dynamicFieldDisplayValues": false,
+        "dynamicHtmlGraphics": false,
+        "dynamicProps": false,
+        "fitContentToPanel": true,
+        "html": "<div class=\"dashboard\"><div class=\"wrap\"><div class=\"panel\"><div class=\"topbar\"><div class=\"brand\">CETIF</div><div class=\"titleBlock\"><div class=\"h1\">PFSENSE FIREWALL</div><div class=\"sub\">Monitoramento Central de Rede e Segurança</div></div><div class=\"clock\" id=\"clock\">00:00:00</div></div></div><div class=\"grid\"><div class=\"panel\"><div class=\"sectionTitle\">STATUS DO SISTEMA</div><div class=\"content\"><div class=\"pfBox\"><span class=\"dot\"></span><span>PFSENSE</span></div><div class=\"statusRows\" id=\"system-status\"></div><div class=\"uptime\" id=\"uptime-display\"></div></div></div><div class=\"rightTop stack\"><div class=\"panel\"><div class=\"sectionTitle\">LINKS WAN</div><div class=\"content\"><div class=\"wanGrid\" id=\"wan-interfaces\"></div></div></div><div class=\"midTitle\">GATEWAYS E VPN</div><div class=\"detailsGrid\"><div class=\"panel\"><div class=\"content\"><div class=\"sectionTitle\" style=\"margin:-14px -16px 14px;padding:12px 16px;font-size:13px\">GATEWAYS</div><div class=\"gwGrid\" id=\"gateways\"></div></div></div><div class=\"panel\"><div class=\"content\"><div class=\"sectionTitle\" style=\"margin:-14px -16px 14px;padding:12px 16px;font-size:13px\">SERVIÇOS</div><div class=\"services\" id=\"services\"></div></div></div><div class=\"panel\"><div class=\"content\"><div class=\"sectionTitle\" style=\"margin:-14px -16px 14px;padding:12px 16px;font-size:13px\">OPENVPN SERVERS</div><div class=\"vpnGrid\" id=\"vpn-servers\"></div></div></div></div></div></div><div class=\"panel\" style=\"margin-top:var(--gutter)\"><div class=\"sectionTitle\">INTERFACES LAN / VLAN / DMZ</div><div class=\"content\"><div class=\"lanGrid\" id=\"lan-interfaces\"></div></div></div></div></div>",
+        "onInit": "",
+        "onInitOnResize": false,
+        "onRender": "(() => {\n  if (!htmlNode || !data || !data.series) return;\n\n  const el = (q) => htmlNode.querySelector(q);\n  const setText = (q, v) => { const n = el(q); if(n) n.innerHTML = v; };\n\n  const last = (series) => {\n    const n = series.fields.find(f => f.type === 'number');\n    if (n && n.values.length) return n.values.get(n.values.length - 1);\n    const s = series.fields.find(f => f.type === 'string');\n    if (s && s.values.length) return s.values.get(s.values.length - 1);\n    return null;\n  };\n\n  const findLastByName = (name) => {\n    const s = data.series.find(x => x.name === name);\n    return s ? last(s) : null;\n  };\n\n  const toNum = (v) => (isFinite(Number(v)) ? Number(v) : 0);\n\n  const bps = (v) => {\n    const x = Number(v ?? 0);\n    if (!isFinite(x) || x < 0) return '0 b/s';\n    const units = ['b/s','Kb/s','Mb/s','Gb/s','Tb/s'];\n    let i=0, val=x;\n    while (val >= 1024 && i < units.length-1){ val/=1024; i++; }\n    return `${val.toFixed(val >= 100 ? 0 : val >= 10 ? 1 : 2)} ${units[i]}`;\n  };\n\n  // Clock\n  const updateClock = () => {\n    const now = new Date();\n    const h = String(now.getHours()).padStart(2, '0');\n    const m = String(now.getMinutes()).padStart(2, '0');\n    const s = String(now.getSeconds()).padStart(2, '0');\n    setText('#clock', `${h}:${m}:${s}`);\n  };\n  updateClock();\n  setInterval(updateClock, 1000);\n\n  // Parse interfaces\n  const rxRe = /^Incoming network traffic on (.+)$/i;\n  const txRe = /^Outgoing network traffic on (.+)$/i;\n  const rxErrRe = /^Incoming errors on (.+)$/i;\n  const txErrRe = /^Outgoing errors on (.+)$/i;\n\n  const byIf = new Map();\n  const ensure = (ifn) => {\n    if (!byIf.has(ifn)) byIf.set(ifn, { rx:0, tx:0, rxErr:0, txErr:0 });\n    return byIf.get(ifn);\n  };\n\n  for (const s of data.series) {\n    const name = s.name || '';\n    let m;\n    if ((m = name.match(rxRe))) ensure(m[1].trim()).rx = toNum(last(s));\n    else if ((m = name.match(txRe))) ensure(m[1].trim()).tx = toNum(last(s));\n    else if ((m = name.match(rxErrRe))) ensure(m[1].trim()).rxErr = toNum(last(s));\n    else if ((m = name.match(txErrRe))) ensure(m[1].trim()).txErr = toNum(last(s));\n  }\n\n  const wanNames = ['WAN', 'WAN_CTI'];\n  const lanNames = ['INTRANET', 'EXTRANET_SFZ', 'DMZ', 'SRVSINTRANET'];\n\n  // System Status\n  const wanUp = wanNames.filter(n => byIf.has(n) && (byIf.get(n).rx > 0 || byIf.get(n).tx > 0)).length;\n  const totalErr = [...byIf.values()].reduce((acc, x) => acc + x.rxErr + x.txErr, 0);\n\n  const cpuIdle = toNum(findLastByName('CPU idle time'));\n  const cpuUsed = Math.max(0, Math.min(100, 100 - cpuIdle));\n\n  const memAvail = toNum(findLastByName('Available memory (percent)'));\n  const memUsed = Math.max(0, Math.min(100, 100 - memAvail));\n\n  const diskFree = toNum(findLastByName('Free disk space on / (percentage)'));\n  const diskUsed = Math.max(0, Math.min(100, 100 - diskFree));\n\n  const statesUsed = Math.max(0, Math.min(100, toNum(findLastByName('States Table Current (percent)'))));\n\n  const tagClassPct = (p) => {\n    if (!isFinite(p)) return 'warn';\n    if (p >= 90) return 'crit';\n    if (p >= 75) return 'warn';\n    return 'ok';\n  };\n\n  const pctTxt = (p) => (isFinite(p) ? `${p.toFixed(0)}%` : 'N/A');\n\n  const systemHTML = `\n    <div class=\"statusRow\">\n      <div class=\"left\">\n        <div class=\"pillIcon\">🌐</div>\n        <div class=\"label\">WANs Ativos</div>\n      </div>\n      <div class=\"tag ok\">${wanUp}/${wanNames.length}</div>\n    </div>\n    <div class=\"statusRow\">\n      <div class=\"left\">\n        <div class=\"pillIcon\">📊</div>\n        <div class=\"label\">Interfaces Total</div>\n      </div>\n      <div class=\"tag ok\">${byIf.size}</div>\n    </div>\n    <div class=\"statusRow\">\n      <div class=\"left\">\n        <div class=\"pillIcon\">⚠️</div>\n        <div class=\"label\">Erros Totais</div>\n      </div>\n      <div class=\"tag ${totalErr > 0 ? 'warn' : 'ok'}\">${totalErr}</div>\n    </div>\n    <div class=\"statusRow\">\n      <div class=\"left\">\n        <div class=\"pillIcon\">🧠</div>\n        <div class=\"label\">CPU</div>\n      </div>\n      <div class=\"tag ${tagClassPct(cpuUsed)}\">${pctTxt(cpuUsed)}</div>\n    </div>\n    <div class=\"statusRow\">\n      <div class=\"left\">\n        <div class=\"pillIcon\">💾</div>\n        <div class=\"label\">Memória</div>\n      </div>\n      <div class=\"tag ${tagClassPct(memUsed)}\">${pctTxt(memUsed)}</div>\n    </div>\n    <div class=\"statusRow\">\n      <div class=\"left\">\n        <div class=\"pillIcon\">🗄️</div>\n        <div class=\"label\">Disco /</div>\n      </div>\n      <div class=\"tag ${tagClassPct(diskUsed)}\">${pctTxt(diskUsed)}</div>\n    </div>\n    <div class=\"statusRow\">\n      <div class=\"left\">\n        <div class=\"pillIcon\">🧾</div>\n        <div class=\"label\">State Table</div>\n      </div>\n      <div class=\"tag ${tagClassPct(statesUsed)}\">${pctTxt(statesUsed)}</div>\n    </div>\n  `;\n  setText('#system-status', systemHTML);\n\n// Uptime (real)\n  const uptimeSec = toNum(findLastByName('System uptime'));\n  const fmtUptime = (sec) => {\n    if (!sec || !isFinite(sec) || sec <= 0) return 'N/A';\n    const s = Math.floor(sec);\n    const d = Math.floor(s / 86400);\n    const h = Math.floor((s % 86400) / 3600);\n    const m = Math.floor((s % 3600) / 60);\n    if (d > 0) return `${d}d ${h}h ${m}m`;\n    if (h > 0) return `${h}h ${m}m`;\n    return `${m}m`;\n  };\n  const uptimeHTML = `\n    <div class=\"left\">\n      <div class=\"pillIcon\">⏱️</div>\n      <div class=\"label\">UPTIME</div>\n    </div>\n    <div class=\"value\">${fmtUptime(uptimeSec)}</div>\n  `;\n  setText('#uptime-display', uptimeHTML);\n\n// WAN Interfaces\n  const wanHTML = wanNames.map(name => {\n    const iface = byIf.get(name);\n    if (!iface) return '';\n    \n    const total = iface.rx + iface.tx;\n    const hasTraffic = total > 0;\n    const hasErr = (iface.rxErr + iface.txErr) > 0;\n    \n    let status = 'UP', cls = 'ok';\n    if (hasErr) { status = 'WARN'; cls = 'warn'; }\n    else if (!hasTraffic) { status = 'DOWN'; cls = 'down'; }\n    \n    const rxPct = Math.min(total > 0 ? (iface.rx / total) * 100 : 0, 100);\n    const txPct = Math.min(total > 0 ? (iface.tx / total) * 100 : 0, 100);\n    \n    return `\n      <div class=\"panel wanCard\" style=\"box-shadow:none\">\n        <div class=\"miniHdr\">\n          <div class=\"name\">${name}</div>\n          <div class=\"state ${cls}\">${status}</div>\n        </div>\n        <div class=\"barArea\">\n          <div class=\"trafficBar\">\n            <div class=\"lbl\">⬇ IN</div>\n            <div class=\"barWrap\"><div class=\"barFill in\" style=\"width:${rxPct.toFixed(1)}%\"></div></div>\n            <div class=\"val\">${bps(iface.rx)}</div>\n          </div>\n          <div class=\"trafficBar\">\n            <div class=\"lbl\">⬆ OUT</div>\n            <div class=\"barWrap\"><div class=\"barFill out\" style=\"width:${txPct.toFixed(1)}%\"></div></div>\n            <div class=\"val\">${bps(iface.tx)}</div>\n          </div>\n        </div>\n        <div class=\"miniFtr\">Erros: ${iface.rxErr + iface.txErr}</div>\n      </div>\n    `;\n  }).join('');\n  setText('#wan-interfaces', wanHTML);\n\n  // Gateways\n  const gateways = [\n    { name: 'WAN', status: findLastByName('Gateway WAN Status'), loss: findLastByName('Gateway WAN Packet Loss'), rtt: findLastByName('Gateway WAN RTT') },\n    { name: 'GW_WAN_CTI', status: findLastByName('Gateway GW_WAN_CTI Status'), loss: findLastByName('Gateway GW_WAN_CTI Packet Loss'), rtt: findLastByName('Gateway GW_WAN_CTI RTT') }\n  ];\n\n  const gwHTML = gateways.map(gw => {\n    const s = (gw.status ?? '').toString();\n    const isUp = /up|online/i.test(s);\n    const lossNum = toNum((gw.loss ?? '').toString().replace('%',''));\n    const lossTxt = gw.loss == null ? '--' : (typeof gw.loss === 'number' ? `${gw.loss.toFixed(1)}%` : String(gw.loss));\n    const rttTxt = gw.rtt == null ? '--' : (typeof gw.rtt === 'number' ? `${gw.rtt.toFixed(1)} ms` : String(gw.rtt));\n    \n    return `\n      <div class=\"gwCard\">\n        <div class=\"gwHdr\">\n          <div class=\"gwName\">${gw.name}</div>\n          <div class=\"gwStatus ${isUp ? 'up' : 'down'}\">${isUp ? 'UP' : 'DOWN'}</div>\n        </div>\n        <div class=\"gwMetric\">\n          <span class=\"mLabel\">Loss</span>\n          <span class=\"mValue\" style=\"color:${lossNum > 2 ? '#ef4444' : '#22c55e'}\">${lossTxt}</span>\n        </div>\n        <div class=\"gwMetric\">\n          <span class=\"mLabel\">RTT</span>\n          <span class=\"mValue\">${rttTxt}</span>\n        </div>\n      </div>\n    `;\n  }).join('');\n  setText('#gateways', gwHTML);\n\n  // Services (real)\n  const svcDefs = [\n    { label: 'DNS (dnsmasq)', item: 'Service DNS Forwarder Status' },\n    { label: 'DHCP (kea-dhcp4)', item: 'Service Kea DHCP Server Status' },\n    { label: 'Gateway Monitor (dpinger)', item: 'Service Gateway Monitoring Daemon Status' },\n    { label: 'OpenVPN (CETIF)', item: 'Service OpenVPN server: CETIF Status' },\n    { label: 'Syslog', item: 'Service System Logger Daemon Status' },\n    { label: 'Zabbix Agent', item: 'Service Zabbix Agent Host Monitor Daemon Status' },\n  ];\n\n  const isOkSvc = (v) => {\n    if (v === null || v === undefined) return null;\n    const s = String(v).toLowerCase().trim();\n    if (s === '') return null;\n    if (s === '1' || s === 'true' || s === 'running' || s === 'up' || s === 'online' || s === 'active' || s === 'ok') return true;\n    if (s === '0' || s === 'false' || s === 'stopped' || s === 'down' || s === 'offline' || s === 'inactive' || s === 'failed' || s === 'critical') return false;\n    // fallback: anything not clearly negative counts as warning\n    return 'warn';\n  };\n\n  const servicesHTML = svcDefs.map(({label, item}) => {\n    const v = findLastByName(item);\n    const st = isOkSvc(v);\n    const cls = st === true ? 'ok' : (st === false ? 'crit' : 'warn');\n    const mark = st === true ? '✓' : (st === false ? '✕' : '!');\n    const val = (v === null || v === undefined || String(v).trim() === '') ? 'N/A' : String(v);\n    return `<div class=\"svc\"><span class=\"name\">${label}</span><span class=\"mark ${cls}\" title=\"${item}: ${val}\">${mark}</span></div>`;\n  }).join('');\n  setText('#services', servicesHTML);\n\n\n  // OpenVPN\n  const ovpnRe = /^OpenVPN Server (.+) Clients Connected$/i;\n  const vpnServers = [];\n  for (const s of data.series) {\n    const name = s.name || '';\n    const m = name.match(ovpnRe);\n    if (!m) continue;\n    const serverName = m[1].trim();\n    const v = toNum(last(s));\n    vpnServers.push({ serverName, clients: v });\n  }\n  vpnServers.sort((a,b) => b.clients - a.clients);\n\n  const vpnHTML = vpnServers.slice(0, 6).map(vpn => `\n    <div class=\"vpnCard\">\n      <div class=\"vpnHdr\">\n        <div class=\"vpnName\">${vpn.serverName}</div>\n      </div>\n      <div class=\"vpnClients\">${vpn.clients}</div>\n      <div class=\"vpnLabel\">Clientes</div>\n    </div>\n  `).join('');\n  setText('#vpn-servers', vpnHTML || '<div style=\"text-align:center;color:#888;padding:20px;grid-column:1/-1\">Nenhum servidor VPN ativo</div>');\n\n  // LAN Interfaces\n  const lanHTML = lanNames.map(name => {\n    const iface = byIf.get(name);\n    if (!iface) return '';\n    \n    const total = iface.rx + iface.tx;\n    const rxPct = Math.min(total > 0 ? (iface.rx / total) * 100 : 0, 100);\n    const txPct = Math.min(total > 0 ? (iface.tx / total) * 100 : 0, 100);\n    \n    return `\n      <div class=\"lanCard\">\n        <div class=\"lanHdr\">\n          <div class=\"lanName\">${name}</div>\n          <div class=\"lanStatus\">ONLINE</div>\n        </div>\n        <div class=\"lanTraffic\">\n          <span class=\"tLabel\">⬇ INBOUND</span>\n          <span class=\"tValue\">${bps(iface.rx)}</span>\n        </div>\n        <div class=\"lanBar\"><div class=\"fill rx\" style=\"width:${rxPct.toFixed(1)}%\"></div></div>\n        <div class=\"lanTraffic\">\n          <span class=\"tLabel\">⬆ OUTBOUND</span>\n          <span class=\"tValue\">${bps(iface.tx)}</span>\n        </div>\n        <div class=\"lanBar\"><div class=\"fill tx\" style=\"width:${txPct.toFixed(1)}%\"></div></div>\n      </div>\n    `;\n  }).join('');\n  setText('#lan-interfaces', lanHTML);\n})();",
+        "overflow": "visible",
+        "panelupdateOnMount": true,
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "renderOnMount": true,
+        "rootCSS": "",
+        "svgBaseFix": false,
+        "useGrafanaScrollbar": false
+      },
+      "pluginVersion": "2.2.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "${DS_ZABBIX}"
+          },
+          "group": {
+            "filter": "$group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "Incoming network traffic on WAN"
+          },
+          "queryType": "0",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "${DS_ZABBIX}"
+          },
+          "group": {
+            "filter": "$group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "Outgoing network traffic on WAN"
+          },
+          "queryType": "0",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "${DS_ZABBIX}"
+          },
+          "group": {
+            "filter": "$group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "Incoming errors on WAN"
+          },
+          "queryType": "0",
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "${DS_ZABBIX}"
+          },
+          "group": {
+            "filter": "$group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "Outgoing errors on WAN"
+          },
+          "queryType": "0",
+          "refId": "D"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "${DS_ZABBIX}"
+          },
+          "group": {
+            "filter": "$group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "Incoming network traffic on WAN_CTI"
+          },
+          "queryType": "0",
+          "refId": "E"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "${DS_ZABBIX}"
+          },
+          "group": {
+            "filter": "$group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "Outgoing network traffic on WAN_CTI"
+          },
+          "queryType": "0",
+          "refId": "F"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "${DS_ZABBIX}"
+          },
+          "group": {
+            "filter": "$group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "Incoming errors on WAN_CTI"
+          },
+          "queryType": "0",
+          "refId": "G"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "${DS_ZABBIX}"
+          },
+          "group": {
+            "filter": "$group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "Outgoing errors on WAN_CTI"
+          },
+          "queryType": "0",
+          "refId": "H"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "${DS_ZABBIX}"
+          },
+          "group": {
+            "filter": "$group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "Incoming network traffic on INTRANET"
+          },
+          "queryType": "0",
+          "refId": "I"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "${DS_ZABBIX}"
+          },
+          "group": {
+            "filter": "$group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "Outgoing network traffic on INTRANET"
+          },
+          "queryType": "0",
+          "refId": "J"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "${DS_ZABBIX}"
+          },
+          "group": {
+            "filter": "$group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "Incoming network traffic on EXTRANET_SFZ"
+          },
+          "queryType": "0",
+          "refId": "K"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "${DS_ZABBIX}"
+          },
+          "group": {
+            "filter": "$group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "Outgoing network traffic on EXTRANET_SFZ"
+          },
+          "queryType": "0",
+          "refId": "L"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "${DS_ZABBIX}"
+          },
+          "group": {
+            "filter": "$group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "Incoming network traffic on DMZ"
+          },
+          "queryType": "0",
+          "refId": "M"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "${DS_ZABBIX}"
+          },
+          "group": {
+            "filter": "$group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "Outgoing network traffic on DMZ"
+          },
+          "queryType": "0",
+          "refId": "N"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "${DS_ZABBIX}"
+          },
+          "group": {
+            "filter": "$group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "Incoming network traffic on SRVSINTRANET"
+          },
+          "queryType": "0",
+          "refId": "O"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "${DS_ZABBIX}"
+          },
+          "group": {
+            "filter": "$group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "Outgoing network traffic on SRVSINTRANET"
+          },
+          "queryType": "0",
+          "refId": "P"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "${DS_ZABBIX}"
+          },
+          "group": {
+            "filter": "$group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "Gateway Status Raw"
+          },
+          "queryType": "0",
+          "refId": "Q"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "${DS_ZABBIX}"
+          },
+          "group": {
+            "filter": "$group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "Gateway WAN Status"
+          },
+          "queryType": "0",
+          "refId": "R"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "${DS_ZABBIX}"
+          },
+          "group": {
+            "filter": "$group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "Gateway WAN Packet Loss"
+          },
+          "queryType": "0",
+          "refId": "S"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "${DS_ZABBIX}"
+          },
+          "group": {
+            "filter": "$group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "Gateway WAN RTT"
+          },
+          "queryType": "0",
+          "refId": "T"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "${DS_ZABBIX}"
+          },
+          "group": {
+            "filter": "$group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "Gateway GW_WAN_CTI Status"
+          },
+          "queryType": "0",
+          "refId": "U"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "${DS_ZABBIX}"
+          },
+          "group": {
+            "filter": "$group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "Gateway GW_WAN_CTI Packet Loss"
+          },
+          "queryType": "0",
+          "refId": "V"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "${DS_ZABBIX}"
+          },
+          "group": {
+            "filter": "$group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "Gateway GW_WAN_CTI RTT"
+          },
+          "queryType": "0",
+          "refId": "W"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "${DS_ZABBIX}"
+          },
+          "group": {
+            "filter": "$group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "/^OpenVPN Server .* Clients Connected$/"
+          },
+          "queryType": "0",
+          "refId": "X"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "${DS_ZABBIX}"
+          },
+          "group": {
+            "filter": "$group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "System uptime"
+          },
+          "queryType": "0",
+          "refId": "Y"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "${DS_ZABBIX}"
+          },
+          "group": {
+            "filter": "$group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "CPU idle time"
+          },
+          "queryType": "0",
+          "refId": "Z"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "${DS_ZABBIX}"
+          },
+          "group": {
+            "filter": "$group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "Available memory (percent)"
+          },
+          "queryType": "0",
+          "refId": "AA"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "${DS_ZABBIX}"
+          },
+          "group": {
+            "filter": "$group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "Free disk space on / (percentage)"
+          },
+          "queryType": "0",
+          "refId": "AB"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "${DS_ZABBIX}"
+          },
+          "group": {
+            "filter": "$group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "States Table Current (percent)"
+          },
+          "queryType": "0",
+          "refId": "AC"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "${DS_ZABBIX}"
+          },
+          "group": {
+            "filter": "$group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "Service DNS Forwarder Status"
+          },
+          "queryType": "0",
+          "refId": "AD"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "${DS_ZABBIX}"
+          },
+          "group": {
+            "filter": "$group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "Service Kea DHCP Server Status"
+          },
+          "queryType": "0",
+          "refId": "AE"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "${DS_ZABBIX}"
+          },
+          "group": {
+            "filter": "$group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "Service Gateway Monitoring Daemon Status"
+          },
+          "queryType": "0",
+          "refId": "AF"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "${DS_ZABBIX}"
+          },
+          "group": {
+            "filter": "$group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "Service OpenVPN server: CETIF Status"
+          },
+          "queryType": "0",
+          "refId": "AG"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "${DS_ZABBIX}"
+          },
+          "group": {
+            "filter": "$group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "Service System Logger Daemon Status"
+          },
+          "queryType": "0",
+          "refId": "AH"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "${DS_ZABBIX}"
+          },
+          "group": {
+            "filter": "$group"
+          },
+          "host": {
+            "filter": "$host"
+          },
+          "item": {
+            "filter": "Service Zabbix Agent Host Monitor Daemon Status"
+          },
+          "queryType": "0",
+          "refId": "AI"
+        }
+      ],
+      "title": "CETIF – pfSense Central Dashboard",
+      "type": "gapit-htmlgraphics-panel"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 40,
+  "tags": [
+    "pfsense",
+    "zabbix",
+    "CETIF",
+    "firewall",
+    "monitoring"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "Zabbix",
+          "value": "aec2bvjiis7pca"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Data Source",
+        "multi": false,
+        "name": "DS_ZABBIX",
+        "options": [],
+        "query": "alexanderzobnin-zabbix-datasource",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "SRVINTRANET",
+          "value": "SRVINTRANET"
+        },
+        "datasource": {
+          "type": "alexanderzobnin-zabbix-datasource",
+          "uid": "${DS_ZABBIX}"
+        },
+        "definition": "Zabbix - group",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Group",
+        "multi": false,
+        "name": "group",
+        "options": [],
+        "query": {
+          "application": "",
+          "group": "/.*/",
+          "host": "",
+          "item": "",
+          "itemTag": "",
+          "queryType": "group"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "PFSENSE",
+          "value": "PFSENSE"
+        },
+        "datasource": {
+          "type": "alexanderzobnin-zabbix-datasource",
+          "uid": "${DS_ZABBIX}"
+        },
+        "definition": "Zabbix - host",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Host",
+        "multi": false,
+        "name": "host",
+        "options": [],
+        "query": {
+          "application": "",
+          "group": "$group",
+          "host": "/.*/",
+          "item": "",
+          "itemTag": "",
+          "queryType": "host"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-3h",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h"
+    ]
+  },
+  "timezone": "browser",
+  "title": "CETIF – pfSense Firewall Monitoring (v2)",
+  "uid": "cetif_pfsense_v1",
+  "version": 2,
+  "weekStart": ""
+}

@@ -1,0 +1,343 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "GovDetector RR - Monitor de Status dos Sites Governamentais de Roraima (Estilo DownDetector)",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 162,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "alexanderzobnin-zabbix-datasource",
+        "uid": "aec2bvjiis7pca"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 50,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "SVGBaseFix": true,
+        "add100Percentage": true,
+        "calcsMutation": "standard",
+        "centerAlignContent": true,
+        "codeData": "{\n  \"text\": \"GovDetector RR\"\n}",
+        "css": "",
+        "dynamicData": false,
+        "dynamicFieldDisplayValues": false,
+        "dynamicHtmlGraphics": false,
+        "dynamicProps": false,
+        "html": "",
+        "onInit": "",
+        "onInitOnResize": false,
+        "onRender": "/********************************************************************************************\n * GovDetector RR - Clone do DownDetector\n * Dashboard simples para telão - Sites Governamentais de Roraima\n ********************************************************************************************/\n(() => {\n  if (!htmlNode) return;\n\n  const styles = `\n    <style>\n      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');\n\n      .govdetector-container {\n        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);\n        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;\n        padding: 24px;\n        min-height: 100%;\n        display: flex;\n        flex-direction: column;\n      }\n\n      .header {\n        display: flex;\n        align-items: center;\n        justify-content: space-between;\n        margin-bottom: 24px;\n        padding-bottom: 16px;\n        border-bottom: 2px solid #dee2e6;\n      }\n\n      .header-left {\n        display: flex;\n        align-items: center;\n        gap: 16px;\n      }\n\n      .header-logo {\n        width: 48px;\n        height: 48px;\n        background: linear-gradient(135deg, #198754 0%, #20c997 100%);\n        border-radius: 12px;\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        font-size: 24px;\n        box-shadow: 0 4px 12px rgba(25, 135, 84, 0.3);\n      }\n\n      .header-title {\n        font-size: 28px;\n        font-weight: 700;\n        color: #212529;\n        margin: 0;\n      }\n\n      .header-subtitle {\n        font-size: 14px;\n        color: #6c757d;\n        margin: 0;\n      }\n\n      .header-right {\n        display: flex;\n        align-items: center;\n        gap: 16px;\n      }\n\n      .status-summary {\n        display: flex;\n        align-items: center;\n        gap: 8px;\n        padding: 8px 16px;\n        border-radius: 8px;\n        font-weight: 600;\n        font-size: 14px;\n      }\n\n      .status-summary.all-ok {\n        background: rgba(25, 135, 84, 0.1);\n        color: #198754;\n      }\n\n      .status-summary.has-issues {\n        background: rgba(220, 53, 69, 0.1);\n        color: #dc3545;\n      }\n\n      .status-dot {\n        width: 10px;\n        height: 10px;\n        border-radius: 50%;\n        animation: pulse 2s infinite;\n      }\n\n      .status-dot.green {\n        background: #198754;\n      }\n\n      .status-dot.red {\n        background: #dc3545;\n        animation: pulse-red 1.5s infinite;\n      }\n\n      @keyframes pulse {\n        0%, 100% { opacity: 1; transform: scale(1); }\n        50% { opacity: 0.7; transform: scale(1.1); }\n      }\n\n      @keyframes pulse-red {\n        0%, 100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7); }\n        50% { box-shadow: 0 0 0 8px rgba(220, 53, 69, 0); }\n      }\n\n      .update-time {\n        font-size: 13px;\n        color: #6c757d;\n        background: #fff;\n        padding: 8px 12px;\n        border-radius: 6px;\n        border: 1px solid #dee2e6;\n      }\n\n      .services-grid {\n        display: grid;\n        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));\n        gap: 20px;\n        flex: 1;\n      }\n\n      .service-card {\n        background: #fff;\n        border: 1px solid #e9ecef;\n        border-radius: 12px;\n        padding: 14px;\n        padding-top: 34px;\n        transition: all 0.3s ease;\n        cursor: pointer;\n        position: relative;\n        overflow: hidden;\n      }\n\n      .service-card:hover {\n        transform: translateY(-4px);\n        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);\n        border-color: #dee2e6;\n      }\n\n      .service-card.status-down {\n        border-color: #dc3545;\n        background: linear-gradient(135deg, #fff 0%, #fff5f5 100%);\n      }\n\n      .service-card.status-degraded {\n        border-color: #ffc107;\n        background: linear-gradient(135deg, #fff 0%, #fffef5 100%);\n      }\n\n      .service-header {\n        display: flex;\n        align-items: flex-start;\n        min-height: 64px;\n        gap: 16px;\n        margin-bottom: 16px;\n      }\n\n      .service-logo {\n        width: 56px;\n        height: 56px;\n        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);\n        border-radius: 12px;\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        font-size: 12px;\n        font-weight: 700;\n        color: #495057;\n        border: 2px solid #e9ecef;\n        text-align: center;\n        line-height: 1.2;\n        padding: 4px;\n      }\n\n      .service-logo.gov {\n        background: linear-gradient(135deg, #0d6efd 0%, #0dcaf0 100%);\n        color: #fff;\n        border: none;\n      }\n\n      .service-info {\n        flex: 1;\n      }\n\n      .service-name {\n        font-size: 14px;\n        font-weight: 600;\n        color: #212529;\n        line-height: 1.2;\n        margin: 0 0 4px 0;\n        display: -webkit-box;\n        -webkit-line-clamp: 2;\n        -webkit-box-orient: vertical;\n        overflow: hidden;\n      }\n\n      .service-url {\n        font-size: 12px;\n        color: #6c757d;\n        margin: 0;\n        text-decoration: none;\n      }\n\n      .service-status-badge {\n        position: absolute;\n        top: 10px;\n        right: 10px;\n        z-index: 2;\n        padding: 4px 10px;\n        border-radius: 20px;\n        font-size: 11px;\n        font-weight: 600;\n        text-transform: uppercase;\n      }\n\n      .service-status-badge.up {\n        background: rgba(25, 135, 84, 0.1);\n        color: #198754;\n      }\n\n      .service-status-badge.down {\n        background: rgba(220, 53, 69, 0.15);\n        color: #dc3545;\n      }\n\n      .service-status-badge.degraded {\n        background: rgba(255, 193, 7, 0.2);\n        color: #997404;\n      }\n\n      .sparkline-container {\n        margin-top: 12px;\n        padding-top: 12px;\n        border-top: 1px solid #f1f3f4;\n      }\n\n      .sparkline-label {\n        display: flex;\n        justify-content: space-between;\n        font-size: 11px;\n        color: #adb5bd;\n        margin-bottom: 6px;\n      }\n\n      .sparkline {\n        display: flex;\n        align-items: flex-end;\n        gap: 2px;\n        height: 40px;\n        background: #f8f9fa;\n        border-radius: 6px;\n        padding: 6px;\n      }\n\n      .sparkline-bar {\n        flex: 1;\n        min-width: 3px;\n        border-radius: 2px 2px 0 0;\n        transition: all 0.3s ease;\n      }\n\n      .sparkline-bar:hover {\n        opacity: 0.8;\n        transform: scaleY(1.1);\n      }\n\n      .sparkline-bar.ok {\n        background: linear-gradient(180deg, #20c997 0%, #198754 100%);\n      }\n\n      .sparkline-bar.warning {\n        background: linear-gradient(180deg, #ffc107 0%, #fd7e14 100%);\n      }\n\n      .sparkline-bar.error {\n        background: linear-gradient(180deg, #f8d7da 0%, #dc3545 100%);\n      }\n\n      .service-metrics {\n        display: flex;\n        justify-content: space-between;\n        margin-top: 12px;\n        padding-top: 12px;\n        border-top: 1px solid #f1f3f4;\n      }\n\n      .metric {\n        text-align: center;\n      }\n\n      .metric-value {\n        font-size: 16px;\n        font-weight: 700;\n        color: #212529;\n      }\n\n      .metric-value.good {\n        color: #198754;\n      }\n\n      .metric-value.warning {\n        color: #ffc107;\n      }\n\n      .metric-value.bad {\n        color: #dc3545;\n      }\n\n      .metric-label {\n        font-size: 10px;\n        color: #6c757d;\n        text-transform: uppercase;\n        letter-spacing: 0.5px;\n      }\n\n      .footer {\n        margin-top: 24px;\n        padding-top: 16px;\n        border-top: 1px solid #dee2e6;\n        display: flex;\n        justify-content: space-between;\n        align-items: center;\n        font-size: 12px;\n        color: #6c757d;\n      }\n\n      .footer-legend {\n        display: flex;\n        gap: 20px;\n      }\n\n      .legend-item {\n        display: flex;\n        align-items: center;\n        gap: 6px;\n      }\n\n      .legend-dot {\n        width: 12px;\n        height: 12px;\n        border-radius: 3px;\n      }\n\n      .legend-dot.green {\n        background: linear-gradient(180deg, #20c997 0%, #198754 100%);\n      }\n\n      .legend-dot.yellow {\n        background: linear-gradient(180deg, #ffc107 0%, #fd7e14 100%);\n      }\n\n      .legend-dot.red {\n        background: linear-gradient(180deg, #f8d7da 0%, #dc3545 100%);\n      }\n\n      @media (max-width: 768px) {\n        .services-grid {\n          grid-template-columns: 1fr;\n        }\n        .header {\n          flex-direction: column;\n          gap: 16px;\n          text-align: center;\n        }\n        .header-left {\n          flex-direction: column;\n        }\n      }\n    </style>\n  `;\n\n  // Parse data from Grafana\n  const panelData = (typeof data !== 'undefined' && data) || (typeof panel !== 'undefined' && panel.data) || null;\n  const series = panelData && Array.isArray(panelData.series) ? panelData.series : [];\n\n  const toNumber = (value) => {\n    if (value == null) return null;\n    if (typeof value === 'number') return Number.isFinite(value) ? value : null;\n    if (typeof value === 'string' && value.trim() !== '') {\n      const num = Number(value);\n      return Number.isFinite(num) ? num : null;\n    }\n    return null;\n  };\n\n  const getLastValue = (frame) => {\n    if (!frame || !frame.fields) return null;\n    const valueField = frame.fields.find(f => f.type === 'number') || frame.fields[1];\n    if (!valueField) return null;\n    const vals = valueField.values;\n    if (vals && typeof vals.get === 'function') {\n      const len = typeof vals.length === 'number' ? vals.length : (typeof vals.toArray === 'function' ? vals.toArray().length : 0);\n      return len ? vals.get(len - 1) : null;\n    }\n    if (Array.isArray(vals)) return vals.length ? vals[vals.length - 1] : null;\n    return null;\n  };\n\n  const getAllValues = (frame) => {\n    if (!frame || !frame.fields) return [];\n    const valueField = frame.fields.find(f => f.type === 'number') || frame.fields[1];\n    if (!valueField) return [];\n    const vals = valueField.values;\n    if (vals && typeof vals.toArray === 'function') return vals.toArray();\n    if (Array.isArray(vals)) return vals;\n    return [];\n  };\n\n  const getHost = (frame) => {\n    const f = frame && frame.fields ? frame.fields[1] : null;\n    const labels = (f && f.labels) || frame.labels || (frame.meta && frame.meta.custom) || {};\n    const byLabel = labels.host || labels.Host || labels.hostname || null;\n    if (byLabel) return byLabel.replace(/:+$/, '').trim();\n\n    let name = String(frame && frame.name ? frame.name : '');\n    const sslMatch = name.match(/^(SITE\\s+)?(.+?):\\s*(Expires on|Valid from)/i);\n    if (sslMatch) return 'SITE ' + sslMatch[2].trim();\n    const websiteMatch = name.match(/^(SITE\\s+)?(.+?):\\s*Website/i);\n    if (websiteMatch) return 'SITE ' + websiteMatch[2].trim();\n    const simpleMatch = name.match(/^(SITE\\s+)?([A-Z\\s]+)/i);\n    if (simpleMatch && simpleMatch[2]) return 'SITE ' + simpleMatch[2].trim().replace(/:+$/, '');\n    return 'UNKNOWN';\n  };\n\n  const byRef = {};\n  series.forEach(s => {\n    const ref = s.refId || 'unknown';\n    (byRef[ref] = byRef[ref] || []).push(s);\n  });\n\n  const indexByHost = (frames, getAllVals = false) => {\n    const map = {};\n    (frames || []).forEach(f => {\n      const h = getHost(f);\n      if (h && h !== 'UNKNOWN') {\n        if (getAllVals) {\n          map[h] = getAllValues(f).map(v => toNumber(v)).filter(v => v != null);\n        } else {\n          let v = getLastValue(f);\n          v = toNumber(v) ?? v;\n          if (v != null) map[h] = v;\n        }\n      }\n    });\n    return map;\n  };\n\n  // Get metrics\n  const ping = indexByHost(byRef['A']);\n  const status = indexByHost(byRef['B']);\n  const httpRt = indexByHost(byRef['C']);\n  const httpRtHistory = indexByHost(byRef['C'], true);\n  const navLoad = indexByHost(byRef['F']);\n  const navLoadHistory = indexByHost(byRef['F'], true);\n\n  // Service definitions with logos/initials\n  const serviceConfig = {\n    'SITE SEFAZ': { name: 'SEFAZ', initials: 'SEFAZ', url: 'sefaz.rr.gov.br', color: '#0d6efd' },\n    'SITE SESP': { name: 'SESP', initials: 'SESP', url: 'sesp.rr.gov.br', color: '#6f42c1' },\n    'SITE EDUCACAO': { name: 'Educação', initials: 'EDUC', url: 'educacao.rr.gov.br', color: '#20c997' },\n    'SITE OUVIDORIA': { name: 'Ouvidoria', initials: 'OUV', url: 'ouvidoria.rr.gov.br', color: '#fd7e14' },\n    'SITE SEINF': { name: 'SEINF', initials: 'SEINF', url: 'seinf.rr.gov.br', color: '#0dcaf0' },\n    'SITE SETRABES': { name: 'SETRABES', initials: 'SETRA', url: 'setrabes.rr.gov.br', color: '#198754' },\n    'SITE FAPERR': { name: 'FAPERR', initials: 'FAPERR', url: 'faperr.rr.gov.br', color: '#dc3545' },\n    'SITE SEPLAN': { name: 'SEPLAN', initials: 'SEPLAN', url: 'seplan.rr.gov.br', color: '#6610f2' },\n    'SITE SEED': { name: 'SEED', initials: 'SEED', url: 'seed.rr.gov.br', color: '#d63384' },\n    'SITE POLICIA CIVIL': { name: 'Polícia Civil', initials: 'PC', url: 'policiacivil.rr.gov.br', color: '#212529' },\n    'SITE PGE': { name: 'PGE', initials: 'PGE', url: 'www.pge.rr.gov.br', color: '#343a40' },\n    'SITE SECULT': { name: 'SECULT', initials: 'SECULT', url: 'secult.rr.gov.br', color: '#e83e8c' },\n    'SITE TRANSPARENCIA': { name: 'Transparência', initials: 'TRANSP', url: 'transparencia.rr.gov.br', color: '#17a2b8' },\n    'SITE ADERR': { name: 'ADERR', initials: 'ADERR', url: 'www.aderr.rr.gov.br', color: '#28a745' },\n    'SITE CODESAIMA': { name: 'CODESAIMA', initials: 'CODES', url: 'codesaima.rr.gov.br', color: '#ffc107' },\n    'SITE IPEM': { name: 'IPEM', initials: 'IPEM', url: 'ipem.rr.gov.br', color: '#007bff' },\n    'Imprensa Oficial': { name: 'Imprensa Oficial', initials: 'IMPR', url: 'imprensaoficial.rr.gov.br', color: '#6c757d' }\n  };\n\n  // Build services list\n  const hosts = new Set();\n  [ping, status, httpRt, navLoad].forEach(m => {\n    Object.keys(m || {}).forEach(h => hosts.add(h));\n  });\n\n  let services = Array.from(hosts).map(h => {\n    const config = serviceConfig[h] || { name: h.replace(/^SITE\\s+/i, ''), initials: h.replace(/^SITE\\s+/i, '').substring(0, 4).toUpperCase(), url: '', color: '#6c757d' };\n    \n    const pingVal = toNumber(ping[h]);\n    const statusVal = toNumber(status[h]);\n    const hasPing = pingVal != null;\n    const hasStatus = statusVal != null;\n    const isUp = (hasPing && pingVal > 0) || (hasStatus && statusVal >= 200 && statusVal < 400);\n    \n    const respTimeRaw = toNumber(httpRt[h]) || 0;\n    const respTime = Math.round(respTimeRaw * 1000);\n    const loadTimeRaw = toNumber(navLoad[h]) || 0;\n    const loadTime = Math.round(loadTimeRaw * 1000);\n    \n    // Determine status\n    let statusLabel = 'UP';\n    let isDegraded = false;\n    if (!isUp && (hasPing || hasStatus)) {\n      statusLabel = 'DOWN';\n    } else if (loadTime > 5000 || respTime > 3000) {\n      statusLabel = 'DEGRADED';\n      isDegraded = true;\n    }\n\n    // Get history for sparkline (use load time or response time)\n    let history = navLoadHistory[h] || httpRtHistory[h] || [];\n    if (history.length === 0) {\n      // Generate placeholder data if no history\n      history = Array(24).fill(0).map(() => Math.random() * 2);\n    }\n    // Normalize to last 24 points\n    history = history.slice(-24);\n    while (history.length < 24) history.unshift(history[0] || 0);\n\n    return {\n      host: h,\n      name: config.name,\n      initials: config.initials,\n      url: config.url,\n      color: config.color,\n      status: statusLabel,\n      isUp: statusLabel === 'UP',\n      isDegraded: isDegraded,\n      isDown: statusLabel === 'DOWN',\n      respTime: respTime,\n      loadTime: loadTime,\n      history: history\n    };\n  }).filter(s => s.host !== 'UNKNOWN');\n\n  // Sort: DOWN first, then DEGRADED, then UP\n  services.sort((a, b) => {\n    const order = { 'DOWN': 0, 'DEGRADED': 1, 'UP': 2 };\n    return order[a.status] - order[b.status];\n  });\n\n  const upCount = services.filter(s => s.isUp && !s.isDegraded).length;\n  const degradedCount = services.filter(s => s.isDegraded).length;\n  const downCount = services.filter(s => s.isDown).length;\n  const totalCount = services.length;\n  const allOk = downCount === 0 && degradedCount === 0;\n\n  const now = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });\n\n  // Generate sparkline bars\n  const generateSparkline = (history, isDown) => {\n    const maxVal = Math.max(...history, 0.001);\n    return history.map((val, idx) => {\n      const height = Math.max((val / maxVal) * 100, 5);\n      let barClass = 'ok';\n      if (isDown) {\n        barClass = 'error';\n      } else if (val > maxVal * 0.7) {\n        barClass = 'warning';\n      } else if (val > maxVal * 0.9) {\n        barClass = 'error';\n      }\n      return `<div class=\"sparkline-bar ${barClass}\" style=\"height: ${height}%\" title=\"${(val * 1000).toFixed(0)}ms\"></div>`;\n    }).join('');\n  };\n\n  // Render services\n  const servicesHtml = services.length > 0 ? services.map(s => {\n    const cardClass = s.isDown ? 'status-down' : (s.isDegraded ? 'status-degraded' : '');\n    const badgeClass = s.isDown ? 'down' : (s.isDegraded ? 'degraded' : 'up');\n    const badgeText = s.isDown ? 'Fora do Ar' : (s.isDegraded ? 'Lento' : 'Operacional');\n    \n    const respClass = s.respTime > 3000 ? 'bad' : (s.respTime > 1500 ? 'warning' : 'good');\n    const loadClass = s.loadTime > 5000 ? 'bad' : (s.loadTime > 2500 ? 'warning' : 'good');\n    \n    return `\n      <div class=\"service-card ${cardClass}\" onclick=\"window.open('https://${s.url}', '_blank')\">\n        <span class=\"service-status-badge ${badgeClass}\">${badgeText}</span>\n        <div class=\"service-header\">\n          <div class=\"service-logo gov\" style=\"background: linear-gradient(135deg, ${s.color} 0%, ${s.color}dd 100%)\">\n            ${s.initials}\n          </div>\n          <div class=\"service-info\">\n            <h3 class=\"service-name\">${s.name}</h3>\n            <p class=\"service-url\">${s.url}</p>\n          </div>\n        </div>\n        <div class=\"sparkline-container\">\n          <div class=\"sparkline-label\">\n            <span>24h atrás</span>\n            <span>Agora</span>\n          </div>\n          <div class=\"sparkline\">\n            ${generateSparkline(s.history, s.isDown)}\n          </div>\n        </div>\n        <div class=\"service-metrics\">\n          <div class=\"metric\">\n            <div class=\"metric-value ${respClass}\">${s.respTime > 0 ? s.respTime + 'ms' : '--'}</div>\n            <div class=\"metric-label\">Resposta</div>\n          </div>\n          <div class=\"metric\">\n            <div class=\"metric-value ${loadClass}\">${s.loadTime > 0 ? (s.loadTime / 1000).toFixed(1) + 's' : '--'}</div>\n            <div class=\"metric-label\">Carregamento</div>\n          </div>\n          <div class=\"metric\">\n            <div class=\"metric-value ${s.isDown ? 'bad' : 'good'}\">${s.isDown ? '❌' : '✓'}</div>\n            <div class=\"metric-label\">Status</div>\n          </div>\n        </div>\n      </div>\n    `;\n  }).join('') : `\n    <div style=\"grid-column: 1/-1; text-align: center; padding: 60px; color: #6c757d;\">\n      <div style=\"font-size: 48px; margin-bottom: 16px;\">📡</div>\n      <h3 style=\"color: #212529; margin-bottom: 8px;\">Aguardando dados...</h3>\n      <p>Os dados dos serviços serão exibidos assim que estiverem disponíveis.</p>\n    </div>\n  `;\n\n  htmlNode.innerHTML = styles + `\n    <div class=\"govdetector-container\">\n      <header class=\"header\">\n        <div class=\"header-left\">\n          <div class=\"header-logo\">🏛️</div>\n          <div>\n            <h1 class=\"header-title\">GovDetector RR</h1>\n            <p class=\"header-subtitle\">Monitor de Status - Sites Governamentais de Roraima</p>\n          </div>\n        </div>\n        <div class=\"header-right\">\n          <div class=\"status-summary ${allOk ? 'all-ok' : 'has-issues'}\">\n            <span class=\"status-dot ${allOk ? 'green' : 'red'}\"></span>\n            ${allOk ? 'Todos os sistemas operacionais' : (downCount > 0 ? downCount + ' serviço(s) fora do ar' : degradedCount + ' serviço(s) lento(s)')}\n          </div>\n          <div class=\"update-time\">Atualizado: ${now}</div>\n        </div>\n      </header>\n\n      <div class=\"services-grid\">\n        ${servicesHtml}\n      </div>\n\n      <footer class=\"footer\">\n        <div class=\"footer-legend\">\n          <div class=\"legend-item\">\n            <span class=\"legend-dot green\"></span>\n            <span>Operacional (${upCount})</span>\n          </div>\n          <div class=\"legend-item\">\n            <span class=\"legend-dot yellow\"></span>\n            <span>Lento (${degradedCount})</span>\n          </div>\n          <div class=\"legend-item\">\n            <span class=\"legend-dot red\"></span>\n            <span>Fora do Ar (${downCount})</span>\n          </div>\n        </div>\n        <div>\n          Dados coletados via Zabbix • Atualização automática a cada 30s\n        </div>\n      </footer>\n    </div>\n  `;\n})();",
+        "overflow": "visible",
+        "panelupdateOnMount": true,
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull",
+            "last",
+            "firstNotNull",
+            "first",
+            "min",
+            "max",
+            "mean",
+            "sum",
+            "count",
+            "range",
+            "delta",
+            "step",
+            "diff",
+            "logmin",
+            "allIsZero",
+            "allIsNull",
+            "diffperc"
+          ]
+        },
+        "renderOnMount": true,
+        "rootCSS": "",
+        "useGrafanaScrollbar": true
+      },
+      "pluginVersion": "2.2.3",
+      "targets": [
+        {
+          "application": {
+            "filter": ""
+          },
+          "countTriggersBy": "",
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "evaltype": "0",
+          "functions": [],
+          "group": {
+            "filter": "SITES GOVERNAMENTAIS"
+          },
+          "hide": false,
+          "host": {
+            "filter": "/.*/"
+          },
+          "item": {
+            "filter": "/^Website \\{\\$SITE_URL\\} HTTP Ping Check$/"
+          },
+          "itemTag": {
+            "filter": ""
+          },
+          "macro": {
+            "filter": ""
+          },
+          "options": {
+            "count": false,
+            "disableDataAlignment": false,
+            "showDisabledItems": false,
+            "skipEmptyValues": false,
+            "useTrends": "default",
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": "0",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "textFilter": "",
+          "trigger": {
+            "filter": ""
+          }
+        },
+        {
+          "application": {
+            "filter": ""
+          },
+          "countTriggersBy": "",
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "evaltype": "0",
+          "functions": [],
+          "group": {
+            "filter": "SITES GOVERNAMENTAIS"
+          },
+          "hide": false,
+          "host": {
+            "filter": "/.*/"
+          },
+          "item": {
+            "filter": "/^Website \\{\\$SITE_URL\\} HTTP Status Code$/"
+          },
+          "itemTag": {
+            "filter": ""
+          },
+          "macro": {
+            "filter": ""
+          },
+          "options": {
+            "count": false,
+            "disableDataAlignment": false,
+            "showDisabledItems": false,
+            "skipEmptyValues": false,
+            "useTrends": "default",
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": "0",
+          "refId": "B",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "textFilter": "",
+          "trigger": {
+            "filter": ""
+          }
+        },
+        {
+          "application": {
+            "filter": ""
+          },
+          "countTriggersBy": "",
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "evaltype": "0",
+          "functions": [],
+          "group": {
+            "filter": "SITES GOVERNAMENTAIS"
+          },
+          "hide": false,
+          "host": {
+            "filter": "/.*/"
+          },
+          "item": {
+            "filter": "/^Website \\{\\$SITE_URL\\} HTTP Response Time$/"
+          },
+          "itemTag": {
+            "filter": ""
+          },
+          "macro": {
+            "filter": ""
+          },
+          "options": {
+            "count": false,
+            "disableDataAlignment": false,
+            "showDisabledItems": false,
+            "skipEmptyValues": false,
+            "useTrends": "default",
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": "0",
+          "refId": "C",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "textFilter": "",
+          "trigger": {
+            "filter": ""
+          }
+        },
+        {
+          "application": {
+            "filter": ""
+          },
+          "countTriggersBy": "",
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "evaltype": "0",
+          "functions": [],
+          "group": {
+            "filter": "SITES GOVERNAMENTAIS"
+          },
+          "hide": false,
+          "host": {
+            "filter": "/.*/"
+          },
+          "item": {
+            "filter": "/^Website \\{\\$SITE_URL\\} Navigation load event time$/"
+          },
+          "itemTag": {
+            "filter": ""
+          },
+          "macro": {
+            "filter": ""
+          },
+          "options": {
+            "count": false,
+            "disableDataAlignment": false,
+            "showDisabledItems": false,
+            "skipEmptyValues": false,
+            "useTrends": "default",
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": "0",
+          "refId": "F",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "textFilter": "",
+          "trigger": {
+            "filter": ""
+          }
+        }
+      ],
+      "title": "",
+      "type": "gapit-htmlgraphics-panel"
+    }
+  ],
+  "preload": false,
+  "refresh": "5m",
+  "schemaVersion": 40,
+  "tags": [
+    "govdetector",
+    "downdetector",
+    "roraima",
+    "sites",
+    "monitoring"
+  ],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "GovDetector RR - Status dos Sites",
+  "uid": "govdetector-rr-status",
+  "version": 11,
+  "weekStart": ""
+}

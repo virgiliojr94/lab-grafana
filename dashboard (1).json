@@ -1,0 +1,712 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "GovService Health & User Experience (NOC View) - RED Method + SSL Context Dashboard",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 150,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "alexanderzobnin-zabbix-datasource",
+        "uid": "aec2bvjiis7pca"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 24,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "SVGBaseFix": true,
+        "add100Percentage": true,
+        "calcsMutation": "standard",
+        "centerAlignContent": true,
+        "codeData": "{\n  \"text\": \"GovService NOC Dashboard\"\n}",
+        "css": "",
+        "dynamicData": false,
+        "dynamicFieldDisplayValues": false,
+        "dynamicHtmlGraphics": false,
+        "dynamicProps": false,
+        "html": "",
+        "onInit": "",
+        "onInitOnResize": false,
+        "onRender": "/********************************************************************************************\n * GovService Health & User Experience (NOC View)\n * RED Method + SSL Context Dashboard\n * VERSÃO CORRIGIDA - métricas reais e charts conectados\n ********************************************************************************************/\n(() => {\n  if (!htmlNode) return;\n\n  const styles = `\n    <style>\n      .noc-container {\n        background-color: #101217;\n        color: #d8d9da;\n        font-family: 'Inter', sans-serif;\n        padding: 16px;\n        min-height: 100%;\n        display: flex;\n        flex-direction: column;\n        gap: 16px;\n      }\n\n      .panel {\n        background-color: #1e2026;\n        border: 1px solid #2c3235;\n        border-radius: 4px;\n        padding: 16px;\n        display: flex;\n        flex-direction: column;\n      }\n\n      .panel-header {\n        font-size: 0.85rem;\n        font-weight: 500;\n        color: #9fa7b3;\n        margin-bottom: 8px;\n        display: flex;\n        justify-content: space-between;\n        align-items: center;\n      }\n\n      .stat-value {\n        font-size: 1.75rem;\n        font-weight: 600;\n      }\n\n      .stat-unit {\n        font-size: 1rem;\n        color: #9fa7b3;\n        margin-left: 4px;\n      }\n\n      @keyframes pulse-red {\n        0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }\n        70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }\n        100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }\n      }\n\n      .alert-critical { color: #f2495c; }\n      .alert-critical-bg {\n        background-color: rgba(242, 73, 92, 0.1);\n        border: 1px solid #f2495c;\n        animation: pulse-red 2s infinite;\n      }\n      .alert-warning { color: #ff9830; }\n      .status-ok { color: #73bf69; }\n      .text-blue-400 { color: #60a5fa; }\n      .text-orange-400 { color: #fb923c; }\n      .text-green-400 { color: #4ade80; }\n      .text-green-500 { color: #22c55e; }\n      .text-yellow-500 { color: #eab308; }\n      .text-red-500 { color: #ef4444; }\n      .text-gray-400 { color: #9ca3af; }\n      .text-gray-500 { color: #6b7280; }\n      .text-white { color: #ffffff; }\n\n      .grid-4 {\n        display: grid;\n        grid-template-columns: repeat(4, 1fr);\n        gap: 16px;\n      }\n\n      .grid-2 {\n        display: grid;\n        grid-template-columns: repeat(2, 1fr);\n        gap: 16px;\n      }\n\n      .top-bar {\n        display: flex;\n        justify-content: space-between;\n        align-items: center;\n        margin-bottom: 8px;\n      }\n\n      .top-bar h1 {\n        font-size: 1.25rem;\n        font-weight: bold;\n        color: white;\n        margin: 0;\n      }\n\n      .top-bar p {\n        font-size: 0.75rem;\n        color: #9ca3af;\n        margin: 0;\n      }\n\n      .btn-refresh {\n        background-color: #2563eb;\n        color: white;\n        padding: 4px 12px;\n        border-radius: 4px;\n        font-size: 0.875rem;\n        font-weight: 500;\n        border: none;\n        cursor: pointer;\n      }\n\n      .btn-refresh:hover {\n        background-color: #1d4ed8;\n      }\n\n      .time-badge {\n        background-color: #1f2937;\n        border: 1px solid #374151;\n        padding: 4px 12px;\n        border-radius: 4px;\n        font-size: 0.875rem;\n        color: #d1d5db;\n      }\n\n      .flex-center {\n        display: flex;\n        flex-direction: column;\n        justify-content: center;\n        align-items: center;\n        flex-grow: 1;\n      }\n\n      .progress-bar {\n        width: 100%;\n        background-color: #374151;\n        height: 4px;\n        margin-top: 8px;\n        border-radius: 4px;\n        overflow: hidden;\n      }\n\n      .progress-fill {\n        height: 100%;\n        transition: width 0.3s;\n      }\n\n      .bg-green-500 { background-color: #22c55e; }\n      .bg-yellow-500 { background-color: #eab308; }\n      .bg-red-500 { background-color: #ef4444; }\n      .bg-blue-500 { background-color: #3b82f6; }\n      .bg-purple-500 { background-color: #a855f7; }\n      .bg-gray-500 { background-color: #6b7280; }\n\n      .sparkline {\n        display: flex;\n        align-items: flex-end;\n        justify-content: space-between;\n        height: 24px;\n        gap: 4px;\n        margin-top: auto;\n        opacity: 0.6;\n      }\n\n      .sparkline-bar {\n        width: 4px;\n        background-color: #3b82f6;\n        border-radius: 2px 2px 0 0;\n      }\n\n      .info-badge {\n        text-align: center;\n        font-size: 0.75rem;\n        margin-top: auto;\n        padding: 4px 8px;\n        border-radius: 4px;\n        background-color: #1f2937;\n        border: 1px solid #374151;\n      }\n\n      table {\n        width: 100%;\n        border-collapse: collapse;\n        font-size: 0.85rem;\n      }\n\n      th {\n        text-align: left;\n        color: #7ebbf7;\n        padding: 8px;\n        border-bottom: 2px solid #2c3235;\n      }\n\n      td {\n        padding: 8px;\n        border-bottom: 1px solid #2c3235;\n      }\n\n      tr:hover td {\n        background-color: #262931;\n      }\n\n      .service-badge {\n        display: inline-flex;\n        align-items: center;\n        gap: 4px;\n        font-weight: bold;\n      }\n\n      .table-container {\n        overflow-y: auto;\n        max-height: 300px;\n      }\n\n      .chart-placeholder {\n        display: flex;\n        flex-direction: column;\n        align-items: center;\n        justify-content: center;\n        height: 150px;\n        background: #111318;\n        border-radius: 4px;\n        color: #6b7280;\n        text-align: center;\n        gap: 4px;\n      }\n\n      .waterfall-bar {\n        display: flex;\n        height: 14px;\n        background-color: #111318;\n        border-radius: 4px;\n        overflow: hidden;\n      }\n\n      .waterfall-values {\n        display: grid;\n        grid-template-columns: repeat(4, 1fr);\n        gap: 8px;\n        margin-top: 8px;\n        font-size: 0.75rem;\n        color: #9ca3af;\n      }\n\n      .waterfall-value {\n        display: flex;\n        align-items: center;\n        gap: 6px;\n      }\n\n      .status-chart {\n        display: flex;\n        align-items: flex-end;\n        gap: 12px;\n        height: 120px;\n        margin-top: 8px;\n      }\n\n      .status-bar {\n        flex: 1;\n        display: flex;\n        flex-direction: column;\n        align-items: center;\n        justify-content: flex-end;\n        gap: 4px;\n      }\n\n      .status-bar-fill {\n        width: 100%;\n        min-height: 4px;\n        border-radius: 4px 4px 0 0;\n      }\n\n      .status-bar-label {\n        font-size: 0.7rem;\n        color: #9ca3af;\n      }\n\n      .status-bar-value {\n        font-size: 0.8rem;\n        color: #e5e7eb;\n      }\n\n      .screenshot-container {\n        position: relative;\n        overflow: hidden;\n        height: 200px;\n        background: #000;\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        border: 1px solid #374151;\n        border-radius: 4px;\n      }\n\n      .screenshot-overlay {\n        position: absolute;\n        bottom: 0;\n        left: 0;\n        right: 0;\n        background: rgba(0,0,0,0.7);\n        padding: 5px 10px;\n        font-size: 0.8rem;\n      }\n\n      .log-container {\n        overflow-y: auto;\n        font-size: 0.75rem;\n        padding: 8px;\n        background: #111318;\n        border-radius: 4px;\n        border: 1px solid #374151;\n        font-family: monospace;\n        height: 200px;\n      }\n\n      .log-entry { margin-bottom: 4px; }\n\n      .flex-row {\n        display: flex;\n        gap: 16px;\n      }\n\n      .w-2-3 { flex: 2; }\n      .w-1-3 { flex: 1; }\n\n      .legend {\n        display: flex;\n        gap: 8px;\n        font-size: 0.75rem;\n      }\n\n      .legend-item {\n        display: flex;\n        align-items: center;\n        gap: 4px;\n      }\n\n      .legend-dot {\n        width: 8px;\n        height: 8px;\n        border-radius: 50%;\n      }\n\n      @media (max-width: 1200px) {\n        .grid-4 { grid-template-columns: repeat(2, 1fr); }\n      }\n      @media (max-width: 768px) {\n        .grid-4, .grid-2 { grid-template-columns: 1fr; }\n        .flex-row { flex-direction: column; }\n        .w-2-3, .w-1-3 { flex: 1; }\n        .waterfall-values { grid-template-columns: repeat(2, 1fr); }\n      }\n    </style>\n  `;\n\n  const panelData = (typeof data !== 'undefined' && data) || (typeof panel !== 'undefined' && panel.data) || null;\n  const series = panelData && Array.isArray(panelData.series) ? panelData.series : [];\n\n  const toNumber = (value) => {\n    if (value == null) return null;\n    if (typeof value === 'number') return Number.isFinite(value) ? value : null;\n    if (typeof value === 'string' && value.trim() !== '') {\n      const num = Number(value);\n      return Number.isFinite(num) ? num : null;\n    }\n    return null;\n  };\n\n  const getLastValue = (frame) => {\n    if (!frame || !frame.fields) return null;\n    const valueField = frame.fields.find(f => f.type === 'number') || frame.fields[1];\n    if (!valueField) return null;\n    const vals = valueField.values;\n    if (vals && typeof vals.get === 'function') {\n      const len = typeof vals.length === 'number' ? vals.length : (typeof vals.toArray === 'function' ? vals.toArray().length : 0);\n      return len ? vals.get(len - 1) : null;\n    }\n    if (Array.isArray(vals)) return vals.length ? vals[vals.length - 1] : null;\n    return null;\n  };\n\n  const getHost = (frame) => {\n    const f = frame && frame.fields ? frame.fields[1] : null;\n    const labels = (f && f.labels) || frame.labels || (frame.meta && frame.meta.custom) || {};\n    const byLabel = labels.host || labels.Host || labels.hostname || null;\n    if (byLabel) {\n      return byLabel.replace(/:+$/, '').trim();\n    }\n\n    let name = String(frame && frame.name ? frame.name : '');\n\n    const sslMatch = name.match(/^(SITE\\s+)?(.+?):\\s*(Expires on|Valid from)/i);\n    if (sslMatch) {\n      return 'SITE ' + sslMatch[2].trim();\n    }\n\n    const websiteMatch = name.match(/^(SITE\\s+)?(.+?):\\s*Website/i);\n    if (websiteMatch) {\n      return 'SITE ' + websiteMatch[2].trim();\n    }\n\n    const simpleMatch = name.match(/^(SITE\\s+)?([A-Z\\s]+)/i);\n    if (simpleMatch && simpleMatch[2]) {\n      const hostName = simpleMatch[2].trim().replace(/:+$/, '');\n      return 'SITE ' + hostName;\n    }\n\n    return 'UNKNOWN';\n  };\n\n  const byRef = {};\n  series.forEach(s => {\n    const ref = s.refId || 'unknown';\n    (byRef[ref] = byRef[ref] || []).push(s);\n  });\n\n  const indexByHost = (frames) => {\n    const map = {};\n    (frames || []).forEach(f => {\n      const h = getHost(f);\n      let v = getLastValue(f);\n      v = toNumber(v) ?? v;\n      if (h && h !== 'UNKNOWN' && v != null) {\n        map[h] = v;\n      }\n    });\n    return map;\n  };\n\n  const avgFromMap = (map) => {\n    const values = Object.values(map || {})\n      .map(v => toNumber(v))\n      .filter(v => v != null);\n    if (!values.length) return 0;\n    return values.reduce((acc, v) => acc + v, 0) / values.length;\n  };\n\n  const scaleMap = (map, multiplier) => {\n    const out = {};\n    Object.entries(map || {}).forEach(([key, value]) => {\n      const num = toNumber(value);\n      if (num != null) out[key] = num * multiplier;\n    });\n    return out;\n  };\n\n  const formatMs = (value) => {\n    const num = toNumber(value);\n    if (num == null) return '--';\n    if (num < 0.1) return num.toFixed(4);\n    if (num < 1) return num.toFixed(3);\n    return num.toFixed(2);\n  };\n\n  const persistMap = (key, map) => {\n    const safe = {};\n    Object.entries(map || {}).forEach(([host, value]) => {\n      const num = toNumber(value);\n      if (num != null) safe[host] = num;\n    });\n\n    if (typeof localStorage === 'undefined') return safe;\n\n    let cached = {};\n    try {\n      cached = JSON.parse(localStorage.getItem(key) || '{}');\n    } catch (err) {\n      cached = {};\n    }\n\n    const merged = { ...cached, ...safe };\n\n    try {\n      localStorage.setItem(key, JSON.stringify(merged));\n    } catch (err) {\n      return safe;\n    }\n\n    return merged;\n  };\n\n  const ping = indexByHost(byRef['A']);\n  const status = indexByHost(byRef['B']);\n  const httpRt = scaleMap(indexByHost(byRef['C']), 1000);\n  const sslExpRaw = indexByHost(byRef['D']);\n  const sslExp = persistMap('govservice-ssl-exp-cache', sslExpRaw);\n  const navLoad = scaleMap(indexByHost(byRef['F']), 1000);\n  const navDecoded = indexByHost(byRef['G']);\n  const resDecoded = indexByHost(byRef['RES_DECODED']);\n  const navResp = scaleMap(indexByHost(byRef['NAV_RESP']), 1000);\n  const navDns = scaleMap(indexByHost(byRef['H']), 1000);\n  const navTcp = scaleMap(indexByHost(byRef['I']), 1000);\n  const navTls = scaleMap(indexByHost(byRef['J']), 1000);\n\n  const hostToUrl = {\n    'SITE SEFAZ': 'https://sefaz.rr.gov.br',\n    'SITE SESP': 'https://sesp.rr.gov.br',\n    'SITE EDUCACAO': 'https://educacao.rr.gov.br',\n    'SITE OUVIDORIA': 'https://ouvidoria.rr.gov.br',\n    'SITE SEINF': 'https://seinf.rr.gov.br',\n    'SITE SETRABES': 'https://setrabes.rr.gov.br',\n    'SITE FAPERR': 'https://faperr.rr.gov.br',\n    'SITE SEPLAN': 'https://seplan.rr.gov.br',\n    'SITE SEED': 'https://seed.rr.gov.br',\n    'SITE POLICIA CIVIL': 'https://policiacivil.rr.gov.br',\n    'SITE PGE': 'https://www.pge.rr.gov.br',\n    'SITE SECULT': 'https://secult.rr.gov.br',\n    'SITE TRANSPARENCIA': 'https://www.transparencia.rr.gov.br',\n    'SITE ADERR': 'https://www.aderr.rr.gov.br',\n    'SITE CODESAIMA': 'https://codesaima.rr.gov.br',\n    'SITE IPEM': 'https://ipem.rr.gov.br',\n    'SITE IMPRENSA OFICIAL': 'https://imprensaoficial.rr.gov.br',\n    'Imprensa Oficial': 'https://imprensaoficial.rr.gov.br'\n  };\n\n  const hosts = new Set();\n  [ping, status, httpRt, sslExpRaw, navLoad, navDecoded, resDecoded, navResp, navDns, navTcp, navTls].forEach(m => {\n    Object.keys(m || {}).forEach(h => hosts.add(h));\n  });\n\n  const emptyService = {\n    name: 'N/A',\n    host: 'N/A',\n    url: '#',\n    status: 'UNKNOWN',\n    respTime: 0,\n    loadTime: 0,\n    size: 0,\n    ssl: '-'\n  };\n\n  let services = Array.from(hosts).map(h => {\n    const pingVal = toNumber(ping[h]);\n    const statusVal = toNumber(status[h]);\n    const hasPing = pingVal != null;\n    const hasStatus = statusVal != null;\n    const isUp = (hasPing && pingVal > 0) || (hasStatus && statusVal >= 200 && statusVal < 400);\n    const statusLabel = (hasPing || hasStatus) ? (isUp ? 'UP' : 'DOWN') : 'UNKNOWN';\n\n    const respMs = Math.round(toNumber(httpRt[h]) || 0);\n    const loadMs = Math.round(toNumber(navLoad[h]) || 0);\n\n    const sizeBytes = toNumber(navDecoded[h]) || toNumber(resDecoded[h]) || 0;\n    const sizeMB = +(sizeBytes / (1024 * 1024)).toFixed(2);\n\n    const daysLeft = (() => {\n      if (sslExp[h] == null) return '-';\n      let timestamp = sslExp[h];\n      if (typeof timestamp === 'string') {\n        const numeric = Number(timestamp);\n        if (Number.isFinite(numeric)) {\n          timestamp = numeric;\n        } else {\n          const parsed = new Date(timestamp).getTime();\n          if (!isNaN(parsed)) timestamp = parsed / 1000;\n          else return '-';\n        }\n      }\n      if (typeof timestamp === 'number' && timestamp < 10000000000) timestamp = timestamp * 1000;\n      const days = Math.floor((timestamp - Date.now()) / 86400000);\n      return Number.isFinite(days) ? days : '-';\n    })();\n\n    const displayName = h.replace(/^SITE\\s+/i, '').toUpperCase();\n    const url = hostToUrl[h] || 'https://' + displayName.toLowerCase().replace(/\\s+/g, '') + '.rr.gov.br';\n\n    return {\n      name: displayName,\n      host: h,\n      url,\n      status: statusLabel,\n      respTime: respMs,\n      loadTime: loadMs,\n      size: sizeMB,\n      ssl: daysLeft\n    };\n  }).filter(s => s.host !== 'UNKNOWN');\n\n  services.sort((a, b) => a.name.localeCompare(b.name));\n\n  const hasData = services.length > 0;\n\n  const upCount = services.filter(s => s.status === 'UP').length;\n  const availPct = hasData ? Math.round((upCount / (services.length || 1)) * 100) : 0;\n\n  const upServices = services.filter(s => s.status === 'UP' && s.loadTime > 0);\n  const avgLat = upServices.length ? (upServices.reduce((acc, s) => acc + s.loadTime, 0) / upServices.length) : null;\n\n  const minSSL = services.reduce((min, s) => {\n    const sDays = typeof s.ssl === 'number' ? s.ssl : Infinity;\n    const mDays = typeof min.ssl === 'number' ? min.ssl : Infinity;\n    return sDays < mDays ? s : min;\n  }, services[0] || emptyService);\n\n  const heavy = services.reduce((max, s) => s.size > max.size ? s : max, services[0] || emptyService);\n  const slowest = services.reduce((max, s) => s.loadTime > max.loadTime ? s : max, services[0] || emptyService);\n\n  let availClass = hasData ? 'status-ok' : 'text-gray-400';\n  let availText = hasData ? 'All Systems Operational' : 'Sem dados';\n  let availBarClass = hasData ? 'bg-green-500' : 'bg-gray-500';\n  let panelClass = '';\n  if (hasData) {\n    if (availPct < 90) {\n      availClass = 'alert-critical';\n      availText = 'CRITICAL OUTAGE DETECTED';\n      availBarClass = 'bg-red-500';\n      panelClass = 'alert-critical-bg';\n    } else if (availPct < 100) {\n      availClass = 'alert-warning';\n      availText = 'Degraded Performance';\n      availBarClass = 'bg-yellow-500';\n    }\n  }\n\n  let latClass = hasData ? 'text-blue-400' : 'text-gray-400';\n  if (avgLat != null) {\n    if (avgLat > 5000) latClass = 'alert-critical';\n    else if (avgLat > 2000) latClass = 'alert-warning';\n  } else if (!hasData) {\n    latClass = 'text-gray-400';\n  }\n\n  let sslClass = hasData ? 'status-ok' : 'text-gray-400';\n  if (typeof minSSL.ssl === 'number') {\n    if (minSSL.ssl < 7) sslClass = 'alert-critical';\n    else if (minSSL.ssl < 30) sslClass = 'alert-warning';\n  }\n\n  let heavyClass = hasData ? 'text-blue-400' : 'text-gray-400';\n  if (hasData) {\n    if (heavy.size > 10) heavyClass = 'alert-critical';\n    else if (heavy.size > 3) heavyClass = 'alert-warning';\n  }\n\n  const availDisplay = hasData ? availPct : '--';\n  const availWidth = hasData ? availPct : 0;\n  const avgLatDisplay = avgLat != null ? (avgLat / 1000).toFixed(2) : '--';\n  const sslDisplay = typeof minSSL.ssl === 'number' ? minSSL.ssl : '--';\n  const heavyDisplay = hasData ? heavy.size.toFixed(2) : '--';\n\n  const sparkValues = upServices.map(s => s.loadTime).filter(v => v > 0).sort((a, b) => b - a).slice(0, 6);\n  const sparkMax = sparkValues.length ? Math.max(...sparkValues) : 0;\n  const sparkBars = sparkValues.length\n    ? sparkValues.map(v => {\n        const height = sparkMax ? Math.max((v / sparkMax) * 100, 5) : 0;\n        return `<div class=\"sparkline-bar\" style=\"height:${height}%\"></div>`;\n      }).join('')\n    : '<span class=\"text-gray-500\" style=\"font-size:0.7rem\">Sem dados</span>';\n\n  const wfSegments = [\n    { label: 'DNS', value: avgFromMap(navDns), class: 'bg-blue-500' },\n    { label: 'TCP', value: avgFromMap(navTcp), class: 'bg-yellow-500' },\n    { label: 'TLS', value: avgFromMap(navTls), class: 'bg-green-500' },\n    { label: 'RESP', value: avgFromMap(navResp), class: 'bg-purple-500' }\n  ];\n  const wfTotal = wfSegments.reduce((acc, s) => acc + s.value, 0);\n  const wfHtml = wfTotal > 0\n    ? `\n      <div class=\"waterfall-bar\">\n        ${wfSegments.map(s => {\n          const width = wfTotal ? (s.value / wfTotal) * 100 : 0;\n          return `<div class=\"${s.class}\" style=\"width:${width}%\"></div>`;\n        }).join('')}\n      </div>\n      <div class=\"waterfall-values\">\n        ${wfSegments.map(s => `\n          <div class=\"waterfall-value\">\n            <span class=\"legend-dot ${s.class}\"></span>\n            <span>${s.label}: ${formatMs(s.value)} ms</span>\n          </div>\n        `).join('')}\n      </div>\n    `\n    : `<div class=\"chart-placeholder\">Sem dados de navegação</div>`;\n\n  const statusValues = Object.values(status || {})\n    .map(v => toNumber(v))\n    .filter(v => v != null);\n\n  const statusCounts = { ok: 0, warn: 0, err: 0, other: 0 };\n  statusValues.forEach(code => {\n    if (code >= 200 && code < 400) statusCounts.ok += 1;\n    else if (code >= 400 && code < 500) statusCounts.warn += 1;\n    else if (code >= 500 && code < 600) statusCounts.err += 1;\n    else statusCounts.other += 1;\n  });\n\n  const statusBars = [\n    { label: '2xx/3xx', value: statusCounts.ok, class: 'bg-green-500' },\n    { label: '4xx', value: statusCounts.warn, class: 'bg-yellow-500' },\n    { label: '5xx', value: statusCounts.err, class: 'bg-red-500' },\n    { label: 'Outros', value: statusCounts.other, class: 'bg-gray-500' }\n  ];\n  const statusMax = Math.max(...statusBars.map(b => b.value), 0);\n  const statusHtml = statusMax > 0\n    ? `\n      <div class=\"status-chart\">\n        ${statusBars.map(b => {\n          const height = statusMax ? Math.max((b.value / statusMax) * 100, 5) : 0;\n          return `\n            <div class=\"status-bar\">\n              <div class=\"status-bar-fill ${b.class}\" style=\"height:${height}%\"></div>\n              <div class=\"status-bar-value\">${b.value}</div>\n              <div class=\"status-bar-label\">${b.label}</div>\n            </div>\n          `;\n        }).join('')}\n      </div>\n    `\n    : `<div class=\"chart-placeholder\">Sem dados de status HTTP</div>`;\n\n  const slowestList = services\n    .filter(s => s.loadTime > 0)\n    .sort((a, b) => b.loadTime - a.loadTime)\n    .slice(0, 5);\n\n  const slowestListHtml = slowestList.length\n    ? slowestList.map((s, idx) => `\n        <div class=\"log-entry\">\n          #${idx + 1} ${s.name} • ${(s.loadTime / 1000).toFixed(2)}s\n        </div>\n      `).join('')\n    : '<div class=\"log-entry text-gray-500\">Sem dados</div>';\n\n  const tableRows = services.length\n    ? services.map(s => {\n        const statusBadge = s.status === 'UP'\n          ? '<span class=\"service-badge text-green-500\">✓ UP</span>'\n          : s.status === 'DOWN'\n            ? '<span class=\"service-badge text-red-500\">✗ DOWN</span>'\n            : '<span class=\"service-badge text-gray-500\">• UNKNOWN</span>';\n\n        const sslColor = typeof s.ssl === 'number'\n          ? (s.ssl < 7 ? 'text-red-500' : s.ssl < 30 ? 'text-yellow-500' : 'text-green-500')\n          : 'text-gray-500';\n\n        const sizeColor = s.size > 5 ? 'text-red-500' : s.size > 3 ? 'text-yellow-500' : 'text-gray-400';\n        const loadColor = s.loadTime > 5000 ? 'text-red-500' : s.loadTime > 2000 ? 'text-yellow-500' : 'text-gray-400';\n\n        const urlDisplay = s.url.replace(/https?:\\/\\//, '');\n\n        return `<tr>\n          <td>\n            <div style=\"font-weight:500\">\n              <a href=\"${s.url}\" target=\"_blank\" style=\"color:#fff;text-decoration:none\">${s.name}</a>\n              <br><span style=\"font-size:0.7rem;color:#9ca3af\">${urlDisplay}</span>\n            </div>\n          </td>\n          <td>${statusBadge}</td>\n          <td style=\"font-family:monospace\">${s.respTime} ms</td>\n          <td style=\"font-family:monospace\" class=\"${loadColor}\">${(s.loadTime/1000).toFixed(2)} s</td>\n          <td style=\"font-family:monospace\" class=\"${sizeColor}\">${s.size} MB</td>\n          <td style=\"font-family:monospace\" class=\"${sslColor}\">${s.ssl}</td>\n        </tr>`;\n      }).join('')\n    : `<tr><td colspan=\"6\" class=\"text-gray-500\">Sem dados disponíveis</td></tr>`;\n\n  const now = new Date().toLocaleTimeString();\n\n  const minSSLLabel = minSSL.url && minSSL.url !== '#' && hasData\n    ? `<a href=\"${minSSL.url}\" target=\"_blank\" style=\"color:#7ebbf7;text-decoration:none\">${minSSL.name}</a>`\n    : `${minSSL.name}`;\n\n  const heavyLabel = heavy.url && heavy.url !== '#' && hasData\n    ? `<a href=\"${heavy.url}\" target=\"_blank\" style=\"color:#fff;text-decoration:none\">${heavy.name}</a>`\n    : `${heavy.name}`;\n\n  const slowestLabel = slowest.url && slowest.url !== '#' && hasData\n    ? `<a href=\"${slowest.url}\" target=\"_blank\" style=\"color:#f2495c;text-decoration:none\">${slowest.name}</a>`\n    : `${slowest.name}`;\n\n  const slowestLoadDisplay = slowest.loadTime > 0 ? (slowest.loadTime / 1000).toFixed(2) : '--';\n  const slowestRespDisplay = slowest.respTime > 0 ? slowest.respTime : '--';\n  const slowestSizeDisplay = slowest.size > 0 ? slowest.size : '--';\n\n  htmlNode.innerHTML = styles + `\n    <div class=\"noc-container\">\n      <!-- Top Bar -->\n      <div class=\"top-bar\">\n        <div>\n          <h1>🌐 GovService Health & User Experience (NOC View)</h1>\n          <p>RED Method + SSL Context | Updated: ${now}</p>\n        </div>\n        <div style=\"display:flex;gap:8px\">\n          <button class=\"btn-refresh\" onclick=\"location.reload()\">🔄 Refresh</button>\n          <div class=\"time-badge\">Período do dashboard</div>\n        </div>\n      </div>\n\n      <!-- HUD Panels -->\n      <div class=\"grid-4\">\n        <!-- Availability -->\n        <div class=\"panel ${panelClass}\">\n          <div class=\"panel-header\">\n            <span>Global Availability (HTTP Ping Check)</span>\n            <span>ℹ️</span>\n          </div>\n          <div class=\"flex-center\">\n            <div class=\"stat-value ${availClass}\">${availDisplay}<span class=\"stat-unit\">%</span></div>\n            <div style=\"font-size:0.75rem;margin-top:4px\">${availText}</div>\n          </div>\n          <div class=\"progress-bar\">\n            <div class=\"progress-fill ${availBarClass}\" style=\"width:${availWidth}%\"></div>\n          </div>\n        </div>\n\n        <!-- Latency -->\n        <div class=\"panel\">\n          <div class=\"panel-header\">\n            <span>Avg. User Latency (Nav Timing)</span>\n            <span>⏱️</span>\n          </div>\n          <div class=\"flex-center\">\n            <div class=\"stat-value ${latClass}\">${avgLatDisplay}<span class=\"stat-unit\">s</span></div>\n            <div style=\"font-size:0.75rem;margin-top:4px\" class=\"text-gray-400\">Target: < 2.0s</div>\n          </div>\n          <div class=\"sparkline\">${sparkBars}</div>\n        </div>\n\n        <!-- SSL Risk -->\n        <div class=\"panel\">\n          <div class=\"panel-header\">\n            <span>SSL Expiry Risk (Closest)</span>\n            <span>🔒</span>\n          </div>\n          <div class=\"flex-center\">\n            <div class=\"stat-value ${sslClass}\">${sslDisplay}<span class=\"stat-unit\">days</span></div>\n            <div style=\"font-size:0.75rem;margin-top:4px\" class=\"text-gray-400\">${minSSLLabel}</div>\n          </div>\n        </div>\n\n        <!-- Heaviest Site -->\n        <div class=\"panel\">\n          <div class=\"panel-header\">\n            <span>Heaviest Site (Resource Size)</span>\n            <span>⚖️</span>\n          </div>\n          <div class=\"flex-center\">\n            <div class=\"stat-value ${heavyClass}\">${heavyDisplay}<span class=\"stat-unit\">MB</span></div>\n            <div style=\"font-size:0.75rem;margin-top:4px;font-weight:bold\" class=\"text-white\">${heavyLabel}</div>\n          </div>\n          <div style=\"font-size:0.75rem;text-align:center;margin-top:4px\" class=\"text-gray-500\">Threshold: 3MB</div>\n        </div>\n      </div>\n\n      <!-- Service Matrix -->\n      <div class=\"panel\">\n        <div class=\"panel-header\">\n          <span>Service Matrix (Detail View)</span>\n          <span class=\"time-badge\">${services.length} Services Monitored</span>\n        </div>\n        <div class=\"table-container\">\n          <table>\n            <thead>\n              <tr>\n                <th>Service Name</th>\n                <th>Status</th>\n                <th>Response Time</th>\n                <th>Load Time</th>\n                <th>Page Size</th>\n                <th>SSL Days</th>\n              </tr>\n            </thead>\n            <tbody>${tableRows}</tbody>\n          </table>\n        </div>\n      </div>\n\n      <!-- Charts Row -->\n      <div class=\"grid-2\">\n        <div class=\"panel\">\n          <div class=\"panel-header\">\n            <span>Waterfall Breakdown (Avg Time)</span>\n            <div class=\"legend\">\n              <span class=\"legend-item\"><span class=\"legend-dot bg-blue-500\"></span>DNS</span>\n              <span class=\"legend-item\"><span class=\"legend-dot bg-yellow-500\"></span>TCP</span>\n              <span class=\"legend-item\"><span class=\"legend-dot bg-green-500\"></span>TLS</span>\n              <span class=\"legend-item\"><span class=\"legend-dot bg-purple-500\"></span>Resp</span>\n            </div>\n          </div>\n          ${wfHtml}\n        </div>\n\n        <div class=\"panel\">\n          <div class=\"panel-header\">\n            <span>HTTP Status Distribution (Hosts)</span>\n            <div class=\"legend\">\n              <span class=\"legend-item\"><span class=\"legend-dot bg-green-500\"></span>2xx/3xx</span>\n              <span class=\"legend-item\"><span class=\"legend-dot bg-yellow-500\"></span>4xx</span>\n              <span class=\"legend-item\"><span class=\"legend-dot bg-red-500\"></span>5xx</span>\n              <span class=\"legend-item\"><span class=\"legend-dot bg-gray-500\"></span>Outros</span>\n            </div>\n          </div>\n          ${statusHtml}\n        </div>\n      </div>\n\n      <!-- Slowest Target -->\n      <div class=\"panel\">\n        <div class=\"panel-header\">\n          <span>Slowest Target (Load Time)</span>\n          <span class=\"text-red-500\" style=\"font-weight:bold\">${slowestLabel}</span>\n        </div>\n        <div class=\"flex-row\">\n          <div class=\"w-2-3 screenshot-container\">\n            <div style=\"text-align:center\">\n              <div style=\"font-size:2rem;color:#4b5563\">⏱️</div>\n              <p class=\"text-gray-500\" style=\"font-size:0.875rem\">Detalhe do alvo mais lento</p>\n              <p style=\"font-size:0.75rem;font-family:monospace\" class=\"text-gray-500\">${slowest.host}</p>\n              <p style=\"font-size:0.75rem\" class=\"text-gray-500\">\n                Load: ${slowestLoadDisplay}s • Resp: ${slowestRespDisplay} ms • Size: ${slowestSizeDisplay} MB\n              </p>\n            </div>\n            <div class=\"screenshot-overlay\">\n              <span class=\"text-red-500\" style=\"font-weight:bold\">⚠️ Load: ${slowestLoadDisplay}s</span> |\n              <span class=\"text-white\">Status: ${slowest.status}</span>\n            </div>\n          </div>\n          <div class=\"w-1-3 log-container\">\n            <div style=\"color:#9ca3af;border-bottom:1px solid #374151;padding-bottom:4px;margin-bottom:8px\">Top 5 mais lentos (load)</div>\n            ${slowestListHtml}\n          </div>\n        </div>\n      </div>\n    </div>\n  `;\n})();",
+        "overflow": "visible",
+        "panelupdateOnMount": true,
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull",
+            "last",
+            "firstNotNull",
+            "first",
+            "min",
+            "max",
+            "mean",
+            "sum",
+            "count",
+            "range",
+            "delta",
+            "step",
+            "diff",
+            "logmin",
+            "allIsZero",
+            "allIsNull",
+            "diffperc"
+          ]
+        },
+        "renderOnMount": true,
+        "rootCSS": "",
+        "useGrafanaScrollbar": true
+      },
+      "pluginVersion": "2.2.3",
+      "targets": [
+        {
+          "application": {
+            "filter": ""
+          },
+          "countTriggersBy": "",
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "evaltype": "0",
+          "functions": [],
+          "group": {
+            "filter": "SITES GOVERNAMENTAIS"
+          },
+          "hide": false,
+          "host": {
+            "filter": "/^(SITE SEFAZ|Imprensa Oficial|SITE SETRABES|SITE FAPERR|SITE TRANSPARENCIA|SITE PGE|SITE ADERR|SITE CODESAIMA|SITE EDUCACAO|SITE OUVIDORIA|SITE SECULT|SITE SEED|SITE SEINF|SITE SEPLAN|SITE SESP|SITE POLICIA CIVIL|SITE IPEM)$/"
+          },
+          "item": {
+            "filter": "/^Website \\{\\$SITE_URL\\} Navigation response time$/"
+          },
+          "itemTag": {
+            "filter": ""
+          },
+          "macro": {
+            "filter": ""
+          },
+          "options": {
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": "0",
+          "refId": "NAV_RESP",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "textFilter": "",
+          "trigger": {}
+        },
+        {
+          "application": {
+            "filter": ""
+          },
+          "countTriggersBy": "",
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "evaltype": "0",
+          "functions": [],
+          "group": {
+            "filter": "SITES GOVERNAMENTAIS"
+          },
+          "hide": false,
+          "host": {
+            "filter": "/^(SITE SEFAZ|Imprensa Oficial|SITE SETRABES|SITE FAPERR|SITE TRANSPARENCIA|SITE PGE|SITE ADERR|SITE CODESAIMA|SITE EDUCACAO|SITE OUVIDORIA|SITE SECULT|SITE SEED|SITE SEINF|SITE SEPLAN|SITE SESP|SITE POLICIA CIVIL|SITE IPEM)$/"
+          },
+          "item": {
+            "filter": "/^Website \\{\\$SITE_URL\\} Resource decodedBody size$/"
+          },
+          "itemTag": {
+            "filter": ""
+          },
+          "macro": {
+            "filter": ""
+          },
+          "options": {
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": "0",
+          "refId": "RES_DECODED",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "textFilter": "",
+          "trigger": {}
+        },
+        {
+          "application": {
+            "filter": ""
+          },
+          "countTriggersBy": "",
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "evaltype": "0",
+          "functions": [],
+          "group": {
+            "filter": "SITES GOVERNAMENTAIS"
+          },
+          "hide": false,
+          "host": {
+            "filter": "/^(SITE SEFAZ|Imprensa Oficial|SITE SETRABES|SITE FAPERR|SITE TRANSPARENCIA|SITE PGE|SITE ADERR|SITE CODESAIMA|SITE EDUCACAO|SITE OUVIDORIA|SITE SECULT|SITE SEED|SITE SEINF|SITE SEPLAN|SITE SESP|SITE POLICIA CIVIL|SITE IPEM)$/"
+          },
+          "item": {
+            "filter": "/^Website \\{\\$SITE_URL\\} HTTP Ping Check$/"
+          },
+          "itemTag": {
+            "filter": ""
+          },
+          "macro": {
+            "filter": ""
+          },
+          "options": {
+            "count": false,
+            "disableDataAlignment": false,
+            "showDisabledItems": false,
+            "skipEmptyValues": false,
+            "useTrends": "default",
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": "0",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "textFilter": "",
+          "trigger": {
+            "filter": ""
+          }
+        },
+        {
+          "application": {
+            "filter": ""
+          },
+          "countTriggersBy": "",
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "evaltype": "0",
+          "functions": [],
+          "group": {
+            "filter": "SITES GOVERNAMENTAIS"
+          },
+          "hide": false,
+          "host": {
+            "filter": "/^(SITE SEFAZ|Imprensa Oficial|SITE SETRABES|SITE FAPERR|SITE TRANSPARENCIA|SITE PGE|SITE ADERR|SITE CODESAIMA|SITE EDUCACAO|SITE OUVIDORIA|SITE SECULT|SITE SEED|SITE SEINF|SITE SEPLAN|SITE SESP|SITE POLICIA CIVIL|SITE IPEM)$/"
+          },
+          "item": {
+            "filter": "/^Website \\{\\$SITE_URL\\} HTTP Status Code$/"
+          },
+          "itemTag": {
+            "filter": ""
+          },
+          "macro": {
+            "filter": ""
+          },
+          "options": {
+            "count": false,
+            "disableDataAlignment": false,
+            "showDisabledItems": false,
+            "skipEmptyValues": false,
+            "useTrends": "default",
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": "0",
+          "refId": "B",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "textFilter": "",
+          "trigger": {
+            "filter": ""
+          }
+        },
+        {
+          "application": {
+            "filter": ""
+          },
+          "countTriggersBy": "",
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "evaltype": "0",
+          "functions": [],
+          "group": {
+            "filter": "SITES GOVERNAMENTAIS"
+          },
+          "hide": false,
+          "host": {
+            "filter": "/^(SITE SEFAZ|Imprensa Oficial|SITE SETRABES|SITE FAPERR|SITE TRANSPARENCIA|SITE PGE|SITE ADERR|SITE CODESAIMA|SITE EDUCACAO|SITE OUVIDORIA|SITE SECULT|SITE SEED|SITE SEINF|SITE SEPLAN|SITE SESP|SITE POLICIA CIVIL|SITE IPEM)$/"
+          },
+          "item": {
+            "filter": "/^Website \\{\\$SITE_URL\\} HTTP Response Time$/"
+          },
+          "itemTag": {
+            "filter": ""
+          },
+          "macro": {
+            "filter": ""
+          },
+          "options": {
+            "count": false,
+            "disableDataAlignment": false,
+            "showDisabledItems": false,
+            "skipEmptyValues": false,
+            "useTrends": "default",
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": "0",
+          "refId": "C",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "textFilter": "",
+          "trigger": {
+            "filter": ""
+          }
+        },
+        {
+          "application": {
+            "filter": ""
+          },
+          "countTriggersBy": "",
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "evaltype": "0",
+          "functions": [],
+          "group": {
+            "filter": "SITES GOVERNAMENTAIS"
+          },
+          "hide": false,
+          "host": {
+            "filter": "/^(SITE SEFAZ|Imprensa Oficial|SITE SETRABES|SITE FAPERR|SITE TRANSPARENCIA|SITE PGE|SITE ADERR|SITE CODESAIMA|SITE EDUCACAO|SITE OUVIDORIA|SITE SECULT|SITE SEED|SITE SEINF|SITE SEPLAN|SITE SESP|SITE POLICIA CIVIL|SITE IPEM)$/"
+          },
+          "item": {
+            "filter": "/^Expires on$/"
+          },
+          "itemTag": {
+            "filter": ""
+          },
+          "macro": {
+            "filter": ""
+          },
+          "options": {
+            "count": false,
+            "disableDataAlignment": true,
+            "showDisabledItems": true,
+            "skipEmptyValues": false,
+            "useTrends": "default",
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": "0",
+          "refId": "D",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "textFilter": "",
+          "trigger": {
+            "filter": ""
+          }
+        },
+        {
+          "application": {
+            "filter": ""
+          },
+          "countTriggersBy": "",
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "evaltype": "0",
+          "functions": [],
+          "group": {
+            "filter": "SITES GOVERNAMENTAIS"
+          },
+          "hide": false,
+          "host": {
+            "filter": "/^(SITE SEFAZ|Imprensa Oficial|SITE SETRABES|SITE FAPERR|SITE TRANSPARENCIA|SITE PGE|SITE ADERR|SITE CODESAIMA|SITE EDUCACAO|SITE OUVIDORIA|SITE SECULT|SITE SEED|SITE SEINF|SITE SEPLAN|SITE SESP|SITE POLICIA CIVIL|SITE IPEM)$/"
+          },
+          "item": {
+            "filter": "/^Website \\{\\$SITE_URL\\} Navigation load event time$/"
+          },
+          "itemTag": {
+            "filter": ""
+          },
+          "macro": {
+            "filter": ""
+          },
+          "options": {
+            "count": false,
+            "disableDataAlignment": false,
+            "showDisabledItems": false,
+            "skipEmptyValues": false,
+            "useTrends": "default",
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": "0",
+          "refId": "F",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "textFilter": "",
+          "trigger": {
+            "filter": ""
+          }
+        },
+        {
+          "application": {
+            "filter": ""
+          },
+          "countTriggersBy": "",
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "evaltype": "0",
+          "functions": [],
+          "group": {
+            "filter": "SITES GOVERNAMENTAIS"
+          },
+          "hide": false,
+          "host": {
+            "filter": "/^(SITE SEFAZ|Imprensa Oficial|SITE SETRABES|SITE FAPERR|SITE TRANSPARENCIA|SITE PGE|SITE ADERR|SITE CODESAIMA|SITE EDUCACAO|SITE OUVIDORIA|SITE SECULT|SITE SEED|SITE SEINF|SITE SEPLAN|SITE SESP|SITE POLICIA CIVIL|SITE IPEM)$/"
+          },
+          "item": {
+            "filter": "/^Website \\{\\$SITE_URL\\} Navigation decodedBody size$/"
+          },
+          "itemTag": {
+            "filter": ""
+          },
+          "macro": {
+            "filter": ""
+          },
+          "options": {
+            "count": false,
+            "disableDataAlignment": false,
+            "showDisabledItems": false,
+            "skipEmptyValues": false,
+            "useTrends": "default",
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": "0",
+          "refId": "G",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "textFilter": "",
+          "trigger": {
+            "filter": ""
+          }
+        },
+        {
+          "application": {
+            "filter": ""
+          },
+          "countTriggersBy": "",
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "evaltype": "0",
+          "functions": [],
+          "group": {
+            "filter": "SITES GOVERNAMENTAIS"
+          },
+          "hide": false,
+          "host": {
+            "filter": "/^(SITE SEFAZ|Imprensa Oficial|SITE SETRABES|SITE FAPERR|SITE TRANSPARENCIA|SITE PGE|SITE ADERR|SITE CODESAIMA|SITE EDUCACAO|SITE OUVIDORIA|SITE SECULT|SITE SEED|SITE SEINF|SITE SEPLAN|SITE SESP|SITE POLICIA CIVIL|SITE IPEM)$/"
+          },
+          "item": {
+            "filter": "/^Website \\{\\$SITE_URL\\} Navigation DNS lookup time$/"
+          },
+          "itemTag": {
+            "filter": ""
+          },
+          "macro": {
+            "filter": ""
+          },
+          "options": {
+            "count": false,
+            "disableDataAlignment": false,
+            "showDisabledItems": false,
+            "skipEmptyValues": false,
+            "useTrends": "default",
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": "0",
+          "refId": "H",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "textFilter": "",
+          "trigger": {
+            "filter": ""
+          }
+        },
+        {
+          "application": {
+            "filter": ""
+          },
+          "countTriggersBy": "",
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "evaltype": "0",
+          "functions": [],
+          "group": {
+            "filter": "SITES GOVERNAMENTAIS"
+          },
+          "hide": false,
+          "host": {
+            "filter": "/^(SITE SEFAZ|Imprensa Oficial|SITE SETRABES|SITE FAPERR|SITE TRANSPARENCIA|SITE PGE|SITE ADERR|SITE CODESAIMA|SITE EDUCACAO|SITE OUVIDORIA|SITE SECULT|SITE SEED|SITE SEINF|SITE SEPLAN|SITE SESP|SITE POLICIA CIVIL|SITE IPEM)$/"
+          },
+          "item": {
+            "filter": "/^Website \\{\\$SITE_URL\\} Navigation TCP handshake time$/"
+          },
+          "itemTag": {
+            "filter": ""
+          },
+          "macro": {
+            "filter": ""
+          },
+          "options": {
+            "count": false,
+            "disableDataAlignment": false,
+            "showDisabledItems": false,
+            "skipEmptyValues": false,
+            "useTrends": "default",
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": "0",
+          "refId": "I",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "textFilter": "",
+          "trigger": {
+            "filter": ""
+          }
+        },
+        {
+          "application": {
+            "filter": ""
+          },
+          "countTriggersBy": "",
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "evaltype": "0",
+          "functions": [],
+          "group": {
+            "filter": "SITES GOVERNAMENTAIS"
+          },
+          "hide": false,
+          "host": {
+            "filter": "/^(SITE SEFAZ|Imprensa Oficial|SITE SETRABES|SITE FAPERR|SITE TRANSPARENCIA|SITE PGE|SITE ADERR|SITE CODESAIMA|SITE EDUCACAO|SITE OUVIDORIA|SITE SECULT|SITE SEED|SITE SEINF|SITE SEPLAN|SITE SESP|SITE POLICIA CIVIL|SITE IPEM)$/"
+          },
+          "item": {
+            "filter": "/^Website \\{\\$SITE_URL\\} Navigation TLS negotiation time$/"
+          },
+          "itemTag": {
+            "filter": ""
+          },
+          "macro": {
+            "filter": ""
+          },
+          "options": {
+            "count": false,
+            "disableDataAlignment": false,
+            "showDisabledItems": false,
+            "skipEmptyValues": false,
+            "useTrends": "default",
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": "0",
+          "refId": "J",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "textFilter": "",
+          "trigger": {
+            "filter": ""
+          }
+        }
+      ],
+      "title": "",
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "includeTimeField": false,
+            "mode": "reduceFields",
+            "reducers": [
+              "lastNotNull"
+            ]
+          }
+        }
+      ],
+      "type": "gapit-htmlgraphics-panel"
+    }
+  ],
+  "preload": false,
+  "refresh": "30s",
+  "schemaVersion": 40,
+  "tags": [
+    "noc",
+    "govservice",
+    "monitoring",
+    "ssl",
+    "red-method"
+  ],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "GovService Health & User Experience (NOC View)",
+  "uid": "govservice-noc-dashboard",
+  "version": 26,
+  "weekStart": ""
+}

@@ -1,0 +1,971 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 104,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "alexanderzobnin-zabbix-datasource",
+        "uid": "aec2bvjiis7pca"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 32,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "SVGBaseFix": true,
+        "add100Percentage": true,
+        "calcsMutation": "standard",
+        "centerAlignContent": false,
+        "codeData": "{}",
+        "css": "*{margin:0;padding:0;box-sizing:border-box}body{background:#0a0a0a;color:#fff;font-family:'Inter',system-ui,-apple-system,sans-serif}.dashboard{background:#0a0a0a;min-height:100vh;padding:20px}.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;padding-bottom:20px;border-bottom:1px solid #222}.logo{font-size:32px;font-weight:700;letter-spacing:3px;background:linear-gradient(135deg,#667eea,#764ba2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.header-center{text-align:center}.header-title{font-size:24px;font-weight:700;letter-spacing:3px;margin-bottom:5px}.header-subtitle{font-size:12px;color:#888;letter-spacing:1px}.clock{font-size:22px;font-weight:300;letter-spacing:2px;font-variant-numeric:tabular-nums}.main-grid{display:grid;grid-template-columns:380px 1fr;gap:20px;margin-bottom:20px}.card{background:#111;border:1px solid #222;border-radius:16px;padding:20px}.card-title{font-size:13px;font-weight:700;letter-spacing:2px;margin-bottom:15px;text-transform:uppercase;color:#888;text-align:center}.summary-item{display:flex;justify-content:space-between;align-items:center;padding:12px 15px;background:#1a1a1a;border-radius:10px;border-left:3px solid #667eea;margin-bottom:10px}.summary-label{font-size:12px;color:#888;font-weight:600;letter-spacing:1px}.summary-value{font-size:16px;font-weight:700;color:#fff}.status-badge{padding:4px 12px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase}.status-badge.up{background:rgba(0,230,118,.2);color:#00e676;border:1px solid #00e676}.status-badge.down{background:rgba(255,23,68,.2);color:#ff1744;border:1px solid #ff1744}.metric-card{background:#1a1a1a;border:1px solid #222;border-radius:12px;padding:15px;margin-bottom:15px}.metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:15px}.gauge{text-align:center;padding:20px}.gauge-value{font-size:48px;font-weight:700;color:#667eea}.gauge-label{font-size:12px;color:#888;margin-top:10px}.service-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.service-item{text-align:center;padding:10px;background:#1a1a1a;border-radius:8px;border:1px solid #222}.service-item.active{border-color:#00e676}.service-name{font-size:11px;color:#888;margin-top:5px}",
+        "dynamicData": false,
+        "dynamicFieldDisplayValues": false,
+        "dynamicHtmlGraphics": false,
+        "dynamicProps": false,
+        "fitContentToPanel": true,
+        "html": "<div class=\"dashboard\">\n  <div class=\"header\">\n    <div class=\"logo\">FLOWBIX</div>\n    <div class=\"header-center\">\n      <div class=\"header-title\">FIREWALL CHECKPOINT</div>\n      <div class=\"header-subtitle\">Informações detalhadas do Firewall</div>\n    </div>\n    <div class=\"clock\" id=\"clock\">00:00:00</div>\n  </div>\n\n  <div class=\"main-grid\">\n    <div class=\"card\">\n      <div class=\"card-title\">Disponibilidade</div>\n      <div id=\"availability\"></div>\n\n      <div class=\"card-title\" style=\"margin-top:20px\">Links WAN</div>\n      <div id=\"wan-links\"></div>\n\n      <div class=\"card-title\" style=\"margin-top:20px\">Detalhes do Firewall</div>\n      <div id=\"fw-details\"></div>\n    </div>\n\n    <div>\n      <div class=\"card\">\n        <div class=\"card-title\">Recursos do Sistema</div>\n        <div class=\"metric-grid\" id=\"system-metrics\"></div>\n      </div>\n\n      <div class=\"card\" style=\"margin-top:20px\">\n        <div class=\"card-title\">Serviços de Segurança</div>\n        <div class=\"service-grid\" id=\"services\"></div>\n      </div>\n\n      <div class=\"card\" style=\"margin-top:20px\">\n        <div class=\"card-title\">Tráfego de Rede</div>\n        <div id=\"network-traffic\"></div>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"card\">\n    <div class=\"card-title\">Status de Alertas</div>\n    <div id=\"alerts\"></div>\n  </div>\n</div>",
+        "onInit": "",
+        "onInitOnResize": false,
+        "onRender": "(() => {\n  if (!htmlNode || !data || !data.series) return;\n\n  const el = (q) => htmlNode.querySelector(q);\n  const setText = (q, v) => { const n = el(q); if(n) n.innerHTML = v; };\n\n  const last = (series) => {\n    const n = series.fields.find(f => f.type === 'number');\n    if (n && n.values.length) return n.values.get(n.values.length - 1);\n    const s = series.fields.find(f => f.type === 'string');\n    if (s && s.values.length) return s.values.get(s.values.length - 1);\n    return null;\n  };\n\n  const findLastByName = (name) => {\n    const s = data.series.find(x => x.name === name);\n    return s ? last(s) : null;\n  };\n\n  const toNum = (v) => (isFinite(Number(v)) ? Number(v) : 0);\n\n  // Update clock\n  const updateClock = () => {\n    const now = new Date();\n    const h = String(now.getHours()).padStart(2, '0');\n    const m = String(now.getMinutes()).padStart(2, '0');\n    const s = String(now.getSeconds()).padStart(2, '0');\n    setText('#clock', `${h}:${m}:${s}`);\n  };\n  updateClock();\n  setInterval(updateClock, 1000);\n\n  // Availability\n  const icmpStatus = findLastByName('ICMP ping');\n  const snmpStatus = findLastByName('SNMP agent availability');\n  const uptime = findLastByName('Uptime');\n\n  const availabilityHTML = `\n    <div class=\"summary-item\">\n      <span class=\"summary-label\">ICMP</span>\n      <span class=\"status-badge ${icmpStatus == 1 ? 'up' : 'down'}\">${icmpStatus == 1 ? 'UP' : 'DOWN'}</span>\n    </div>\n    <div class=\"summary-item\">\n      <span class=\"summary-label\">SNMP</span>\n      <span class=\"status-badge ${snmpStatus == 1 ? 'up' : 'down'}\">${snmpStatus == 1 ? 'UP' : 'DOWN'}</span>\n    </div>\n    <div class=\"summary-item\">\n      <span class=\"summary-label\">UPTIME</span>\n      <span class=\"summary-value\">${uptime || '0'}</span>\n    </div>\n  `;\n  setText('#availability', availabilityHTML);\n\n  // WAN Links\n  const wan4Status = findLastByName('WAN4 Interface Status');\n  const wan4Traffic = findLastByName('WAN4 Incoming Traffic');\n  const wan5Status = findLastByName('WAN5 Interface Status');\n  const wan5Traffic = findLastByName('WAN5 Incoming Traffic');\n  const camonStatus = findLastByName('CAMON Interface Status');\n  const camonTraffic = findLastByName('CAMON Incoming Traffic');\n\n  const bps = (v) => {\n    const x = Number(v ?? 0);\n    if (!isFinite(x) || x < 0) return '0 b/s';\n    const units = ['b/s','Kb/s','Mb/s','Gb/s'];\n    let i=0, val=x;\n    while (val >= 1024 && i < units.length-1){ val/=1024; i++; }\n    return `${val.toFixed(1)} ${units[i]}`;\n  };\n\n  const wanHTML = `\n    <div class=\"summary-item\">\n      <span class=\"summary-label\">WAN 4 (VIVO)</span>\n      <div>\n        <span class=\"status-badge ${wan4Status == 1 ? 'up' : 'down'}\">${wan4Status == 1 ? 'UP' : 'DOWN'}</span>\n        <span class=\"summary-value\">${bps(wan4Traffic)}</span>\n      </div>\n    </div>\n    <div class=\"summary-item\">\n      <span class=\"summary-label\">WAN 5 (CLARO)</span>\n      <div>\n        <span class=\"status-badge ${wan5Status == 1 ? 'up' : 'down'}\">${wan5Status == 1 ? 'UP' : 'DOWN'}</span>\n        <span class=\"summary-value\">${bps(wan5Traffic)}</span>\n      </div>\n    </div>\n    <div class=\"summary-item\">\n      <span class=\"summary-label\">CAMON</span>\n      <div>\n        <span class=\"status-badge ${camonStatus == 1 ? 'up' : 'down'}\">${camonStatus == 1 ? 'UP' : 'DOWN'}</span>\n        <span class=\"summary-value\">${bps(camonTraffic)}</span>\n      </div>\n    </div>\n  `;\n  setText('#wan-links', wanHTML);\n\n  // Firewall Details\n  const sysName = findLastByName('System name');\n  const sysVersion = findLastByName('Operating system');\n  const sysModel = findLastByName('System description');\n\n  const fwDetailsHTML = `\n    <div class=\"summary-item\">\n      <span class=\"summary-label\">🖥️ Nome do sistema</span>\n      <span class=\"summary-value\">${sysName || 'N/A'}</span>\n    </div>\n    <div class=\"summary-item\">\n      <span class=\"summary-label\">🧩 Versão</span>\n      <span class=\"summary-value\">${sysVersion || 'N/A'}</span>\n    </div>\n    <div class=\"summary-item\">\n      <span class=\"summary-label\">🏷️ Modelo</span>\n      <span class=\"summary-value\">${sysModel || 'N/A'}</span>\n    </div>\n  `;\n  setText('#fw-details', fwDetailsHTML);\n\n  // System Metrics\n  const cpuUtil = findLastByName('CPU utilization');\n  const memUtil = findLastByName('Memory utilization');\n  const loadAvg1 = findLastByName('Load average (1m avg)');\n  const loadAvg5 = findLastByName('Load average (5m avg)');\n  const loadAvg15 = findLastByName('Load average (15m avg)');\n\n  const metricsHTML = `\n    <div class=\"metric-card\">\n      <div class=\"gauge\">\n        <div class=\"gauge-value\">${toNum(cpuUtil).toFixed(0)}%</div>\n        <div class=\"gauge-label\">CPU Utilization</div>\n      </div>\n    </div>\n    <div class=\"metric-card\">\n      <div class=\"gauge\">\n        <div class=\"gauge-value\">${toNum(memUtil).toFixed(0)}%</div>\n        <div class=\"gauge-label\">Memory Utilization</div>\n      </div>\n    </div>\n    <div class=\"metric-card\">\n      <div class=\"summary-item\">\n        <span class=\"summary-label\">Load Average 1m</span>\n        <span class=\"summary-value\">${loadAvg1 || '0'}</span>\n      </div>\n      <div class=\"summary-item\">\n        <span class=\"summary-label\">Load Average 5m</span>\n        <span class=\"summary-value\">${loadAvg5 || '0'}</span>\n      </div>\n      <div class=\"summary-item\">\n        <span class=\"summary-label\">Load Average 15m</span>\n        <span class=\"summary-value\">${loadAvg15 || '0'}</span>\n      </div>\n    </div>\n  `;\n  setText('#system-metrics', metricsHTML);\n\n  // Services\n  const services = [\n    {name: 'Firewall', key: 'Firewall Service'},\n    {name: 'Threat', key: 'Threat Prevention'},\n    {name: 'Anti-Spam', key: 'Anti-Spam Service'},\n    {name: 'IPS', key: 'IPS Service'},\n    {name: 'URL Filt', key: 'URL Filtering'},\n    {name: 'IPSec VPN', key: 'IPSec VPN'},\n    {name: 'App Ctrl', key: 'Application Control'},\n    {name: 'Anti-Virus', key: 'Anti-Virus'}\n  ];\n\n  const servicesHTML = services.map(svc => {\n    const status = findLastByName(svc.key);\n    const isActive = status == 1 || status == 'running';\n    return `\n      <div class=\"service-item ${isActive ? 'active' : ''}\">\n        <div style=\"font-size:24px\">${isActive ? '✓' : '✗'}</div>\n        <div class=\"service-name\">${svc.name}</div>\n      </div>\n    `;\n  }).join('');\n  setText('#services', servicesHTML);\n\n  // Alerts\n  const disaster = findLastByName('Number of disaster alarms');\n  const high = findLastByName('Number of high alarms');\n  const average = findLastByName('Number of average alarms');\n  const warning = findLastByName('Number of warning alarms');\n  const information = findLastByName('Number of information alarms');\n\n  const alertsHTML = `\n    <div class=\"metric-grid\">\n      <div class=\"summary-item\" style=\"border-left-color:#ff1744\">\n        <span class=\"summary-label\">DISASTER</span>\n        <span class=\"summary-value\" style=\"color:#ff1744\">${disaster || 0}</span>\n      </div>\n      <div class=\"summary-item\" style=\"border-left-color:#ff9800\">\n        <span class=\"summary-label\">HIGH</span>\n        <span class=\"summary-value\" style=\"color:#ff9800\">${high || 0}</span>\n      </div>\n      <div class=\"summary-item\" style=\"border-left-color:#ffc107\">\n        <span class=\"summary-label\">AVERAGE</span>\n        <span class=\"summary-value\" style=\"color:#ffc107\">${average || 0}</span>\n      </div>\n      <div class=\"summary-item\" style=\"border-left-color:#2196f3\">\n        <span class=\"summary-label\">WARNING</span>\n        <span class=\"summary-value\" style=\"color:#2196f3\">${warning || 0}</span>\n      </div>\n      <div class=\"summary-item\" style=\"border-left-color:#00e676\">\n        <span class=\"summary-label\">INFORMATION</span>\n        <span class=\"summary-value\" style=\"color:#00e676\">${information || 0}</span>\n      </div>\n    </div>\n  `;\n  setText('#alerts', alertsHTML);\n})();",
+        "overflow": "visible",
+        "panelupdateOnMount": true,
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "renderOnMount": true,
+        "rootCSS": "",
+        "svgBaseFix": false,
+        "useGrafanaScrollbar": false
+      },
+      "pluginVersion": "2.2.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "ICMP ping"
+          },
+          "queryType": "0",
+          "refId": "A",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "SNMP agent availability"
+          },
+          "queryType": "0",
+          "refId": "B",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "Uptime"
+          },
+          "queryType": "0",
+          "refId": "C",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "System uptime"
+          },
+          "queryType": "0",
+          "refId": "D",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "System name"
+          },
+          "queryType": "0",
+          "refId": "E",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "Operating system"
+          },
+          "queryType": "0",
+          "refId": "F",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "System description"
+          },
+          "queryType": "0",
+          "refId": "G",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "CPU utilization"
+          },
+          "queryType": "0",
+          "refId": "H",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "Memory utilization"
+          },
+          "queryType": "0",
+          "refId": "I",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "Available memory"
+          },
+          "queryType": "0",
+          "refId": "J",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "Total memory"
+          },
+          "queryType": "0",
+          "refId": "K",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "Load average (1m avg)"
+          },
+          "queryType": "0",
+          "refId": "L",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "Load average (5m avg)"
+          },
+          "queryType": "0",
+          "refId": "M",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "Load average (15m avg)"
+          },
+          "queryType": "0",
+          "refId": "N",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "Interface WAN4: Operational status"
+          },
+          "queryType": "0",
+          "refId": "O",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "Interface WAN4: Bits received"
+          },
+          "queryType": "0",
+          "refId": "P",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "Interface WAN4: Bits sent"
+          },
+          "queryType": "0",
+          "refId": "Q",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "Interface WAN4: Inbound packets with errors"
+          },
+          "queryType": "0",
+          "refId": "R",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "Interface WAN4: Outbound packets with errors"
+          },
+          "queryType": "0",
+          "refId": "S",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "Interface WAN5: Operational status"
+          },
+          "queryType": "0",
+          "refId": "T",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "Interface WAN5: Bits received"
+          },
+          "queryType": "0",
+          "refId": "U",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "Interface WAN5: Bits sent"
+          },
+          "queryType": "0",
+          "refId": "V",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "Interface WAN5: Inbound packets with errors"
+          },
+          "queryType": "0",
+          "refId": "W",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "Interface WAN5: Outbound packets with errors"
+          },
+          "queryType": "0",
+          "refId": "X",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "Interface CAMON: Operational status"
+          },
+          "queryType": "0",
+          "refId": "Y",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "Interface CAMON: Bits received"
+          },
+          "queryType": "0",
+          "refId": "Z",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "Interface CAMON: Bits sent"
+          },
+          "queryType": "0",
+          "refId": "AA",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "Interface PPPo: Bits received"
+          },
+          "queryType": "0",
+          "refId": "AB",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "Interface PPPo: Bits sent"
+          },
+          "queryType": "0",
+          "refId": "AC",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "Interface LAN2.60: Bits received"
+          },
+          "queryType": "0",
+          "refId": "AD",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "Interface LAN2.60: Bits sent"
+          },
+          "queryType": "0",
+          "refId": "AE",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "Interface LAN1.50: Bits received"
+          },
+          "queryType": "0",
+          "refId": "AF",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "Interface LAN1.50: Bits sent"
+          },
+          "queryType": "0",
+          "refId": "AG",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "Firewall Service"
+          },
+          "queryType": "0",
+          "refId": "AH",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "Threat Prevention"
+          },
+          "queryType": "0",
+          "refId": "AI",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "Anti-Spam Service"
+          },
+          "queryType": "0",
+          "refId": "AJ",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "IPS Service"
+          },
+          "queryType": "0",
+          "refId": "AK",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "URL Filtering"
+          },
+          "queryType": "0",
+          "refId": "AL",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "IPSec VPN"
+          },
+          "queryType": "0",
+          "refId": "AM",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "Application Control"
+          },
+          "queryType": "0",
+          "refId": "AN",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "Anti-Virus"
+          },
+          "queryType": "0",
+          "refId": "AO",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "Number of disaster alarms"
+          },
+          "queryType": "0",
+          "refId": "AP",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "Number of high alarms"
+          },
+          "queryType": "0",
+          "refId": "AQ",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "Number of average alarms"
+          },
+          "queryType": "0",
+          "refId": "AR",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "Number of warning alarms"
+          },
+          "queryType": "0",
+          "refId": "AS",
+          "resultFormat": "time_series"
+        },
+        {
+          "application": {
+            "filter": ""
+          },
+          "countTriggersBy": "",
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "evaltype": "0",
+          "functions": [],
+          "group": {
+            "filter": "FIREWALL"
+          },
+          "host": {
+            "filter": "FLOWBIX-DF-FW001"
+          },
+          "item": {
+            "filter": "Number of information alarms"
+          },
+          "itemTag": {
+            "filter": ""
+          },
+          "macro": {
+            "filter": ""
+          },
+          "options": {
+            "count": false,
+            "disableDataAlignment": false,
+            "showDisabledItems": false,
+            "skipEmptyValues": false,
+            "useTrends": "default",
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": "0",
+          "refId": "AT",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "textFilter": "",
+          "trigger": {
+            "filter": ""
+          }
+        }
+      ],
+      "title": "FLOWBIX - Firewall Checkpoint Monitoring",
+      "type": "gapit-htmlgraphics-panel"
+    }
+  ],
+  "preload": false,
+  "refresh": "30s",
+  "schemaVersion": 40,
+  "tags": [
+    "checkpoint",
+    "firewall",
+    "zabbix",
+    "FLOWBIX",
+    "monitoring"
+  ],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-3h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "FLOWBIX - Firewall Checkpoint Monitoring",
+  "uid": "FLOWBIX_checkpoint_v1",
+  "version": 2,
+  "weekStart": ""
+}

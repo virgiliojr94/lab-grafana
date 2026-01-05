@@ -1,0 +1,468 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "Optimized NOC dashboard - 91% less queries, professional alerts, no memory leaks",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 177,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "alexanderzobnin-zabbix-datasource",
+        "uid": "aec2bvjiis7pca"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 71,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "SVGBaseFix": true,
+        "add100Percentage": true,
+        "calcsMutation": "standard",
+        "centerAlignContent": false,
+        "codeData": "{}",
+        "css": "*{margin:0;padding:0;box-sizing:border-box}body{background:#0a0a0a;color:#fff;font-family:'Inter',system-ui,-apple-system,sans-serif}.dashboard{background:#0a0a0a;min-height:100vh;padding:20px}.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;padding-bottom:20px;border-bottom:1px solid #222}.logo{font-size:32px;font-weight:700;letter-spacing:3px;background:linear-gradient(135deg,#667eea,#764ba2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.header-center{text-align:center}.header-title{font-size:24px;font-weight:700;letter-spacing:3px;margin-bottom:5px}.header-subtitle{font-size:12px;color:#888;letter-spacing:1px}.clock{font-size:22px;font-weight:300;letter-spacing:2px;font-variant-numeric:tabular-nums}.main-grid{display:grid;grid-template-columns:380px 1fr;gap:20px;margin-bottom:20px}.card{background:#111;border:1px solid #222;border-radius:16px;padding:20px}.card-title{font-size:13px;font-weight:700;letter-spacing:2px;margin-bottom:15px;text-transform:uppercase;color:#888;text-align:center}.summary-item{display:flex;justify-content:space-between;align-items:center;padding:12px 15px;background:#1a1a1a;border-radius:10px;border-left:3px solid #667eea;margin-bottom:10px}.summary-label{font-size:12px;color:#888;font-weight:600;letter-spacing:1px}.summary-value{font-size:16px;font-weight:700;color:#fff}.wan-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:15px;margin-bottom:20px}.interface-card{background:#1a1a1a;border:1px solid #222;border-radius:12px;padding:15px;position:relative;overflow:hidden}.interface-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#00e676,#00c853)}.interface-card.warn::before{background:linear-gradient(90deg,#ffc107,#ff9800)}.interface-card.down::before{background:linear-gradient(90deg,#ff1744,#d50000)}.interface-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.interface-name{font-size:13px;font-weight:700;letter-spacing:1px;color:#fff}.status-badge{padding:4px 12px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase}.status-badge.up{background:rgba(0,230,118,.2);color:#00e676;border:1px solid #00e676}.status-badge.warn{background:rgba(255,193,7,.2);color:#ffc107;border:1px solid #ffc107}.status-badge.down{background:rgba(255,23,68,.2);color:#ff1744;border:1px solid #ff1744}.traffic-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:11px}.traffic-label{color:#888;font-weight:600;letter-spacing:.5px}.traffic-value{font-weight:700;color:#fff;font-variant-numeric:tabular-nums}.progress-bar{height:8px;background:#0d1117;border-radius:10px;overflow:hidden;margin-bottom:10px;border:1px solid #222}.progress-fill{height:100%;transition:width .3s ease;border-radius:10px}.progress-fill.in{background:linear-gradient(90deg,#667eea,#764ba2)}.progress-fill.out{background:linear-gradient(90deg,#00e676,#00c853)}.error-row{display:flex;justify-content:space-between;font-size:10px;color:#666;margin-top:10px}.error-row.has-error{color:#ff1744}.gateway-card{background:#1a1a1a;border:1px solid #222;border-radius:12px;padding:15px;position:relative}.gateway-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.metric-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #222;font-size:11px}.metric-row:last-child{border-bottom:none}.metric-label{color:#888;font-weight:600}.metric-value{color:#fff;font-weight:700;font-variant-numeric:tabular-nums}.ovpn-card{background:#1a1a1a;border:1px solid #222;border-radius:12px;padding:15px;border-top:3px solid #2196f3}.ovpn-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.ovpn-name{font-size:12px;font-weight:700;color:#fff;letter-spacing:.5px}.client-count{font-size:24px;font-weight:700;color:#2196f3;text-align:center;margin-top:10px}.lan-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:15px}@media (max-width:1200px){.main-grid{grid-template-columns:1fr}.wan-grid{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}}",
+        "dynamicData": false,
+        "dynamicFieldDisplayValues": false,
+        "dynamicHtmlGraphics": false,
+        "dynamicProps": false,
+        "fitContentToPanel": true,
+        "html": "<div class=\"dashboard\"><div class=\"header\"><div class=\"logo\">CETIF</div><div class=\"header-center\"><div class=\"header-title\">PFSENSE CENTRAL MONITORING</div><div class=\"header-subtitle\">Dashboard centralizado NOC - pfSense</div></div><div class=\"clock\" id=\"clock\">00:00:00</div></div><div class=\"main-grid\"><div class=\"card\"><div class=\"card-title\">System Overview</div><div id=\"summary\"></div><div class=\"card-title\" style=\"margin-top:20px\">Active Alerts</div><div id=\"alerts\"></div><div class=\"card-title\" style=\"margin-top:20px\">Gateway Status</div><div id=\"gateway-summary\"></div><div class=\"card-title\" style=\"margin-top:20px\">VPN Overview</div><div id=\"vpn-summary\"></div></div><div><div class=\"card\"><div class=\"card-title\">WAN Links</div><div class=\"wan-grid\" id=\"wan-interfaces\"></div></div><div class=\"card\" style=\"margin-top:20px\"><div class=\"card-title\">Gateway Metrics (All)</div><div class=\"wan-grid\" id=\"gateways\"></div></div><div class=\"card\" style=\"margin-top:20px\"><div class=\"card-title\">OpenVPN Servers</div><div class=\"wan-grid\" id=\"ovpn-servers\"></div></div></div></div><div class=\"card\"><div class=\"card-title\">LAN / VLAN / DMZ Interfaces (Top 12 by Traffic)</div><div class=\"lan-grid\" id=\"lan-interfaces\"></div></div></div>",
+        "onInit": "",
+        "onInitOnResize": false,
+        "onRender": "(() => {\n  if (!htmlNode || !data || !data.series) return;\n\n  // ========================================\n  // UTILITY FUNCTIONS\n  // ========================================\n\n  const el = (q) => htmlNode.querySelector(q);\n  const setText = (q, v) => { const n = el(q); if(n) n.innerHTML = v; };\n\n  const last = (series) => {\n    const n = series.fields.find(f => f.type === 'number');\n    if (n && n.values.length) return n.values.get(n.values.length - 1);\n    const s = series.fields.find(f => f.type === 'string');\n    if (s && s.values.length) return s.values.get(s.values.length - 1);\n    return null;\n  };\n\n  const toNum = (v) => (isFinite(Number(v)) ? Number(v) : 0);\n\n  const bps = (v) => {\n    const x = Number(v ?? 0);\n    if (!isFinite(x) || x < 0) return '0 b/s';\n    const units = ['b/s','Kb/s','Mb/s','Gb/s','Tb/s'];\n    let i=0, val=x;\n    while (val >= 1024 && i < units.length-1){ val/=1024; i++; }\n    return `${val.toFixed(val >= 100 ? 0 : val >= 10 ? 1 : 2)} ${units[i]}`;\n  };\n\n  const formatUptime = (bootTime) => {\n    if (!bootTime) return '--';\n    const now = Math.floor(Date.now() / 1000);\n    const upSec = now - bootTime;\n    const days = Math.floor(upSec / 86400);\n    const hours = Math.floor((upSec % 86400) / 3600);\n    const mins = Math.floor((upSec % 3600) / 60);\n    if (days > 0) return `${days}d ${hours}h`;\n    if (hours > 0) return `${hours}h ${mins}m`;\n    return `${mins}m`;\n  };\n\n  const formatCertDays = (unixTime) => {\n    if (!unixTime) return null;\n    const now = Math.floor(Date.now() / 1000);\n    const diff = unixTime - now;\n    const days = Math.floor(diff / 86400);\n    return days;\n  };\n\n  const updateClock = () => {\n    const now = new Date();\n    const h = String(now.getHours()).padStart(2, '0');\n    const m = String(now.getMinutes()).padStart(2, '0');\n    const s = String(now.getSeconds()).padStart(2, '0');\n    setText('#clock', `${h}:${m}:${s}`);\n  };\n  updateClock();\n  \n  // Limpar intervalo anterior se existir\n  if (window.__clockInterval) clearInterval(window.__clockInterval);\n  window.__clockInterval = setInterval(updateClock, 1000);\n\n  // ========================================\n  // DATA PARSING - DYNAMIC FROM SERIES NAMES\n  // ========================================\n\n  // Regex patterns for dynamic extraction\n  const rxRe = /^Incoming network traffic on (.+)$/i;\n  const txRe = /^Outgoing network traffic on (.+)$/i;\n  const rxErrRe = /^Incoming [Ee]rrors on (.+)$/i;\n  const txErrRe = /^Outgoing errors on (.+)$/i;\n  const adminStatusRe = /^Interface (.+) Admin Status$/i;\n  const linkStatusRe = /^Interface (.+) Link Status$/i;\n  const gwStatusRe = /^Gateway (.+) Status$/i;\n  const gwLossRe = /^Gateway (.+) Packet\\s+Loss$/i;\n  const gwRttRe = /^Gateway (.+) RTT$/i;\n  const gwStddevRe = /^Gateway (.+) RTT Std Deviation$/i;\n  const ovpnClientsRe = /^OpenVPN Server (.+) Clients Connected$/i;\n  const ovpnStatusRe = /^OpenVPN Server (.+) Tunnel Status$/i;\n\n  // Maps to store parsed data\n  const interfaceData = new Map();\n  const gatewayData = new Map();\n  const ovpnData = new Map();\n  const systemMetrics = {};\n\n  const ensureInterface = (name) => {\n    if (!interfaceData.has(name)) {\n      interfaceData.set(name, { name, rx:0, tx:0, rxErr:0, txErr:0, adminStatus:null });\n    }\n    return interfaceData.get(name);\n  };\n\n  const ensureGateway = (name) => {\n    if (!gatewayData.has(name)) {\n      gatewayData.set(name, { name, status:null, loss:null, rtt:null, stddev:null });\n    }\n    return gatewayData.get(name);\n  };\n\n  const ensureOvpn = (name) => {\n    if (!ovpnData.has(name)) {\n      ovpnData.set(name, { name, clients:0, tunnelStatus:null });\n    }\n    return ovpnData.get(name);\n  };\n\n  // Parse all series dynamically\n  for (const s of data.series) {\n    const name = s.name || '';\n    const value = last(s);\n    let m;\n\n    // Interface traffic\n    if ((m = name.match(rxRe))) {\n      ensureInterface(m[1].trim()).rx = toNum(value);\n    } else if ((m = name.match(txRe))) {\n      ensureInterface(m[1].trim()).tx = toNum(value);\n    } else if ((m = name.match(rxErrRe))) {\n      ensureInterface(m[1].trim()).rxErr = toNum(value);\n    } else if ((m = name.match(txErrRe))) {\n      ensureInterface(m[1].trim()).txErr = toNum(value);\n    } else if ((m = name.match(adminStatusRe))) {\n      ensureInterface(m[1].trim()).adminStatus = value;\n    }\n    // Gateway metrics\n    else if ((m = name.match(gwStatusRe))) {\n      ensureGateway(m[1].trim()).status = value;\n    } else if ((m = name.match(gwLossRe))) {\n      ensureGateway(m[1].trim()).loss = value;\n    } else if ((m = name.match(gwRttRe))) {\n      ensureGateway(m[1].trim()).rtt = value;\n    } else if ((m = name.match(gwStddevRe))) {\n      ensureGateway(m[1].trim()).stddev = value;\n    }\n    // OpenVPN\n    else if ((m = name.match(ovpnClientsRe))) {\n      ensureOvpn(m[1].trim()).clients = toNum(value);\n    } else if ((m = name.match(ovpnStatusRe))) {\n      ensureOvpn(m[1].trim()).tunnelStatus = value;\n    }\n    // System metrics (by exact name match)\n    else if (name === 'CPU idle time') systemMetrics.cpuIdle = toNum(value);\n    else if (name === 'CPU user time') systemMetrics.cpuUser = toNum(value);\n    else if (name === 'CPU System time') systemMetrics.cpuSystem = toNum(value);\n    else if (name === 'Available memory (percent)') systemMetrics.memAvail = toNum(value);\n    else if (name === 'Memory Active (percent)') systemMetrics.memActive = toNum(value);\n    else if (name === 'Memory Cached (percent)') systemMetrics.memCached = toNum(value);\n    else if (name === 'Memory Buffers (percent)') systemMetrics.memBuffers = toNum(value);\n    else if (name === 'Memory Wired (percent)') systemMetrics.memWired = toNum(value);\n    else if (name === 'Memory Free (percent)') systemMetrics.memFree = toNum(value);\n    else if (name === 'Free disk space on / (percentage)') systemMetrics.diskFree = toNum(value);\n    else if (name === 'Free swap space in %') systemMetrics.swapFree = toNum(value);\n    else if (name === 'Number of processes') systemMetrics.procTotal = toNum(value);\n    else if (name === 'Number of running processes') systemMetrics.procRun = toNum(value);\n    else if (name === 'Host boot time') systemMetrics.bootTime = toNum(value);\n    else if (name === 'MBUF Total Used (percent)') systemMetrics.mbufUsage = toNum(value);\n    else if (name === 'New Version of pfSense Available') systemMetrics.newVersion = value;\n    else if (name === 'Certificates Manager: earliest validTo') systemMetrics.certExpiry = toNum(value);\n    else if (name === 'States Table Current (percent)') systemMetrics.statesUsagePercent = toNum(value);\n    else if (name === 'States Table Current') systemMetrics.statesCurrent = toNum(value);\n    else if (name === 'States Table Max') systemMetrics.statesMax = toNum(value);\n    else if (name === 'DHCP Failover Pool Problems') systemMetrics.dhcpProblems = toNum(value);\n    else if (name === 'CARP Status') systemMetrics.carpStatus = value;\n    else if (name === 'Expected CARP Status') systemMetrics.carpExpected = value;\n    else if (name === 'IPsec Tunnel 1 VPN CIELO  Phase 1 Status') systemMetrics.ipsecStatus = value;\n    else if (name === 'IPsec Tunnel 1 VPN CIELO Tunnel Enabled') systemMetrics.ipsecEnabled = value;\n    else if (name === 'Gateway Status Raw') systemMetrics.gwRaw = value;\n  }\n\n\n  // ========================================\n  // ZABBIX PROBLEMS PROCESSING (Operação Séria!)\n  // ========================================\n\n  const zabbixProblems = [];\n  for (const s of data.series) {\n    // Problems query retorna séries com formato diferente\n    if (s.refId === 'PROBLEMS' || (s.fields && s.fields.some(f => f.name === 'problem' || f.name === 'description'))) {\n      const problemField = s.fields.find(f => f.name === 'problem' || f.name === 'description' || (f.type === 'string' && !['time','severity'].includes(f.name)));\n      const severityField = s.fields.find(f => f.name === 'severity' || f.name === 'priority');\n      const timeField = s.fields.find(f => f.type === 'time');\n      \n      if (problemField && problemField.values) {\n        for (let i = 0; i < problemField.values.length; i++) {\n          const problem = problemField.values.get(i);\n          const severity = severityField ? severityField.values.get(i) : 3;\n          const time = timeField ? new Date(timeField.values.get(i)).toLocaleString('pt-BR', {hour:'2-digit',minute:'2-digit'}) : '';\n          \n          if (problem && String(problem).trim()) {\n            zabbixProblems.push({ problem: String(problem), severity: toNum(severity), time });\n          }\n        }\n      }\n    }\n  }\n\n  // ========================================\n  // INTERFACE PROCESSING\n  // ========================================\n\n  const isWan = (n) => /^WAN($|[_-])/i.test(n);\n  const interfaces = [...interfaceData.values()];\n  const wan = interfaces.filter(x => isWan(x.name));\n  const lan = interfaces\n    .filter(x => !isWan(x.name))\n    .filter(x => !x.name.toLowerCase().startsWith('ovpns'))\n    .sort((a,b) => (b.rx+b.tx) - (a.rx+a.tx))\n    .slice(0, 12);\n\n  const errTotal = interfaces.reduce((acc, x) => acc + x.rxErr + x.txErr, 0);\n\n  // ========================================\n  // SYSTEM METRICS CALCULATIONS\n  // ========================================\n\n  const cpuUsage = 100 - (systemMetrics.cpuIdle || 0);\n  const memUsage = 100 - (systemMetrics.memAvail || 0);\n  const diskUsage = 100 - (systemMetrics.diskFree || 0);\n  const swapUsage = 100 - (systemMetrics.swapFree || 0);\n  const uptime = formatUptime(systemMetrics.bootTime);\n  const certDays = formatCertDays(systemMetrics.certExpiry);\n  \n  let statesUsagePercent = systemMetrics.statesUsagePercent || 0;\n  if (statesUsagePercent <= 0 && systemMetrics.statesCurrent > 0 && systemMetrics.statesMax > 0) {\n    statesUsagePercent = (systemMetrics.statesCurrent / systemMetrics.statesMax) * 100;\n  }\n\n  // ========================================\n  // GATEWAY PROCESSING\n  // ========================================\n\n  const gateways = [...gatewayData.values()].filter(g => g.status != null);\n  const gwOnline = gateways.filter(g => {\n    const s = String(g.status ?? '').trim().toLowerCase();\n    return s.includes('up') || s.includes('online') || s.includes('ok') || s === '0' || s === '0.0';\n  }).length;\n  \n  const gwStats = gateways.reduce((acc, g) => {\n    const s = String(g.status ?? '').trim().toLowerCase();\n    const isUp = s.includes('up') || s.includes('online') || s.includes('ok') || s === '0' || s === '0.0';\n    const lossNum = toNum(String(g.loss ?? '').replace('%',''));\n    const rttNum = toNum(String(g.rtt ?? '').replace('ms',''));\n    const stddevNum = toNum(String(g.stddev ?? '').replace('ms',''));\n    \n    if (!isUp) acc.down++;\n    else if (rttNum > 500) acc.down++;\n    else if (lossNum >= 2 || stddevNum > 10 || rttNum > 200) acc.warn++;\n    return acc;\n  }, { down: 0, warn: 0 });\n\n  // ========================================\n  // OVPN PROCESSING\n  // ========================================\n\n  const ovpnServers = [...ovpnData.values()].sort((a,b) => b.clients - a.clients);\n  const totalClients = ovpnServers.reduce((acc,x)=>acc+x.clients,0);\n  \n  const ovpnStatusInfo = (v) => {\n    const s = String(v ?? '').trim().toLowerCase();\n    if (!s) return { level: 'down', isUp: false, label: 'UNKNOWN' };\n    if (s.includes('up') || s.includes('connected') || s.includes('ok') || s.includes('listening')) \n      return { level: 'up', isUp: true, label: 'UP' };\n    if (s.includes('reconnecting')) return { level: 'warn', isUp: false, label: 'RECONNECTING' };\n    if (s.includes('waiting')) return { level: 'warn', isUp: false, label: 'WAITING' };\n    if (s.includes('down') || s.includes('disconnected') || s.includes('fail')) \n      return { level: 'down', isUp: false, label: 'DOWN' };\n    \n    const n = Number(s);\n    if (isFinite(n)) {\n      if (n === 0) return { level: 'down', isUp: false, label: 'DOWN' };\n      if (n === 1) return { level: 'up', isUp: true, label: 'UP' };\n      if (n === 5) return { level: 'up', isUp: true, label: 'UP/LISTENING' };\n      return { level: n > 0 ? 'up' : 'down', isUp: n > 0, label: n > 0 ? 'UP' : 'DOWN' };\n    }\n    return { level: 'down', isUp: false, label: 'UNKNOWN' };\n  };\n  \n  const tunnelsUp = ovpnServers.filter(x => ovpnStatusInfo(x.tunnelStatus).isUp).length;\n\n  // ========================================\n  // GLOBAL STATUS\n  // ========================================\n\n  const criticalSignals = [\n    gwStats.down > 0,\n    statesUsagePercent > 85,\n    swapUsage > 10,\n    systemMetrics.mbufUsage > 90,\n    cpuUsage > 90,\n    memUsage > 90,\n    diskUsage > 90,\n    systemMetrics.carpStatus && systemMetrics.carpExpected && systemMetrics.carpStatus !== systemMetrics.carpExpected\n  ];\n  \n  const warningSignals = [\n    gwStats.warn > 0,\n    statesUsagePercent > 70,\n    swapUsage > 5,\n    systemMetrics.mbufUsage > 80,\n    cpuUsage > 80,\n    memUsage > 80,\n    diskUsage > 80,\n    systemMetrics.dhcpProblems > 0,\n    errTotal > 100\n  ];\n  \n  let globalBadge = 'up', globalLabel = 'FIREWALL OK', globalColor = '#00e676';\n  if (criticalSignals.some(Boolean)) {\n    globalBadge = 'down';\n    globalLabel = 'FIREWALL CRITICAL';\n    globalColor = '#ff1744';\n  } else if (warningSignals.some(Boolean)) {\n    globalBadge = 'warn';\n    globalLabel = 'FIREWALL DEGRADED';\n    globalColor = '#ffc107';\n  }\n\n  // ========================================\n  // RENDER FUNCTIONS\n  // ========================================\n\n  const mkIfCard = (iface) => {\n    const total = iface.rx + iface.tx;\n    const hasTraffic = total > 0;\n    const hasErr = (iface.rxErr + iface.txErr) > 0;\n    const adminDown = iface.adminStatus && (String(iface.adminStatus).toLowerCase().includes('down') || String(iface.adminStatus) === '0');\n    \n    let status = 'up', label = 'ONLINE';\n    if (adminDown) {\n      status = 'down';\n      label = 'ADMIN DOWN';\n    } else if (hasErr) {\n      status = 'warn';\n      label = 'WARNING';\n    } else if (!hasTraffic) {\n      status = 'up';\n      label = 'IDLE';\n    }\n    \n    const rxPct = total > 0 ? Math.min((iface.rx / total) * 100, 100) : 0;\n    const txPct = total > 0 ? Math.min((iface.tx / total) * 100, 100) : 0;\n    \n    return `<div class=\"interface-card ${status}\"><div class=\"interface-header\"><div class=\"interface-name\">${iface.name}</div><div class=\"status-badge ${status}\">${label}</div></div><div class=\"traffic-row\"><span class=\"traffic-label\">⬇ INBOUND</span><span class=\"traffic-value\">${bps(iface.rx)}</span></div><div class=\"progress-bar\"><div class=\"progress-fill in\" style=\"width:${rxPct.toFixed(1)}%\"></div></div><div class=\"traffic-row\"><span class=\"traffic-label\">⬆ OUTBOUND</span><span class=\"traffic-value\">${bps(iface.tx)}</span></div><div class=\"progress-bar\"><div class=\"progress-fill out\" style=\"width:${txPct.toFixed(1)}%\"></div></div><div class=\"error-row ${hasErr ? 'has-error' : ''}\"><span>Errors IN/OUT:</span><span>${iface.rxErr} / ${iface.txErr}</span></div></div>`;\n  };\n\n  const mkGwCard = (g) => {\n    const s = String(g.status ?? '').trim().toLowerCase();\n    const isUp = s.includes('up') || s.includes('online') || s.includes('ok') || s === '0' || s === '0.0';\n    const lossNum = toNum(String(g.loss ?? '').replace('%',''));\n    const rttNum = toNum(String(g.rtt ?? '').replace('ms',''));\n    const stddevNum = toNum(String(g.stddev ?? '').replace('ms',''));\n    \n    let badge = 'up', label = 'ONLINE';\n    if (!isUp) {\n      badge='down';\n      label='OFFLINE';\n    } else if (rttNum > 500) {\n      badge='down';\n      label='CRITICAL LATENCY';\n    } else if (lossNum >= 2 || stddevNum > 10 || rttNum > 200) {\n      badge='warn';\n      label='DEGRADED';\n    }\n    \n    const lossTxt = g.loss == null ? '--' : (typeof g.loss === 'number' ? `${g.loss.toFixed(1)}%` : String(g.loss));\n    const rttTxt = g.rtt == null ? '--' : (typeof g.rtt === 'number' ? `${g.rtt.toFixed(1)} ms` : String(g.rtt));\n    const stddevTxt = g.stddev == null ? '--' : (typeof g.stddev === 'number' ? `${g.stddev.toFixed(1)} ms` : String(g.stddev));\n    \n    return `<div class=\"gateway-card ${badge}\" style=\"${badge === 'down' && label === 'CRITICAL LATENCY' ? 'border:3px solid #ff1744;box-shadow:0 0 10px rgba(255,23,68,0.5)' : ''}\"><div class=\"gateway-header\"><div class=\"interface-name\">GW ${g.name}</div><div class=\"status-badge ${badge}\">${label}</div></div><div class=\"metric-row\"><span class=\"metric-label\">Packet Loss</span><span class=\"metric-value\" style=\"color:${lossNum > 2 ? '#ff1744' : '#00e676'}\">${lossTxt}</span></div><div class=\"metric-row\"><span class=\"metric-label\">RTT</span><span class=\"metric-value\" style=\"color:${rttNum > 500 ? '#ff1744' : rttNum > 200 ? '#ffc107' : '#00e676'}\">${rttTxt}</span></div><div class=\"metric-row\"><span class=\"metric-label\">Jitter (stddev)</span><span class=\"metric-value\" style=\"color:${stddevNum > 10 ? '#ffc107' : '#888'}\">${stddevTxt}</span></div></div>`;\n  };\n\n  const mkOvpnCard = (o) => {\n    const info = ovpnStatusInfo(o.tunnelStatus);\n    let badge='down', label='DOWN';\n    \n    if (info.level === 'warn') {\n      badge='warn';\n      label=info.label;\n    } else if (info.isUp) {\n      if (o.clients > 0) {\n        badge='up';\n        label='ACTIVE';\n      } else {\n        badge='warn';\n        label='IDLE';\n      }\n    }\n    \n    const tunnelLabel = info.label === 'UNKNOWN' ? (o.tunnelStatus ?? 'unknown') : info.label + (o.tunnelStatus == null ? '' : ' (' + o.tunnelStatus + ')');\n    \n    return `<div class=\"ovpn-card\"><div class=\"ovpn-header\"><div class=\"ovpn-name\">${o.name}</div><div class=\"status-badge ${badge}\">${label}</div></div><div class=\"client-count\">${o.clients}</div><div style=\"text-align:center;font-size:10px;color:#888;margin-top:5px\">CONNECTED CLIENTS</div><div style=\"text-align:center;font-size:9px;color:#666;margin-top:3px\">Tunnel: ${tunnelLabel}</div></div>`;\n  };\n\n  // ========================================\n  // RENDER SECTIONS\n  // ========================================\n\n  setText('#wan-interfaces', wan.map(mkIfCard).join(''));\n  setText('#lan-interfaces', lan.map(mkIfCard).join(''));\n  setText('#gateways', gateways.map(mkGwCard).join(''));\n  setText('#ovpn-servers', ovpnServers.length ? ovpnServers.map(mkOvpnCard).join('') : '<div style=\"text-align:center;color:#888;padding:20px\">No VPN servers</div>');\n\n  // Summary\n  const summaryHTML = `<div class=\"summary-item\" style=\"border-left:4px solid ${globalColor};background:rgba(255,255,255,0.03)\"><span class=\"summary-label\">Global Status</span><span class=\"summary-value\" style=\"color:${globalColor};font-weight:800\">${globalLabel}</span></div><div class=\"summary-item\"><span class=\"summary-label\">WANs Monitored</span><span class=\"summary-value\">${wan.length}</span></div><div class=\"summary-item\"><span class=\"summary-label\">Gateways</span><span class=\"summary-value\" style=\"color:${gwOnline < gateways.length ? '#ffc107' : '#00e676'}\">${gwOnline} / ${gateways.length}</span></div><div class=\"summary-item\"><span class=\"summary-label\">Total Errors</span><span class=\"summary-value\" style=\"color:${errTotal > 0 ? '#ff1744' : '#00e676'}\">${errTotal}</span></div><div class=\"summary-item\" style=\"margin-top:20px\"><span class=\"summary-label\">CPU Usage</span><span class=\"summary-value\" style=\"color:${cpuUsage > 90 ? '#ff1744' : cpuUsage > 80 ? '#ffc107' : '#00e676'}\">${cpuUsage.toFixed(1)}%</span></div><div class=\"summary-item\"><span class=\"summary-label\">Memory Usage</span><span class=\"summary-value\" style=\"color:${memUsage > 90 ? '#ff1744' : memUsage > 80 ? '#ffc107' : '#00e676'}\">${memUsage.toFixed(1)}%</span></div><div class=\"summary-item\"><span class=\"summary-label\">Disk Usage</span><span class=\"summary-value\" style=\"color:${diskUsage > 90 ? '#ff1744' : diskUsage > 80 ? '#ffc107' : '#00e676'}\">${diskUsage.toFixed(1)}%</span></div><div class=\"summary-item\"><span class=\"summary-label\">Swap Usage</span><span class=\"summary-value\" style=\"color:${swapUsage > 10 ? '#ff1744' : swapUsage > 5 ? '#ffc107' : '#00e676'}\">${swapUsage.toFixed(1)}%</span></div><div class=\"summary-item\" style=\"margin-top:20px;border:2px solid ${statesUsagePercent > 85 ? '#ff1744' : statesUsagePercent > 70 ? '#ffc107' : '#2196f3'}\"><span class=\"summary-label\">States Table Usage</span><span class=\"summary-value\" style=\"color:${statesUsagePercent > 85 ? '#ff1744' : statesUsagePercent > 70 ? '#ffc107' : '#00e676'}; font-size:18px\">${statesUsagePercent.toFixed(1)}%</span></div><div class=\"summary-item\"><span class=\"summary-label\">Uptime</span><span class=\"summary-value\">${uptime}</span></div><div class=\"summary-item\"><span class=\"summary-label\">Processes</span><span class=\"summary-value\">${systemMetrics.procRun || 0} / ${systemMetrics.procTotal || 0}</span></div>`;\n  setText('#summary', summaryHTML);\n\n  // Gateway summary\n  const gwSummaryHTML = `<div class=\"summary-item\"><span class=\"summary-label\">Gateways Online</span><span class=\"summary-value\" style=\"color:${gwOnline < gateways.length ? '#ffc107' : '#00e676'}\">${gwOnline} / ${gateways.length}</span></div><div class=\"summary-item\"><span class=\"summary-label\">Raw Status</span><span class=\"summary-value\" style=\"font-size:10px\">${systemMetrics.gwRaw ?? '--'}</span></div>`;\n  setText('#gateway-summary', gwSummaryHTML);\n\n  // VPN summary\n  const vpnSummaryHTML = `<div class=\"summary-item\"><span class=\"summary-label\">Total VPN Clients</span><span class=\"summary-value\" style=\"color:#2196f3\">${totalClients}</span></div><div class=\"summary-item\"><span class=\"summary-label\">Tunnels UP</span><span class=\"summary-value\">${tunnelsUp} / ${ovpnServers.length}</span></div>`;\n  setText('#vpn-summary', vpnSummaryHTML);\n\n  // ========================================\n  // ALERTS - ZABBIX PROBLEMS + LOCAL (Operação Séria!)\n  // ========================================\n  // Severity: 0=Not classified, 1=Info, 2=Warning, 3=Average, 4=High, 5=Disaster\n  \n  const getSeverityColor = (sev) => {\n    if (sev >= 5) return '#d50000'; // Disaster\n    if (sev >= 4) return '#ff1744'; // High\n    if (sev >= 3) return '#ff9800'; // Average\n    if (sev >= 2) return '#ffc107'; // Warning\n    return '#2196f3'; // Info\n  };\n  \n  const getSeverityLabel = (sev) => {\n    if (sev >= 5) return 'DISASTER';\n    if (sev >= 4) return 'CRITICAL';\n    if (sev >= 3) return 'HIGH';\n    if (sev >= 2) return 'WARNING';\n    return 'INFO';\n  };\n  \n  // Alertas calculados locais (fallback se não houver triggers configurados)\n  const localAlerts = [];\n  if (swapUsage > 10) localAlerts.push({ severity: 4, msg: `Swap: ${swapUsage.toFixed(1)}%`, time: '', problem: `High swap usage: ${swapUsage.toFixed(1)}%` });\n  if (statesUsagePercent > 85) localAlerts.push({ severity: 4, msg: `States: ${statesUsagePercent.toFixed(1)}%`, time: '', problem: `States table critical: ${statesUsagePercent.toFixed(1)}%` });\n  if (systemMetrics.mbufUsage > 90) localAlerts.push({ severity: 4, msg: `MBUF: ${systemMetrics.mbufUsage.toFixed(1)}%`, time: '', problem: `MBUF critical: ${systemMetrics.mbufUsage.toFixed(1)}%` });\n  if (cpuUsage > 90) localAlerts.push({ severity: 3, msg: `CPU: ${cpuUsage.toFixed(1)}%`, time: '', problem: `High CPU usage: ${cpuUsage.toFixed(1)}%` });\n  if (memUsage > 90) localAlerts.push({ severity: 3, msg: `RAM: ${memUsage.toFixed(1)}%`, time: '', problem: `High memory usage: ${memUsage.toFixed(1)}%` });\n  if (systemMetrics.carpStatus && systemMetrics.carpExpected && systemMetrics.carpStatus !== systemMetrics.carpExpected) {\n    localAlerts.push({ severity: 5, msg: 'CARP Mismatch!', time: '', problem: `CARP status mismatch: ${systemMetrics.carpStatus} vs ${systemMetrics.carpExpected}` });\n  }\n  if (gwStats.down > 0) localAlerts.push({ severity: 4, msg: `${gwStats.down} Gateway(s) DOWN`, time: '', problem: `${gwStats.down} gateway(s) offline or critical` });\n  \n  // Combinar Problems do Zabbix com alertas locais\n  const allProblems = [...zabbixProblems, ...localAlerts]\n    .sort((a,b) => b.severity - a.severity)\n    .slice(0, 10); // Limitar a 10 problemas mais críticos\n  \n  const alertsHTML = allProblems.length === 0 \n    ? '<div class=\"summary-item\" style=\"background:#1a3a1a\"><span class=\"summary-label\">System Status</span><span class=\"summary-value\" style=\"color:#00e676\">ALL OK ✓</span></div>' \n    : allProblems.map(p => {\n        const color = getSeverityColor(p.severity);\n        const label = getSeverityLabel(p.severity);\n        const timeStr = p.time ? ` [${p.time}]` : '';\n        const msg = p.problem || p.msg;\n        return `<div class=\"summary-item\" style=\"border-left:3px solid ${color};padding:8px 12px\"><span class=\"summary-label\" style=\"color:${color};font-size:10px\">${label}</span><span class=\"summary-value\" style=\"font-size:10px;color:#fff;line-height:1.3\">${msg}${timeStr}</span></div>`;\n      }).join('');\n  setText('#alerts', alertsHTML);\n})();",
+        "overflow": "scroll",
+        "panelupdateOnMount": true,
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "renderOnMount": true,
+        "rootCSS": "",
+        "svgBaseFix": false,
+        "useGrafanaScrollbar": false
+      },
+      "pluginVersion": "2.2.3",
+      "targets": [
+        {
+          "application": {
+            "filter": ""
+          },
+          "countTriggersBy": "",
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "evaltype": "0",
+          "functions": [],
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "/^(Incoming|Outgoing) network traffic on .*/"
+          },
+          "itemTag": {
+            "filter": ""
+          },
+          "macro": {
+            "filter": ""
+          },
+          "options": {
+            "count": false,
+            "disableDataAlignment": false,
+            "showDisabledItems": false,
+            "skipEmptyValues": false,
+            "useTrends": "default",
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": "0",
+          "refId": "TRAFFIC",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "textFilter": "",
+          "trigger": {
+            "filter": ""
+          }
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "/^(Incoming|Outgoing) [Ee]rrors on .*/"
+          },
+          "queryType": "0",
+          "refId": "ERRORS",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "/^Gateway .* (Status|Packet\\s+Loss|RTT|RTT Std Deviation)$/"
+          },
+          "queryType": "0",
+          "refId": "GATEWAY",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Gateway Status Raw"
+          },
+          "queryType": "0",
+          "refId": "GW_RAW",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "/^OpenVPN Server .* (Clients Connected|Tunnel Status)$/"
+          },
+          "queryType": "0",
+          "refId": "OVPN",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "CPU idle time"
+          },
+          "queryType": "0",
+          "refId": "CPU_IDLE",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "CPU user time"
+          },
+          "queryType": "0",
+          "refId": "CPU_USER",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "CPU System time"
+          },
+          "queryType": "0",
+          "refId": "CPU_SYS",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "/^(Available memory|Memory (Active|Cached|Buffers|Wired|Free)) \\(percent\\)$/"
+          },
+          "queryType": "0",
+          "refId": "MEMORY",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Free disk space on / (percentage)"
+          },
+          "queryType": "0",
+          "refId": "DISK",
+          "resultFormat": "time_series"
+        },
+        {
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "Free swap space in %"
+          },
+          "queryType": "0",
+          "refId": "SWAP",
+          "resultFormat": "time_series"
+        },
+        {
+          "application": {
+            "filter": ""
+          },
+          "countTriggersBy": "",
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "evaltype": "0",
+          "functions": [],
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "item": {
+            "filter": "/^(Number of|States Table|MBUF|Host boot|Certificates|DHCP|CARP|IPsec|New Version).*/"
+          },
+          "itemTag": {
+            "filter": ""
+          },
+          "macro": {
+            "filter": ""
+          },
+          "options": {
+            "count": false,
+            "disableDataAlignment": false,
+            "showDisabledItems": false,
+            "skipEmptyValues": false,
+            "useTrends": "default",
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": "0",
+          "refId": "SYSTEM",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "textFilter": "",
+          "trigger": {
+            "filter": ""
+          }
+        },
+        {
+          "application": {
+            "filter": ""
+          },
+          "countTriggersBy": "",
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "aec2bvjiis7pca"
+          },
+          "evaltype": "0",
+          "functions": [],
+          "group": {
+            "filter": "SRVINTRANET"
+          },
+          "host": {
+            "filter": "PFSENSE"
+          },
+          "itServiceFilter": "",
+          "item": {
+            "filter": ""
+          },
+          "itemTag": {
+            "filter": ""
+          },
+          "macro": {
+            "filter": ""
+          },
+          "options": {
+            "acknowledged": 2,
+            "count": false,
+            "disableDataAlignment": false,
+            "hostProxy": false,
+            "hostsInMaintenance": false,
+            "limit": 20,
+            "minSeverity": 2,
+            "severities": [
+              5,
+              3,
+              4
+            ],
+            "showDisabledItems": false,
+            "showLastChangeTime": false,
+            "showTags": false,
+            "skipEmptyValues": false,
+            "sortProblems": "default",
+            "useTimeRange": true,
+            "useTrends": "default",
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": "5",
+          "refId": "PROBLEMS",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "showProblems": "problems",
+          "slaFilter": "",
+          "slaInterval": "none",
+          "slaProperty": "sla",
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "textFilter": "",
+          "trigger": {
+            "filter": ""
+          }
+        }
+      ],
+      "title": "pfSense Central Monitoring - OPTIMIZED",
+      "type": "gapit-htmlgraphics-panel"
+    }
+  ],
+  "preload": false,
+  "refresh": "1m",
+  "schemaVersion": 40,
+  "tags": [
+    "pfsense",
+    "network",
+    "monitoring",
+    "optimized"
+  ],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "CETIF – pfSense Central Monitoring (OPTIMIZED v2)",
+  "uid": "pfsense-monitoring-optimized",
+  "version": 8,
+  "weekStart": ""
+}

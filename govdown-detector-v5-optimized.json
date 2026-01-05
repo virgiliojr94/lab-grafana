@@ -1,0 +1,215 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "GovDown Detector v5 - Arquitetura Otimizada | Performance-first dashboard para monitoramento dos sites governamentais de Roraima",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "alexanderzobnin-zabbix-datasource",
+        "uid": "${DS_ZABBIX}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "SVGBaseFix": true,
+        "add100Percentage": true,
+        "calcsMutation": "standard",
+        "centerAlignContent": true,
+        "dynamicData": false,
+        "dynamicFieldDisplayValues": false,
+        "dynamicHtmlGraphics": false,
+        "dynamicProps": false,
+        "html": "",
+        "onInit": "",
+        "onInitOnResize": false,
+        "onRender": "/* PAINEL 1: HEADER OTIMIZADO */\n(() => {\n  if (!htmlNode || !data) return;\n  \n  // Carrega configuração (inline para evitar HTTP request extra)\n  const CONFIG = {\n    thresholds: {\n      response_time: { good: 1000, warning: 3000, critical: 5000 },\n      load_time: { good: 2000, warning: 5000, critical: 10000 }\n    }\n  };\n  \n  // Parser inline otimizado\n  const toNumber = (v) => {\n    if (v == null) return null;\n    if (typeof v === 'number') return Number.isFinite(v) ? v : null;\n    if (typeof v === 'string') {\n      let s = v.trim().toLowerCase();\n      let m = 1;\n      if (s.endsWith('ms')) { s = s.replace('ms', ''); m = 0.001; }\n      else if (s.endsWith('s')) s = s.replace('s', '');\n      const n = parseFloat(s.replace(/[^0-9.-]/g, ''));\n      return Number.isFinite(n) ? n * m : null;\n    }\n    return null;\n  };\n  \n  const getLastValue = (frame) => {\n    if (!frame?.fields) return null;\n    const vf = frame.fields.find(f => f.type === 'number') || frame.fields[1];\n    if (!vf) return null;\n    const vals = Array.isArray(vf.values) ? vf.values : (vf.values?.toArray?.() || []);\n    return vals.length ? vals[vals.length - 1] : null;\n  };\n  \n  const getHost = (frame) => {\n    const f = frame?.fields?.[1];\n    const labels = f?.labels || frame.labels || {};\n    return labels.host || labels.Host || 'UNKNOWN';\n  };\n  \n  // Agrupa por refId\n  const byRef = {};\n  (data.series || []).forEach(s => {\n    const ref = s.refId || 'unknown';\n    (byRef[ref] = byRef[ref] || []).push(s);\n  });\n  \n  // Indexa métricas\n  const index = (frames) => {\n    const map = {};\n    (frames || []).forEach(f => {\n      const h = getHost(f);\n      if (h !== 'UNKNOWN') map[h] = toNumber(getLastValue(f));\n    });\n    return map;\n  };\n  \n  const ping = index(byRef['A']);\n  const status = index(byRef['B']);\n  \n  // Calcula estatísticas\n  const hosts = new Set([...Object.keys(ping), ...Object.keys(status)]);\n  let online = 0, offline = 0;\n  \n  hosts.forEach(h => {\n    const p = ping[h];\n    const s = status[h];\n    const isUp = (p != null && p > 0) || (s != null && s >= 200 && s < 400);\n    isUp ? online++ : offline++;\n  });\n  \n  const total = online + offline || 1;\n  const uptime = Math.round((online / total) * 100);\n  const circ = 2 * Math.PI * 25;\n  const offset = circ - (uptime / 100) * circ;\n  const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });\n  \n  // Renderiza\n  htmlNode.innerHTML = `\n    <style>\n      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');\n      * { margin: 0; padding: 0; box-sizing: border-box; }\n      .header-container { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: #fff; min-height: 100%; display: flex; flex-direction: column; }\n      .navbar { display: flex; align-items: center; justify-content: space-between; padding: 15px 30px; border-bottom: 1px solid rgba(255,255,255,0.1); gap: 20px; flex-wrap: wrap; }\n      .logo-section { display: flex; align-items: center; gap: 15px; }\n      .logo-icon { width: 45px; height: 45px; background: linear-gradient(135deg, #e94334 0%, #ff6b5b 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 24px; }\n      .logo-text { display: flex; flex-direction: column; }\n      .logo-title { font-size: 22px; font-weight: 700; }\n      .logo-title span { color: #e94334; }\n      .logo-subtitle { font-size: 11px; color: #8892b0; letter-spacing: 1px; text-transform: uppercase; }\n      .stats-section { display: flex; align-items: center; gap: 20px; flex: 1; justify-content: center; }\n      .stat-box { display: flex; flex-direction: column; align-items: center; padding: 10px 20px; border-radius: 8px; background: rgba(255,255,255,0.05); min-width: 100px; }\n      .stat-value { font-size: 28px; font-weight: 700; }\n      .stat-value.online { color: #4ade80; }\n      .stat-value.offline { color: #ef4444; }\n      .stat-label { font-size: 11px; color: #8892b0; text-transform: uppercase; letter-spacing: 1px; margin-top: 3px; }\n      .uptime-section { display: flex; align-items: center; gap: 15px; }\n      .uptime-ring { position: relative; width: 60px; height: 60px; }\n      .uptime-ring svg { transform: rotate(-90deg); }\n      .uptime-ring circle { fill: none; stroke-width: 5; }\n      .uptime-ring .bg { stroke: rgba(255,255,255,0.1); }\n      .uptime-ring .progress { stroke: #4ade80; stroke-linecap: round; transition: stroke-dashoffset 0.5s; }\n      .uptime-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 14px; font-weight: 600; }\n      .update-info { text-align: right; }\n      .update-time { font-size: 14px; color: #ccd6f6; }\n      .update-label { font-size: 10px; color: #8892b0; text-transform: uppercase; }\n      .live-dot { display: inline-block; width: 8px; height: 8px; background: #4ade80; border-radius: 50%; margin-right: 5px; animation: pulse 2s infinite; }\n      @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }\n      @media (max-width: 768px) { .navbar { flex-direction: column; align-items: stretch; } .stats-section { justify-content: space-around; } }\n    </style>\n    <div class=\"header-container\">\n      <div class=\"navbar\">\n        <div class=\"logo-section\">\n          <div class=\"logo-icon\">📡</div>\n          <div class=\"logo-text\">\n            <div class=\"logo-title\">Gov<span>Down</span> Detector</div>\n            <div class=\"logo-subtitle\">SEFAZ Roraima • Monitoramento em Tempo Real</div>\n          </div>\n        </div>\n        <div class=\"stats-section\">\n          <div class=\"stat-box\"><div class=\"stat-value online\">${online}</div><div class=\"stat-label\">✓ Online</div></div>\n          <div class=\"stat-box\"><div class=\"stat-value offline\">${offline}</div><div class=\"stat-label\">✗ Offline</div></div>\n        </div>\n        <div class=\"uptime-section\">\n          <div class=\"uptime-ring\">\n            <svg width=\"60\" height=\"60\"><circle class=\"bg\" cx=\"30\" cy=\"30\" r=\"25\"/><circle class=\"progress\" cx=\"30\" cy=\"30\" r=\"25\" stroke-dasharray=\"${circ}\" stroke-dashoffset=\"${offset}\"/></svg>\n            <div class=\"uptime-text\">${uptime}%</div>\n          </div>\n          <div class=\"update-info\"><div class=\"update-time\"><span class=\"live-dot\"></span>${time}</div><div class=\"update-label\">Última atualização</div></div>\n        </div>\n      </div>\n    </div>\n  `;\n})();",
+        "overflow": "visible",
+        "panelupdateOnMount": true,
+        "renderOnMount": true,
+        "rootCSS": "",
+        "useGrafanaScrollbar": true
+      },
+      "pluginVersion": "2.2.3",
+      "targets": [
+        {
+          "group": { "filter": "SITES GOVERNAMENTAIS" },
+          "host": { "filter": "/.*/" },
+          "item": { "filter": "/^Website \\{\\$SITE_URL\\} HTTP Ping Check$/" },
+          "queryType": "0",
+          "refId": "A",
+          "resultFormat": "time_series"
+        },
+        {
+          "group": { "filter": "SITES GOVERNAMENTAIS" },
+          "host": { "filter": "/.*/" },
+          "item": { "filter": "/^Website \\{\\$SITE_URL\\} HTTP Status Code$/" },
+          "queryType": "0",
+          "refId": "B",
+          "resultFormat": "time_series"
+        }
+      ],
+      "title": "Header",
+      "type": "gapit-htmlgraphics-panel"
+    },
+    {
+      "datasource": {
+        "type": "alexanderzobnin-zabbix-datasource",
+        "uid": "${DS_ZABBIX}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 32,
+        "w": 24,
+        "x": 0,
+        "y": 5
+      },
+      "id": 2,
+      "options": {
+        "SVGBaseFix": true,
+        "add100Percentage": true,
+        "calcsMutation": "standard",
+        "centerAlignContent": true,
+        "dynamicData": false,
+        "dynamicFieldDisplayValues": false,
+        "dynamicHtmlGraphics": false,
+        "dynamicProps": false,
+        "html": "",
+        "onInit": "",
+        "onInitOnResize": false,
+        "onRender": "/* PAINEL 2: GRID DE SERVIÇOS OTIMIZADO */\n(() => {\n  if (!htmlNode || !data) return;\n  \n  // Configuração inline\n  const SERVICES = {\n    'SITE SEFAZ': { name: 'SEFAZ', url: 'sefaz.rr.gov.br', emoji: '💰', priority: 'critical' },\n    'SITE SESP': { name: 'SESP', url: 'sesp.rr.gov.br', emoji: '🛡️', priority: 'critical' },\n    'SITE EDUCACAO': { name: 'EDUCAÇÃO', url: 'educacao.rr.gov.br', emoji: '📚', priority: 'high' },\n    'SITE OUVIDORIA': { name: 'OUVIDORIA', url: 'ouvidoria.rr.gov.br', emoji: '📢', priority: 'high' },\n    'SITE SEINF': { name: 'SEINF', url: 'seinf.rr.gov.br', emoji: '🏗️', priority: 'medium' },\n    'SITE SETRABES': { name: 'SETRABES', url: 'setrabes.rr.gov.br', emoji: '🤝', priority: 'high' },\n    'SITE FAPERR': { name: 'FAPERR', url: 'faperr.rr.gov.br', emoji: '🔬', priority: 'medium' },\n    'SITE SEPLAN': { name: 'SEPLAN', url: 'seplan.rr.gov.br', emoji: '📊', priority: 'high' },\n    'SITE SEED': { name: 'SEED', url: 'seed.rr.gov.br', emoji: '📈', priority: 'high' },\n    'SITE POLICIA CIVIL': { name: 'POLÍCIA CIVIL', url: 'policiacivil.rr.gov.br', emoji: '👮', priority: 'critical' },\n    'SITE PGE': { name: 'PGE', url: 'www.pge.rr.gov.br', emoji: '⚖️', priority: 'critical' },\n    'SITE SECULT': { name: 'SECULT', url: 'secult.rr.gov.br', emoji: '🎭', priority: 'medium' },\n    'SITE TRANSPARENCIA': { name: 'TRANSPARÊNCIA', url: 'transparencia.rr.gov.br', emoji: '🔍', priority: 'critical' },\n    'SITE ADERR': { name: 'ADERR', url: 'aderr.rr.gov.br', emoji: '🌱', priority: 'medium' },\n    'SITE CODESAIMA': { name: 'CODESAIMA', url: 'codesaima.rr.gov.br', emoji: '🌳', priority: 'medium' },\n    'SITE IPEM': { name: 'IPEM', url: 'ipem.rr.gov.br', emoji: '⚖️', priority: 'low' },\n    'SITE IMPRENSA OFICIAL': { name: 'IMPRENSA', url: 'imprensaoficial.rr.gov.br', emoji: '📰', priority: 'high' }\n  };\n  \n  // Parser otimizado\n  const toNum = (v) => {\n    if (v == null) return null;\n    if (typeof v === 'number') return Number.isFinite(v) ? v : null;\n    if (typeof v === 'string') {\n      let s = v.trim().toLowerCase(), m = 1;\n      if (s.endsWith('ms')) { s = s.replace('ms', ''); m = 0.001; }\n      else if (s.endsWith('s')) s = s.replace('s', '');\n      const n = parseFloat(s.replace(/[^0-9.-]/g, ''));\n      return Number.isFinite(n) ? n * m : null;\n    }\n    return null;\n  };\n  \n  const getLast = (f) => {\n    if (!f?.fields) return null;\n    const vf = f.fields.find(x => x.type === 'number') || f.fields[1];\n    if (!vf) return null;\n    const v = Array.isArray(vf.values) ? vf.values : (vf.values?.toArray?.() || []);\n    return v.length ? v[v.length - 1] : null;\n  };\n  \n  const getVals = (f, n = 12) => {\n    if (!f?.fields) return [];\n    const vf = f.fields.find(x => x.type === 'number') || f.fields[1];\n    if (!vf) return [];\n    const v = Array.isArray(vf.values) ? vf.values : (vf.values?.toArray?.() || []);\n    return v.slice(-n).map(toNum).filter(x => x != null);\n  };\n  \n  const getHost = (f) => {\n    const field = f?.fields?.[1];\n    const labels = field?.labels || f.labels || {};\n    return labels.host || labels.Host || 'UNKNOWN';\n  };\n  \n  // Agrupa e indexa\n  const byRef = {};\n  (data.series || []).forEach(s => {\n    const r = s.refId || 'unknown';\n    (byRef[r] = byRef[r] || []).push(s);\n  });\n  \n  const idx = (frames, hist = false) => {\n    const m = {};\n    (frames || []).forEach(f => {\n      const h = getHost(f);\n      if (h !== 'UNKNOWN') m[h] = hist ? getVals(f) : toNum(getLast(f));\n    });\n    return m;\n  };\n  \n  const ping = idx(byRef['A']);\n  const status = idx(byRef['B']);\n  const resp = idx(byRef['C']);\n  const load = idx(byRef['D']);\n  const respHist = idx(byRef['C'], true);\n  const loadHist = idx(byRef['D'], true);\n  \n  // Monta serviços\n  const hosts = new Set([...Object.keys(ping), ...Object.keys(status), ...Object.keys(resp), ...Object.keys(load)]);\n  const services = Array.from(hosts)\n    .filter(h => h !== 'UNKNOWN')\n    .map(h => {\n      const cfg = SERVICES[h] || { name: h.replace(/^SITE\\s*/i, ''), url: '', emoji: '🏛️', priority: 'medium' };\n      const p = ping[h], s = status[h], r = resp[h], l = load[h];\n      const isUp = (p != null && p > 0) || (s != null && s >= 200 && s < 400);\n      const rMs = Math.round((r || 0) * 1000), lMs = Math.round((l || 0) * 1000);\n      let st = 'online';\n      if (!isUp && (p != null || s != null)) st = 'offline';\n      else if (lMs > 5000 || rMs > 3000) st = 'degraded';\n      let hist = loadHist[h] || respHist[h] || [];\n      while (hist.length < 12) hist.unshift(0);\n      hist = hist.slice(-12);\n      return { host: h, name: cfg.name, url: cfg.url, emoji: cfg.emoji, priority: cfg.priority, status: st, resp: rMs, load: lMs, hist };\n    })\n    .sort((a, b) => {\n      const sOrd = { offline: 0, degraded: 1, online: 2 };\n      const pOrd = { critical: 0, high: 1, medium: 2, low: 3 };\n      const sDiff = sOrd[a.status] - sOrd[b.status];\n      return sDiff !== 0 ? sDiff : pOrd[a.priority] - pOrd[b.priority];\n    });\n  \n  // Sparkline\n  const spark = (hist, off) => {\n    const max = Math.max(...hist, 0.001);\n    return hist.map(v => {\n      const h = Math.max((v / max) * 100, 10);\n      const cls = off ? 'danger' : (v > max * 0.7 ? 'warning' : '');\n      return `<div class=\"spark-bar ${cls}\" style=\"height:${h}%\"></div>`;\n    }).join('');\n  };\n  \n  // Renderiza cards\n  const cards = services.map(s => {\n    const cCls = s.status === 'offline' ? 'offline' : (s.status === 'degraded' ? 'degraded' : '');\n    const sCls = `status-${s.status}`;\n    const sTxt = s.status === 'offline' ? '✗ Offline' : (s.status === 'degraded' ? '⚠ Lento' : '✓ Online');\n    const rCls = s.resp > 3000 ? 'bad' : (s.resp > 1000 ? 'warning' : 'good');\n    const lCls = s.load > 5000 ? 'bad' : (s.load > 2000 ? 'warning' : 'good');\n    return `<div class=\"service-card ${cCls}\" onclick=\"window.open('https://${s.url}', '_blank')\">\n      <div class=\"card-header\">\n        <div class=\"service-icon\">${s.emoji}</div>\n        <div class=\"service-info\"><div class=\"service-name\">${s.name}</div><div class=\"service-url\">${s.url}</div></div>\n        <div class=\"status-indicator ${sCls}\">${sTxt}</div>\n      </div>\n      <div class=\"sparkline-section\">\n        <div class=\"sparkline-label\">Tempo de Resposta (última hora)</div>\n        <div class=\"sparkline-container\">${spark(s.hist, s.status === 'offline')}</div>\n      </div>\n      <div class=\"metrics-row\">\n        <div class=\"metric-item\"><div class=\"metric-value ${rCls}\">${s.resp}ms</div><div class=\"metric-label\">Resposta HTTP</div></div>\n        <div class=\"metric-item\"><div class=\"metric-value ${lCls}\">${s.load}ms</div><div class=\"metric-label\">Carregamento</div></div>\n      </div>\n    </div>`;\n  }).join('');\n  \n  const online = services.filter(s => s.status === 'online').length;\n  const problems = services.filter(s => s.status !== 'online').length;\n  \n  htmlNode.innerHTML = `\n    <style>\n      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');\n      * { margin: 0; padding: 0; box-sizing: border-box; }\n      .services-container { font-family: 'Inter', sans-serif; background: #0a0a0f; min-height: 100%; padding: 25px; }\n      .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.08); flex-wrap: wrap; gap: 15px; }\n      .section-title { font-size: 18px; font-weight: 600; color: #e2e8f0; display: flex; align-items: center; gap: 10px; }\n      .section-title span { font-size: 20px; }\n      .filter-tabs { display: flex; gap: 8px; flex-wrap: wrap; }\n      .filter-tab { padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.2s; border: 1px solid rgba(255,255,255,0.1); background: transparent; color: #8892b0; }\n      .filter-tab:hover, .filter-tab.active { background: rgba(255,255,255,0.1); color: #fff; }\n      .filter-tab.active { border-color: #e94334; }\n      .services-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }\n      .service-card { background: linear-gradient(145deg, #12121a 0%, #0d0d12 100%); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 20px; transition: all 0.3s ease; cursor: pointer; position: relative; overflow: hidden; }\n      .service-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #4ade80, #22c55e); }\n      .service-card.degraded::before { background: linear-gradient(90deg, #fbbf24, #f59e0b); }\n      .service-card.offline::before { background: linear-gradient(90deg, #ef4444, #dc2626); }\n      .service-card:hover { transform: translateY(-3px); border-color: rgba(255,255,255,0.15); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }\n      .card-header { display: flex; align-items: flex-start; gap: 15px; margin-bottom: 15px; }\n      .service-icon { width: 50px; height: 50px; border-radius: 10px; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; font-size: 26px; flex-shrink: 0; }\n      .service-info { flex: 1; min-width: 0; }\n      .service-name { font-size: 16px; font-weight: 600; color: #e2e8f0; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }\n      .service-url { font-size: 11px; color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }\n      .status-indicator { padding: 4px 10px; border-radius: 12px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }\n      .status-online { background: rgba(74, 222, 128, 0.15); color: #4ade80; }\n      .status-degraded { background: rgba(251, 191, 36, 0.15); color: #fbbf24; }\n      .status-offline { background: rgba(239, 68, 68, 0.15); color: #ef4444; }\n      .sparkline-section { margin: 15px 0; padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); }\n      .sparkline-label { font-size: 10px; color: #64748b; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }\n      .sparkline-container { height: 35px; display: flex; align-items: flex-end; gap: 2px; }\n      .spark-bar { flex: 1; border-radius: 2px 2px 0 0; min-height: 3px; transition: all 0.2s; background: linear-gradient(180deg, #4ade80 0%, #22c55e 100%); }\n      .spark-bar.warning { background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 100%); }\n      .spark-bar.danger { background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%); }\n      .spark-bar:hover { opacity: 0.8; transform: scaleY(1.1); }\n      .metrics-row { display: flex; justify-content: space-between; gap: 10px; }\n      .metric-item { flex: 1; text-align: center; padding: 8px; background: rgba(255,255,255,0.03); border-radius: 6px; }\n      .metric-value { font-size: 16px; font-weight: 600; color: #e2e8f0; }\n      .metric-value.good { color: #4ade80; }\n      .metric-value.warning { color: #fbbf24; }\n      .metric-value.bad { color: #ef4444; }\n      .metric-label { font-size: 9px; color: #64748b; text-transform: uppercase; margin-top: 3px; letter-spacing: 0.5px; }\n      .no-data { grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: #64748b; }\n      .no-data-icon { font-size: 48px; margin-bottom: 15px; }\n      @media (max-width: 768px) { .services-grid { grid-template-columns: 1fr; } }\n      @media (min-width: 1600px) { .services-grid { grid-template-columns: repeat(5, 1fr); } }\n      @media (min-width: 1920px) { .services-grid { grid-template-columns: repeat(6, 1fr); } }\n    </style>\n    <div class=\"services-container\">\n      <div class=\"section-header\">\n        <div class=\"section-title\"><span>🖥️</span> Status dos Serviços</div>\n        <div class=\"filter-tabs\">\n          <button class=\"filter-tab active\">Todos (${services.length})</button>\n          <button class=\"filter-tab\">Online (${online})</button>\n          <button class=\"filter-tab\">Problemas (${problems})</button>\n        </div>\n      </div>\n      <div class=\"services-grid\">${cards || '<div class=\"no-data\"><div class=\"no-data-icon\">📡</div><h3 style=\"color:#e2e8f0;margin-bottom:8px;\">Aguardando dados...</h3><p>Os serviços serão exibidos quando os dados estiverem disponíveis.</p></div>'}</div>\n    </div>\n  `;\n})();",
+        "overflow": "visible",
+        "panelupdateOnMount": true,
+        "renderOnMount": true,
+        "rootCSS": "",
+        "useGrafanaScrollbar": true
+      },
+      "pluginVersion": "2.2.3",
+      "targets": [
+        {
+          "group": { "filter": "SITES GOVERNAMENTAIS" },
+          "host": { "filter": "/.*/" },
+          "item": { "filter": "/^Website \\{\\$SITE_URL\\} HTTP Ping Check$/" },
+          "queryType": "0",
+          "refId": "A",
+          "resultFormat": "time_series"
+        },
+        {
+          "group": { "filter": "SITES GOVERNAMENTAIS" },
+          "host": { "filter": "/.*/" },
+          "item": { "filter": "/^Website \\{\\$SITE_URL\\} HTTP Status Code$/" },
+          "queryType": "0",
+          "refId": "B",
+          "resultFormat": "time_series"
+        },
+        {
+          "group": { "filter": "SITES GOVERNAMENTAIS" },
+          "host": { "filter": "/.*/" },
+          "item": { "filter": "/^Website \\{\\$SITE_URL\\} HTTP Response Time$/" },
+          "queryType": "0",
+          "refId": "C",
+          "resultFormat": "time_series"
+        },
+        {
+          "group": { "filter": "SITES GOVERNAMENTAIS" },
+          "host": { "filter": "/.*/" },
+          "item": { "filter": "/^Website \\{\\$SITE_URL\\} Navigation load event time$/" },
+          "queryType": "0",
+          "refId": "D",
+          "resultFormat": "time_series"
+        }
+      ],
+      "title": "Services Grid",
+      "type": "gapit-htmlgraphics-panel"
+    }
+  ],
+  "preload": false,
+  "refresh": "1m",
+  "schemaVersion": 40,
+  "tags": [
+    "govmonitor",
+    "downdetector",
+    "roraima",
+    "optimized",
+    "v5"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "text": "zabbix-sefaz",
+          "value": "aec2bvjiis7pca"
+        },
+        "includeAll": false,
+        "name": "DS_ZABBIX",
+        "options": [],
+        "query": "alexanderzobnin-zabbix-datasource",
+        "refresh": 1,
+        "regex": "",
+        "type": "datasource"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "GovDown Detector v5 - Optimized",
+  "uid": "govdown-detector-v5-optimized",
+  "version": 1,
+  "weekStart": ""
+}

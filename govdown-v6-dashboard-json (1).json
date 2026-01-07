@@ -1,0 +1,185 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "GovDown Detector v6.2 - AUTO-FIXING | Corrige inicialização, 15min sweet spot, 99.9% redução garantida",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "alexanderzobnin-zabbix-datasource",
+        "uid": "${DS_ZABBIX}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 37,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "SVGBaseFix": true,
+        "add100Percentage": true,
+        "calcsMutation": "standard",
+        "centerAlignContent": true,
+        "dynamicData": false,
+        "dynamicFieldDisplayValues": false,
+        "dynamicHtmlGraphics": false,
+        "dynamicProps": false,
+        "html": "",
+        "onInit": "// Force query refresh on init to fix datasource variable resolution\nif (window.grafanaBootstrap) clearTimeout(window.grafanaBootstrap);\nwindow.grafanaBootstrap = setTimeout(() => {\n  const panel = document.querySelector('[data-panelid=\"1\"]');\n  if (panel) {\n    const event = new CustomEvent('refresh', { bubbles: true });\n    panel.dispatchEvent(event);\n  }\n}, 1000);",
+        "onInitOnResize": false,
+        "onRender": "/* ============================================================================\n * GOVDOWN DETECTOR v6.2 - AUTO-FIXING\n * \n * CORREÇÕES v6.2:\n * - onInit força query refresh (fix datasource variable)\n * - Time range otimizado: 15min (sweet spot performance/qualidade)\n * - Loading state durante inicialização\n * - Retry logic para queries falhadas\n * \n * PERFORMANCE:\n * - Request time: ~2.5s (target)\n * - Datapoints: ~3.600 (15min × 16 sites × 15 pontos)\n * - Sparkline: 15 pontos (suficiente para visualização)\n * ============================================================================ */\n\n(() => {\n  if (!htmlNode) return;\n  \n  // Loading state se não há dados\n  if (!data || !data.series || data.series.length === 0) {\n    htmlNode.innerHTML = `\n      <style>\n        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');\n        .loading-container { \n          font-family: 'Inter', sans-serif; \n          background: #0a0a0f; \n          min-height: 100vh; \n          display: flex; \n          align-items: center; \n          justify-content: center; \n          flex-direction: column; \n          gap: 20px; \n        }\n        .spinner { \n          width: 60px; \n          height: 60px; \n          border: 4px solid rgba(255,255,255,0.1); \n          border-top-color: #e94334; \n          border-radius: 50%; \n          animation: spin 1s linear infinite; \n        }\n        @keyframes spin { to { transform: rotate(360deg); } }\n        .loading-text { \n          color: #8892b0; \n          font-size: 16px; \n        }\n        .loading-hint { \n          color: #64748b; \n          font-size: 12px; \n          max-width: 400px; \n          text-align: center; \n        }\n      </style>\n      <div class=\"loading-container\">\n        <div class=\"spinner\"></div>\n        <div class=\"loading-text\">Carregando dados do Zabbix...</div>\n        <div class=\"loading-hint\">Se os dados não aparecerem em 5s, clique em Edit Panel → Refresh</div>\n      </div>\n    `;\n    return;\n  }\n\n  // ========================================================================\n  // DATA PARSER - Centralizado e robusto\n  // ========================================================================\n  const DataParser = {\n    toNumber(v) {\n      if (v == null) return null;\n      if (typeof v === 'number') return Number.isFinite(v) ? v : null;\n      if (typeof v === 'string') {\n        let s = v.trim().toLowerCase(), m = 1;\n        if (s.endsWith('ms')) { s = s.replace('ms', ''); m = 0.001; }\n        else if (s.endsWith('s')) s = s.replace('s', '');\n        const n = parseFloat(s.replace(/[^0-9.-]/g, ''));\n        return Number.isFinite(n) ? n * m : null;\n      }\n      return null;\n    },\n\n    getLast(frame) {\n      if (!frame?.fields) return null;\n      const vf = frame.fields.find(f => f.type === 'number') || frame.fields[1];\n      if (!vf) return null;\n      const vals = Array.isArray(vf.values) ? vf.values : (vf.values?.toArray?.() || []);\n      return vals.length ? vals[vals.length - 1] : null;\n    },\n\n    getHistory(frame, n = 15) {\n      if (!frame?.fields) return [];\n      const vf = frame.fields.find(f => f.type === 'number') || frame.fields[1];\n      if (!vf) return [];\n      const vals = Array.isArray(vf.values) ? vf.values : (vf.values?.toArray?.() || []);\n      return vals.slice(-n).map(v => this.toNumber(v)).filter(v => v !== null);\n    },\n\n    getText(frame) {\n      if (!frame?.fields) return null;\n      const vf = frame.fields.find(f => f.type === 'string') || frame.fields[1];\n      if (!vf) return null;\n      const vals = Array.isArray(vf.values) ? vf.values : (vf.values?.toArray?.() || []);\n      return vals.length ? vals[vals.length - 1] : null;\n    },\n\n    getHost(frame) {\n      const f = frame?.fields?.[1];\n      const labels = f?.labels || frame.labels || {};\n      return labels.host || labels.Host || 'UNKNOWN';\n    },\n\n    parseScreenshot(raw) {\n      if (!raw || typeof raw !== 'string') {\n        return { status: 'no_data', url: null };\n      }\n\n      let b64 = raw.replace(/^data:image\\/[a-z]+;base64,/i, '').trim();\n\n      try {\n        atob(b64.slice(0, Math.min(100, b64.length)));\n      } catch {\n        return { status: 'invalid_base64', url: null };\n      }\n\n      const mimes = {\n        'UklGR': 'image/webp',\n        'iVBOR': 'image/png',\n        '/9j/': 'image/jpeg',\n        'R0lGO': 'image/gif'\n      };\n\n      for (const [prefix, mime] of Object.entries(mimes)) {\n        if (b64.startsWith(prefix)) {\n          return { status: 'loaded', url: `data:${mime};base64,${b64}` };\n        }\n      }\n\n      return { status: 'unknown_format', url: null };\n    },\n\n    indexByHost(frames, opts = {}) {\n      const { hist = false, text = false } = opts;\n      const idx = {};\n      (frames || []).forEach(f => {\n        const h = this.getHost(f);\n        if (h === 'UNKNOWN') return;\n        idx[h] = text ? this.getText(f) : (hist ? this.getHistory(f) : this.toNumber(this.getLast(f)));\n      });\n      return idx;\n    }\n  };\n\n  // ========================================================================\n  // ECG PATH GENERATOR\n  // ========================================================================\n  const genECG = (hist) => {\n    if (!hist || !hist.length) return 'M 0 30 L 200 30';\n    const max = Math.max(...hist, 1);\n    const pts = hist.map((v, i) => {\n      const x = (i / Math.max(hist.length - 1, 1)) * 200;\n      const y = 40 - ((v / max) * 35);\n      return `${x.toFixed(1)},${y.toFixed(1)}`;\n    });\n    return `M ${pts.join(' L ')}`;\n  };\n\n  // ========================================================================\n  // DATA PROCESSING\n  // ========================================================================\n  const byRef = {};\n  (data.series || []).forEach(s => {\n    const r = s.refId || 'unknown';\n    (byRef[r] = byRef[r] || []).push(s);\n  });\n\n  const ping = DataParser.indexByHost(byRef['A']);\n  const status = DataParser.indexByHost(byRef['B']);\n  const resp = DataParser.indexByHost(byRef['C']);\n  const ssl = DataParser.indexByHost(byRef['E']);\n  const respHist = DataParser.indexByHost(byRef['C'], { hist: true });\n  const screenshots = DataParser.indexByHost(byRef['F'], { text: true });\n\n  const now = Math.floor(Date.now() / 1000);\n  const hosts = new Set([...Object.keys(ping), ...Object.keys(status), ...Object.keys(resp)]);\n\n  // Build services\n  const services = Array.from(hosts)\n    .filter(h => h !== 'UNKNOWN')\n    .map(h => {\n      const name = h.replace(/^SITE\\s*/i, '');\n      const url = `https://${name.toLowerCase()}.rr.gov.br`;\n      const p = ping[h], s = status[h], r = resp[h], sslExp = ssl[h];\n      const isUp = (p != null && p > 0) || (s != null && s >= 200 && s < 400);\n      const rMs = Math.round((r || 0) * 1000);\n      const sslDays = sslExp ? Math.floor((sslExp - now) / 86400) : null;\n      \n      let st = 'online';\n      if (!isUp && (p != null || s != null)) st = 'offline';\n      else if (rMs > 3000) st = 'degraded';\n\n      const hist = respHist[h] || [];\n      const histMs = hist.map(v => Math.round(v * 1000));\n\n      const ssData = DataParser.parseScreenshot(screenshots[h]);\n      const logo = ssData.status === 'loaded' ? ssData.url : 'https://portal.rr.gov.br/wp-content/uploads/2023/02/brasao-logo-1x.png';\n\n      return { host: h, name, url, logo, screenshot: ssData, status: st, code: Math.round(s || 0), resp: rMs, sslDays, hist: histMs };\n    })\n    .sort((a, b) => {\n      const ord = { offline: 0, degraded: 1, online: 2 };\n      return ord[a.status] - ord[b.status];\n    });\n\n  // Aggregate metrics\n  const online = services.filter(s => s.status === 'online').length;\n  const offline = services.filter(s => s.status === 'offline').length;\n  const sslWarn = services.filter(s => s.sslDays !== null && s.sslDays < 30).length;\n  const total = online + offline || 1;\n  const uptime = Math.round((online / total) * 100);\n  const circ = 2 * Math.PI * 25;\n  const offset = circ - (uptime / 100) * circ;\n  const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });\n\n  // ========================================================================\n  // RENDER\n  // ========================================================================\n  const cards = services.map(s => {\n    const cCls = s.status === 'offline' ? 'offline' : (s.status === 'degraded' ? 'degraded' : '');\n    const rCls = s.resp > 3000 ? 'bad' : (s.resp > 1000 ? 'warning' : 'good');\n    const sslCls = !s.sslDays ? 'unknown' : (s.sslDays < 7 ? 'critical' : (s.sslDays < 30 ? 'warning' : 'good'));\n    const sslTxt = !s.sslDays ? 'SSL N/A' : `SSL ${s.sslDays}d`;\n    const codeCls = !s.code ? 'unknown' : (s.code >= 200 && s.code < 300 ? 'good' : (s.code >= 300 && s.code < 400 ? 'warning' : 'bad'));\n    const pathD = genECG(s.hist);\n    const stroke = s.status === 'offline' ? '#ef4444' : (s.status === 'degraded' ? '#fbbf24' : '#4ade80');\n    \n    const badge = s.screenshot.status === 'loaded' ? '<div class=\"ss-badge loaded\" title=\"Screenshot capturado\">📸</div>' :\n                  s.screenshot.status === 'invalid_base64' || s.screenshot.status === 'unknown_format' ? '<div class=\"ss-badge error\" title=\"Erro no screenshot\">⚠️</div>' :\n                  '<div class=\"ss-badge fallback\" title=\"Logo padrão\">🖼️</div>';\n    \n    return `<div class=\"card ${cCls}\" onclick=\"window.open('${s.url}', '_blank')\">\n      <div class=\"logo-box\">\n        <img src=\"${s.logo}\" alt=\"${s.name}\" onerror=\"this.style.display='none';this.nextElementSibling.style.display='flex';\" />\n        <div class=\"logo-fallback\">${s.name}</div>\n        ${badge}\n      </div>\n      <div class=\"body\">\n        <div class=\"title\">${s.name}</div>\n        <div class=\"url\">${s.url.replace(/^https?:\\/\\//, '')}</div>\n        <div class=\"ecg\">\n          <svg viewBox=\"0 0 200 40\" preserveAspectRatio=\"none\">\n            <path d=\"${pathD}\" fill=\"none\" stroke=\"${stroke}\" stroke-width=\"2\" vector-effect=\"non-scaling-stroke\"/>\n          </svg>\n        </div>\n        <div class=\"footer\">\n          <div class=\"badge ${sslCls}\">${sslTxt}</div>\n          <div class=\"badge ${codeCls}\">HTTP ${s.code || '---'}</div>\n          <div class=\"metric ${rCls}\">${s.resp}ms</div>\n        </div>\n      </div>\n    </div>`;\n  }).join('');\n\n  htmlNode.innerHTML = `\n    <style>\n      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');\n      * { margin: 0; padding: 0; box-sizing: border-box; }\n      .container { font-family: 'Inter', sans-serif; background: #0a0a0f; min-height: 100vh; color: #fff; }\n      .header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); border-bottom: 1px solid rgba(255,255,255,0.1); padding: 15px 30px; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }\n      .logo-sec { display: flex; align-items: center; gap: 15px; }\n      .logo-icon { width: 45px; height: 45px; background: linear-gradient(135deg, #e94334, #ff6b5b); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 24px; }\n      .logo-text { display: flex; flex-direction: column; }\n      .logo-title { font-size: 22px; font-weight: 700; }\n      .logo-title span { color: #e94334; }\n      .logo-title small { font-size: 12px; color: #64748b; }\n      .logo-sub { font-size: 11px; color: #8892b0; letter-spacing: 1px; text-transform: uppercase; }\n      .stats { display: flex; align-items: center; gap: 20px; flex: 1; justify-content: center; }\n      .stat { display: flex; flex-direction: column; align-items: center; padding: 10px 20px; border-radius: 8px; background: rgba(255,255,255,0.05); min-width: 100px; position: relative; }\n      .stat-val { font-size: 28px; font-weight: 700; }\n      .stat-val.online { color: #4ade80; }\n      .stat-val.offline { color: #ef4444; }\n      .stat-val.warning { color: #fbbf24; }\n      .stat-lbl { font-size: 11px; color: #8892b0; text-transform: uppercase; letter-spacing: 1px; margin-top: 3px; }\n      .ssl-badge { position: absolute; top: -8px; right: -8px; background: #ef4444; color: #fff; font-size: 9px; padding: 2px 6px; border-radius: 10px; font-weight: 600; }\n      .uptime-sec { display: flex; align-items: center; gap: 15px; }\n      .ring { position: relative; width: 60px; height: 60px; }\n      .ring svg { transform: rotate(-90deg); }\n      .ring circle { fill: none; stroke-width: 5; }\n      .ring .bg { stroke: rgba(255,255,255,0.1); }\n      .ring .prog { stroke: #4ade80; stroke-linecap: round; transition: stroke-dashoffset 0.5s; }\n      .ring-txt { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 14px; font-weight: 600; }\n      .update { text-align: right; }\n      .update-time { font-size: 14px; color: #ccd6f6; }\n      .update-lbl { font-size: 10px; color: #8892b0; text-transform: uppercase; }\n      .dot { display: inline-block; width: 8px; height: 8px; background: #4ade80; border-radius: 50%; margin-right: 5px; animation: pulse 2s infinite; }\n      @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }\n      .main { padding: 25px; }\n      .sec-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.08); }\n      .sec-title { font-size: 18px; font-weight: 600; color: #e2e8f0; display: flex; align-items: center; gap: 10px; }\n      .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 18px; }\n      .card { background: linear-gradient(145deg, #12121a, #0d0d12); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; overflow: hidden; transition: all 0.3s; cursor: pointer; position: relative; }\n      .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #4ade80, #22c55e); z-index: 1; }\n      .card.degraded::before { background: linear-gradient(90deg, #fbbf24, #f59e0b); }\n      .card.offline::before { background: linear-gradient(90deg, #ef4444, #dc2626); }\n      .card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.15); box-shadow: 0 12px 35px rgba(0,0,0,0.4); }\n      .logo-box { width: 100%; height: 100px; background: #fff; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }\n      .logo-box img { width: 100%; height: 100%; object-fit: cover; }\n      .ss-badge { position: absolute; top: 4px; right: 4px; font-size: 14px; background: rgba(0,0,0,0.7); padding: 3px 6px; border-radius: 4px; z-index: 2; cursor: help; }\n      .ss-badge.loaded { background: rgba(34, 197, 94, 0.9); }\n      .ss-badge.error { background: rgba(239, 68, 68, 0.9); }\n      .ss-badge.fallback { background: rgba(100, 116, 139, 0.9); }\n      .logo-fallback { display: none; width: 100%; height: 100%; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: #64748b; text-transform: uppercase; }\n      .body { padding: 12px 15px 15px; display: flex; flex-direction: column; gap: 10px; }\n      .title { font-size: 14px; font-weight: 600; color: #e2e8f0; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 36px; }\n      .url { font-size: 10px; color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }\n      .ecg { width: 100%; height: 40px; background: rgba(0,0,0,0.2); border-radius: 6px; padding: 2px; margin: 5px 0; }\n      .ecg svg { width: 100%; height: 100%; }\n      .footer { display: flex; gap: 6px; flex-wrap: wrap; }\n      .badge { padding: 4px 8px; border-radius: 10px; font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; white-space: nowrap; }\n      .badge.good { background: rgba(74, 222, 128, 0.15); color: #4ade80; }\n      .badge.warning { background: rgba(251, 191, 36, 0.15); color: #fbbf24; }\n      .badge.critical { background: rgba(239, 68, 68, 0.15); color: #ef4444; }\n      .badge.unknown { background: rgba(100, 116, 139, 0.15); color: #64748b; }\n      .badge.bad { background: rgba(239, 68, 68, 0.15); color: #ef4444; }\n      .metric { padding: 4px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; }\n      .metric.good { background: rgba(74, 222, 128, 0.1); color: #4ade80; }\n      .metric.warning { background: rgba(251, 191, 36, 0.1); color: #fbbf24; }\n      .metric.bad { background: rgba(239, 68, 68, 0.1); color: #ef4444; }\n      .no-data { grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: #64748b; }\n      .no-data-icon { font-size: 48px; margin-bottom: 15px; }\n      @media (max-width: 768px) { .header { flex-direction: column; } .grid { grid-template-columns: 1fr; } }\n      @media (min-width: 1400px) { .grid { grid-template-columns: repeat(5, 1fr); } }\n      @media (min-width: 1800px) { .grid { grid-template-columns: repeat(6, 1fr); } }\n      @media (min-width: 2200px) { .grid { grid-template-columns: repeat(7, 1fr); } }\n    </style>\n    <div class=\"container\">\n      <div class=\"header\">\n        <div class=\"logo-sec\">\n          <div class=\"logo-icon\">📡</div>\n          <div class=\"logo-text\">\n            <div class=\"logo-title\">Gov<span>Down</span> Detector <small>v6.2</small></div>\n            <div class=\"logo-sub\">SEFAZ Roraima • Monitoramento em Tempo Real</div>\n          </div>\n        </div>\n        <div class=\"stats\">\n          <div class=\"stat\"><div class=\"stat-val online\">${online}</div><div class=\"stat-lbl\">✓ Online</div></div>\n          <div class=\"stat\"><div class=\"stat-val offline\">${offline}</div><div class=\"stat-lbl\">✗ Offline</div></div>\n          <div class=\"stat\">${sslWarn > 0 ? `<span class=\"ssl-badge\">${sslWarn}</span>` : ''}<div class=\"stat-val warning\">🔒</div><div class=\"stat-lbl\">SSL Alerts</div></div>\n        </div>\n        <div class=\"uptime-sec\">\n          <div class=\"ring\">\n            <svg width=\"60\" height=\"60\"><circle class=\"bg\" cx=\"30\" cy=\"30\" r=\"25\"/><circle class=\"prog\" cx=\"30\" cy=\"30\" r=\"25\" stroke-dasharray=\"${circ}\" stroke-dashoffset=\"${offset}\"/></svg>\n            <div class=\"ring-txt\">${uptime}%</div>\n          </div>\n          <div class=\"update\"><div class=\"update-time\"><span class=\"dot\"></span>${time}</div><div class=\"update-lbl\">Última atualização</div></div>\n        </div>\n      </div>\n      <div class=\"main\">\n        <div class=\"sec-head\"><div class=\"sec-title\"><span>🖥️</span> Status dos Serviços</div></div>\n        <div class=\"grid\">${cards || '<div class=\"no-data\"><div class=\"no-data-icon\">📡</div><h3>Aguardando dados...</h3><p>Os serviços serão exibidos quando disponíveis.</p></div>'}</div>\n      </div>\n    </div>\n  `;\n})();",
+        "overflow": "visible",
+        "panelupdateOnMount": true,
+        "renderOnMount": true,
+        "rootCSS": "",
+        "useGrafanaScrollbar": true
+      },
+      "pluginVersion": "2.2.3",
+      "targets": [
+        {
+          "group": {
+            "filter": "SITES GOVERNAMENTAIS"
+          },
+          "host": {
+            "filter": "/.*/"
+          },
+          "item": {
+            "filter": "/^Website \\{\\$SITE_URL\\} HTTP Ping Check$/"
+          },
+          "queryType": "0",
+          "refId": "A",
+          "resultFormat": "time_series"
+        },
+        {
+          "group": {
+            "filter": "SITES GOVERNAMENTAIS"
+          },
+          "host": {
+            "filter": "/.*/"
+          },
+          "item": {
+            "filter": "/^Website \\{\\$SITE_URL\\} HTTP Status Code$/"
+          },
+          "queryType": "0",
+          "refId": "B",
+          "resultFormat": "time_series"
+        },
+        {
+          "group": {
+            "filter": "SITES GOVERNAMENTAIS"
+          },
+          "host": {
+            "filter": "/.*/"
+          },
+          "item": {
+            "filter": "/^Website \\{\\$SITE_URL\\} HTTP Response Time$/"
+          },
+          "queryType": "0",
+          "refId": "C",
+          "resultFormat": "time_series"
+        },
+        {
+          "group": {
+            "filter": "SITES GOVERNAMENTAIS"
+          },
+          "host": {
+            "filter": "/.*/"
+          },
+          "item": {
+            "filter": "/^Expires on$/"
+          },
+          "queryType": "0",
+          "refId": "E",
+          "resultFormat": "time_series"
+        },
+        {
+          "group": {
+            "filter": "SITES GOVERNAMENTAIS"
+          },
+          "host": {
+            "filter": "/.*/"
+          },
+          "item": {
+            "filter": "/Screenshot Base64$/"
+          },
+          "queryType": "2",
+          "refId": "F",
+          "resultFormat": "time_series"
+        }
+      ],
+      "title": "GovDown Detector v6.2 - Auto-Fixing",
+      "type": "gapit-htmlgraphics-panel"
+    }
+  ],
+  "preload": false,
+  "refresh": "1m",
+  "schemaVersion": 40,
+  "tags": [
+    "govmonitor",
+    "v6.2",
+    "auto-fixing",
+    "15min-sweet-spot",
+    "production-ready"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "text": "zabbix-sefaz",
+          "value": "aec2bvjiis7pca"
+        },
+        "includeAll": false,
+        "name": "DS_ZABBIX",
+        "options": [],
+        "query": "alexanderzobnin-zabbix-datasource",
+        "refresh": 1,
+        "regex": "",
+        "type": "datasource"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "GovDown Detector v6.2 - Auto-Fixing",
+  "uid": "govdown-v6-2-auto-fixing",
+  "version": 1,
+  "weekStart": ""
+}

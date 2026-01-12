@@ -1,0 +1,290 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "SEFAZ Infrastructure Analytics v2.0 | Analytical View - Detailed per-host metrics with trend analysis, percentiles, and network throughput monitoring",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "alexanderzobnin-zabbix-datasource",
+        "uid": "${DS_ZABBIX}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 50,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "SVGBaseFix": true,
+        "add100Percentage": true,
+        "calcsMutation": "standard",
+        "centerAlignContent": true,
+        "codeData": "{}",
+        "css": "",
+        "dynamicData": false,
+        "dynamicFieldDisplayValues": false,
+        "dynamicHtmlGraphics": false,
+        "dynamicProps": false,
+        "html": "",
+        "onInit": "",
+        "onInitOnResize": false,
+        "onRender": "/* SEFAZ Infrastructure Analytics v2.0 - Analytical View */\n(() => {\n  if (!htmlNode || !data?.series?.length) {\n    htmlNode.innerHTML = '<div style=\"font-family:Inter;background:#0a0a0f;min-height:100vh;display:flex;align-items:center;justify-content:center;color:#8892b0;\">Carregando infraestrutura...</div>';\n    return;\n  }\n\n  const DataParser = {\n    toNumber(v) {\n      if (v == null) return null;\n      if (typeof v === 'number') return Number.isFinite(v) ? v : null;\n      if (typeof v === 'string') {\n        const n = parseFloat(v.trim().replace(/[^0-9.-]/g, ''));\n        return Number.isFinite(n) ? n : null;\n      }\n      return null;\n    },\n    getLast(frame) {\n      if (!frame?.fields) return null;\n      const vf = frame.fields.find(f => f.type === 'number') || frame.fields[1];\n      if (!vf) return null;\n      const vals = Array.isArray(vf.values) ? vf.values : (vf.values?.toArray?.() || []);\n      return vals.length ? vals[vals.length - 1] : null;\n    },\n    getHistory(frame, n = 20) {\n      if (!frame?.fields) return [];\n      const vf = frame.fields.find(f => f.type === 'number') || frame.fields[1];\n      if (!vf) return [];\n      const vals = Array.isArray(vf.values) ? vf.values : (vf.values?.toArray?.() || []);\n      return vals.slice(-n).map(v => this.toNumber(v)).filter(v => v !== null);\n    },\n    getHost(frame) {\n      const f = frame?.fields?.[1];\n      const labels = f?.labels || frame.labels || {};\n      return labels.host || labels.Host || 'UNKNOWN';\n    },\n    indexByHost(frames, opts = {}) {\n      const { hist = false } = opts, idx = {};\n      (frames || []).forEach(f => {\n        const h = this.getHost(f);\n        if (h === 'UNKNOWN') return;\n        idx[h] = hist ? this.getHistory(f) : this.toNumber(this.getLast(f));\n      });\n      return idx;\n    }\n  };\n\n  const VizHelpers = {\n    genSparkline(hist) {\n      if (!hist || !hist.length) return 'M 0 20 L 100 20';\n      const max = Math.max(...hist, 1), min = Math.min(...hist, 0), range = max - min || 1;\n      const pts = hist.map((v, i) => {\n        const x = (i / Math.max(hist.length - 1, 1)) * 100;\n        const y = 30 - ((v - min) / range) * 25;\n        return `${x.toFixed(1)},${y.toFixed(1)}`;\n      });\n      return `M ${pts.join(' L ')}`;\n    },\n    formatBytes(bytes) {\n      if (bytes == null || bytes === 0) return '0 B';\n      const k = 1024, sizes = ['B', 'KB', 'MB', 'GB', 'TB'];\n      const i = Math.floor(Math.log(Math.abs(bytes)) / Math.log(k));\n      return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];\n    },\n    formatUptime(seconds) {\n      if (!seconds) return '0s';\n      const d = Math.floor(seconds / 86400), h = Math.floor((seconds % 86400) / 3600);\n      if (d > 0) return `${d}d ${h}h`;\n      const m = Math.floor((seconds % 3600) / 60);\n      return h > 0 ? `${h}h ${m}m` : `${m}m`;\n    },\n    getStatusClass(value, thresholds) {\n      if (value == null) return 'unknown';\n      if (value >= thresholds.critical) return 'critical';\n      if (value >= thresholds.warning) return 'warning';\n      return 'good';\n    }\n  };\n\n  const byRef = {};\n  (data.series || []).forEach(s => { const r = s.refId || 'unknown'; (byRef[r] = byRef[r] || []).push(s); });\n\n  const cpuUtil = DataParser.indexByHost(byRef['A']);\n  const cpuUtilHist = DataParser.indexByHost(byRef['A'], { hist: true });\n  const memPAvail = DataParser.indexByHost(byRef['B']);\n  const memTotal = DataParser.indexByHost(byRef['C']);\n  const memAvail = DataParser.indexByHost(byRef['D']);\n  const memAvailHist = DataParser.indexByHost(byRef['D'], { hist: true });\n  const diskPUsed = DataParser.indexByHost(byRef['E']);\n  const netIn = DataParser.indexByHost(byRef['F']);\n  const netOut = DataParser.indexByHost(byRef['G']);\n  const uptime = DataParser.indexByHost(byRef['H']);\n  const agentPing = DataParser.indexByHost(byRef['I']);\n  const triggers = DataParser.indexByHost(byRef['J']);\n\n  const hostnames = new Set([...Object.keys(cpuUtil), ...Object.keys(memPAvail), ...Object.keys(uptime)]);\n\n  const hosts = Array.from(hostnames).filter(h => h !== 'UNKNOWN').map(h => {\n    const cpu = cpuUtil[h], memPA = memPAvail[h], memUsedPct = memPA != null ? 100 - memPA : null;\n    const diskUsed = diskPUsed[h], up = uptime[h], ping = agentPing[h], triggerCount = triggers[h] || 0;\n    let status = 'online';\n    if (ping !== 1) status = 'offline';\n    else if (cpu >= 90 || memUsedPct >= 90 || diskUsed >= 90) status = 'critical';\n    else if (cpu >= 75 || memUsedPct >= 75 || diskUsed >= 75) status = 'warning';\n    return {\n      name: h, status, cpu: cpu || 0, cpuHist: cpuUtilHist[h] || [],\n      memUsedPct: memUsedPct || 0, memTotal: memTotal[h] || 0, memAvail: memAvail[h] || 0,\n      memAvailHist: memAvailHist[h] || [], diskUsedPct: diskUsed || 0,\n      netInBps: netIn[h] || 0, netOutBps: netOut[h] || 0,\n      uptime: up || 0, ping: ping === 1, triggers: Math.round(triggerCount)\n    };\n  }).sort((a, b) => { const ord = { offline: 0, critical: 1, warning: 2, online: 3 }; return ord[a.status] - ord[b.status]; });\n\n  const online = hosts.filter(h => h.status === 'online').length;\n  const warning = hosts.filter(h => h.status === 'warning').length;\n  const critical = hosts.filter(h => h.status === 'critical').length;\n  const offline = hosts.filter(h => h.status === 'offline').length;\n  const totalTriggers = hosts.reduce((sum, h) => sum + h.triggers, 0);\n  const avgCpu = hosts.reduce((sum, h) => sum + h.cpu, 0) / (hosts.length || 1);\n  const avgMem = hosts.reduce((sum, h) => sum + h.memUsedPct, 0) / (hosts.length || 1);\n  const avgDisk = hosts.reduce((sum, h) => sum + h.diskUsedPct, 0) / (hosts.length || 1);\n  const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });\n\n  const hostCards = hosts.map(h => {\n    const cpuCls = VizHelpers.getStatusClass(h.cpu, { warning: 75, critical: 90 });\n    const memCls = VizHelpers.getStatusClass(h.memUsedPct, { warning: 75, critical: 90 });\n    const diskCls = VizHelpers.getStatusClass(h.diskUsedPct, { warning: 80, critical: 90 });\n    const cpuPath = VizHelpers.genSparkline(h.cpuHist);\n    const memPath = VizHelpers.genSparkline(h.memAvailHist.map(v => 100 - v));\n    const cpuStroke = h.cpu >= 90 ? '#f97316' : (h.cpu >= 75 ? '#fbbf24' : '#3b82f6');\n    const memStroke = h.memUsedPct >= 90 ? '#f97316' : (h.memUsedPct >= 75 ? '#fbbf24' : '#a855f7');\n    const uptimeStr = VizHelpers.formatUptime(h.uptime);\n    const uptimeDays = Math.floor(h.uptime / 86400);\n    const cpuHistSorted = [...h.cpuHist].sort((a, b) => a - b);\n    const cpuP50 = cpuHistSorted[Math.floor(cpuHistSorted.length * 0.5)] || 0;\n    const cpuP95 = cpuHistSorted[Math.floor(cpuHistSorted.length * 0.95)] || 0;\n    const cpuMax = Math.max(...h.cpuHist, 0);\n    const netTotalBps = h.netInBps + h.netOutBps;\n    const netTotalMbps = (netTotalBps / 1024 / 1024 * 8).toFixed(1);\n    return `<div class=\"card ${h.status}\"><div class=\"hdr\"><div class=\"t-sec\"><div class=\"icon\">🖥️</div><div><h2>${h.name}</h2><div class=\"meta\"><span>⏱ ${uptimeStr} (${uptimeDays}d)</span><span class=\"s-${h.status}\">📡 ${h.status.toUpperCase()}</span>${h.triggers > 0 ? `<span class=\"alert\">🚨 ${h.triggers} alerts</span>` : ''}</div></div></div><div class=\"sum\"><div><div class=\"lbl\">CPU</div><div class=\"val ${cpuCls}\">${Math.round(h.cpu)}%</div></div><div><div class=\"lbl\">RAM</div><div class=\"val ${memCls}\">${Math.round(h.memUsedPct)}%</div></div><div><div class=\"lbl\">Disk</div><div class=\"val ${diskCls}\">${Math.round(h.diskUsedPct)}%</div></div></div></div><div class=\"grid\"><div class=\"sec\"><div class=\"sh\"><span>⚡</span><span>CPU Analysis</span></div><div class=\"chart\"><svg viewBox=\"0 0 200 80\" preserveAspectRatio=\"none\"><defs><linearGradient id=\"cpuG${h.name.replace(/\\s/g, '')}\" x1=\"0%\" y1=\"0%\" x2=\"0%\" y2=\"100%\"><stop offset=\"0%\" style=\"stop-color:${cpuStroke};stop-opacity:0.3\"/><stop offset=\"100%\" style=\"stop-color:${cpuStroke};stop-opacity:0\"/></linearGradient></defs><path d=\"${cpuPath} L 200 80 L 0 80 Z\" fill=\"url(#cpuG${h.name.replace(/\\s/g, '')})\"/><path d=\"${cpuPath}\" fill=\"none\" stroke=\"${cpuStroke}\" stroke-width=\"3\" vector-effect=\"non-scaling-stroke\"/></svg></div><div class=\"sr\"><div class=\"si\"><div class=\"sl\">Current</div><div class=\"sv ${cpuCls}\">${Math.round(h.cpu)}%</div></div><div class=\"si\"><div class=\"sl\">P50</div><div class=\"sv\">${Math.round(cpuP50)}%</div></div><div class=\"si\"><div class=\"sl\">P95</div><div class=\"sv\">${Math.round(cpuP95)}%</div></div><div class=\"si\"><div class=\"sl\">Peak</div><div class=\"sv\">${Math.round(cpuMax)}%</div></div></div></div><div class=\"sec\"><div class=\"sh\"><span>💾</span><span>Memory Analysis</span></div><div class=\"chart\"><svg viewBox=\"0 0 200 80\" preserveAspectRatio=\"none\"><defs><linearGradient id=\"memG${h.name.replace(/\\s/g, '')}\" x1=\"0%\" y1=\"0%\" x2=\"0%\" y2=\"100%\"><stop offset=\"0%\" style=\"stop-color:${memStroke};stop-opacity:0.3\"/><stop offset=\"100%\" style=\"stop-color:${memStroke};stop-opacity:0\"/></linearGradient></defs><path d=\"${memPath} L 200 80 L 0 80 Z\" fill=\"url(#memG${h.name.replace(/\\s/g, '')})\"/><path d=\"${memPath}\" fill=\"none\" stroke=\"${memStroke}\" stroke-width=\"3\" vector-effect=\"non-scaling-stroke\"/></svg></div><div class=\"sr\"><div class=\"si\"><div class=\"sl\">Used</div><div class=\"sv ${memCls}\">${VizHelpers.formatBytes(h.memTotal - h.memAvail)}</div></div><div class=\"si\"><div class=\"sl\">Available</div><div class=\"sv\">${VizHelpers.formatBytes(h.memAvail)}</div></div><div class=\"si\"><div class=\"sl\">Total</div><div class=\"sv\">${VizHelpers.formatBytes(h.memTotal)}</div></div><div class=\"si\"><div class=\"sl\">Usage</div><div class=\"sv ${memCls}\">${Math.round(h.memUsedPct)}%</div></div></div></div><div class=\"sec\"><div class=\"sh\"><span>💿</span><span>Storage</span></div><div class=\"dg\"><svg viewBox=\"0 0 120 120\"><circle cx=\"60\" cy=\"60\" r=\"50\" fill=\"none\" stroke=\"rgba(255,255,255,0.1)\" stroke-width=\"12\"/><circle cx=\"60\" cy=\"60\" r=\"50\" fill=\"none\" stroke=\"${h.diskUsedPct >= 90 ? '#f97316' : (h.diskUsedPct >= 80 ? '#fbbf24' : '#4ade80')}\" stroke-width=\"12\" stroke-dasharray=\"${2 * Math.PI * 50}\" stroke-dashoffset=\"${2 * Math.PI * 50 * (1 - h.diskUsedPct / 100)}\" stroke-linecap=\"round\" transform=\"rotate(-90 60 60)\"/><text x=\"60\" y=\"55\" text-anchor=\"middle\" fill=\"#e2e8f0\" font-size=\"24\" font-weight=\"bold\">${Math.round(h.diskUsedPct)}%</text><text x=\"60\" y=\"75\" text-anchor=\"middle\" fill=\"#64748b\" font-size=\"10\">DISK USED</text></svg></div><div class=\"sh\" style=\"margin-top:20px\"><span>📊</span><span>Network</span></div><div class=\"ns\"><div class=\"n\"><div class=\"nd\">↓ INBOUND</div><div class=\"nv\">${VizHelpers.formatBytes(h.netInBps)}/s</div></div><div class=\"n\"><div class=\"nd\">↑ OUTBOUND</div><div class=\"nv\">${VizHelpers.formatBytes(h.netOutBps)}/s</div></div><div class=\"n t\"><div class=\"nd\">⚡ TOTAL</div><div class=\"nv\">${netTotalMbps} Mbps</div></div></div></div></div></div>`;\n  }).join('');\n\n  htmlNode.innerHTML = `<style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');*{margin:0;padding:0;box-sizing:border-box}.c{font-family:Inter,sans-serif;background:#0a0a0f;min-height:100vh;color:#fff;padding:20px}.h{background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:20px 30px;margin-bottom:25px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px}.h-l{display:flex;align-items:center;gap:15px}.h-i{width:50px;height:50px;background:linear-gradient(135deg,#3b82f6,#2563eb);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:26px}.h-t .t{font-size:24px;font-weight:700;color:#e2e8f0}.h-t .t span{color:#3b82f6}.h-t .st{font-size:11px;color:#8892b0;text-transform:uppercase;letter-spacing:1px;margin-top:2px}.h-s{display:flex;gap:20px;flex:1;justify-content:center}.sb{background:rgba(255,255,255,.05);border-radius:8px;padding:12px 20px;min-width:100px;text-align:center}.sb .v{font-size:28px;font-weight:700}.sb.on .v{color:#4ade80}.sb.wa .v{color:#fbbf24}.sb.cr .v{color:#f97316}.sb.of .v{color:#ef4444}.sb.tr .v{color:#a855f7}.sb .l{font-size:10px;color:#8892b0;text-transform:uppercase;letter-spacing:1px;margin-top:4px}.h-r{text-align:right}.ut{font-size:14px;color:#ccd6f6;display:flex;align-items:center;gap:8px}.pd{width:8px;height:8px;background:#4ade80;border-radius:50%;animation:p 2s infinite}@keyframes p{0%,100%{opacity:1}50%{opacity:.5}}.ul{font-size:10px;color:#64748b;text-transform:uppercase;margin-top:2px}.sm{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:25px}.sc{background:linear-gradient(145deg,#12121a,#0d0d12);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:20px}.sc .ct{font-size:12px;color:#8892b0;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;display:flex;align-items:center;gap:8px}.sc .cv{font-size:36px;font-weight:700;color:#e2e8f0}.sc .cl{font-size:11px;color:#64748b;margin-top:4px}.card{background:linear-gradient(145deg,#12121a,#0d0d12);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:0;margin-bottom:25px;transition:all .3s;position:relative;overflow:hidden}.card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;z-index:1}.card.online::before{background:linear-gradient(90deg,#4ade80,#22c55e)}.card.warning::before{background:linear-gradient(90deg,#fbbf24,#f59e0b)}.card.critical::before{background:linear-gradient(90deg,#f97316,#ea580c)}.card.offline::before{background:linear-gradient(90deg,#ef4444,#dc2626)}.card:hover{border-color:rgba(255,255,255,.15);box-shadow:0 12px 40px rgba(0,0,0,.5)}.hdr{display:flex;justify-content:space-between;align-items:center;padding:25px 30px;border-bottom:1px solid rgba(255,255,255,.05);background:rgba(0,0,0,.2)}.t-sec{display:flex;align-items:center;gap:20px;flex:1}.icon{width:60px;height:60px;background:linear-gradient(135deg,rgba(59,130,246,.2),rgba(37,99,235,.1));border:2px solid rgba(59,130,246,.3);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0}h2{font-size:24px;font-weight:700;color:#e2e8f0;margin:0 0 8px 0}.meta{display:flex;gap:20px;flex-wrap:wrap}.meta span{font-size:12px;color:#8892b0}.s-online{color:#4ade80}.s-warning{color:#fbbf24}.s-critical{color:#f97316}.s-offline{color:#ef4444}.alert{color:#f97316!important}.sum{display:flex;gap:30px}.sum>div{text-align:center}.lbl{font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}.val{font-size:32px;font-weight:700;color:#e2e8f0}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid rgba(255,255,255,.05)}.sec{padding:25px;border-right:1px solid rgba(255,255,255,.05)}.sec:last-child{border-right:none}.sh{display:flex;align-items:center;gap:10px;margin-bottom:20px}.sh span:first-child{font-size:20px}.sh span:last-child{font-size:14px;font-weight:600;color:#8892b0;text-transform:uppercase;letter-spacing:1px}.chart{height:120px;background:rgba(0,0,0,.3);border-radius:8px;margin-bottom:20px;overflow:hidden}.chart svg{width:100%;height:100%}.sr{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.si{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);border-radius:8px;padding:12px;text-align:center}.sl{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}.sv{font-size:20px;font-weight:700;color:#e2e8f0}.good{color:#4ade80!important}.warning{color:#fbbf24!important}.critical{color:#f97316!important}.dg{display:flex;justify-content:center;align-items:center;padding:20px 0}.dg svg{max-width:150px}.ns{display:flex;flex-direction:column;gap:12px}.n{background:rgba(0,0,0,.3);border-radius:8px;padding:15px;display:flex;justify-content:space-between;align-items:center;border:1px solid rgba(255,255,255,.05)}.n.t{background:rgba(59,130,246,.1);border-color:rgba(59,130,246,.2)}.nd{font-size:11px;color:#8892b0;font-weight:600;letter-spacing:1px}.nv{font-size:16px;color:#ccd6f6;font-weight:700}.n.t .nv{color:#3b82f6}@media (max-width:768px){.h{flex-direction:column;text-align:center}.h-s{flex-wrap:wrap}.sm{grid-template-columns:1fr}.grid{grid-template-columns:1fr}}</style><div class=\"c\"><div class=\"h\"><div class=\"h-l\"><div class=\"h-i\">🏢</div><div class=\"h-t\"><div class=\"t\">SEFAZ <span>Infrastructure</span> Analytics</div><div class=\"st\">Data Center • Analytical View</div></div></div><div class=\"h-s\"><div class=\"sb on\"><div class=\"v\">${online}</div><div class=\"l\">✓ Online</div></div><div class=\"sb wa\"><div class=\"v\">${warning}</div><div class=\"l\">⚠ Warning</div></div><div class=\"sb cr\"><div class=\"v\">${critical}</div><div class=\"l\">🔥 Critical</div></div><div class=\"sb of\"><div class=\"v\">${offline}</div><div class=\"l\">✗ Offline</div></div>${totalTriggers > 0 ? `<div class=\"sb tr\"><div class=\"v\">${totalTriggers}</div><div class=\"l\">🚨 Alerts</div></div>` : ''}</div><div class=\"h-r\"><div class=\"ut\"><span class=\"pd\"></span><span>${time}</span></div><div class=\"ul\">Última Atualização</div></div></div><div class=\"sm\"><div class=\"sc\"><div class=\"ct\">📊 CPU Médio</div><div class=\"cv\" style=\"color:${avgCpu >= 90 ? '#f97316' : (avgCpu >= 75 ? '#fbbf24' : '#4ade80')}\">${Math.round(avgCpu)}%</div><div class=\"cl\">Utilização agregada</div></div><div class=\"sc\"><div class=\"ct\">💾 RAM Média</div><div class=\"cv\" style=\"color:${avgMem >= 90 ? '#f97316' : (avgMem >= 75 ? '#fbbf24' : '#4ade80')}\">${Math.round(avgMem)}%</div><div class=\"cl\">Uso de memória</div></div><div class=\"sc\"><div class=\"ct\">💿 Disk Médio</div><div class=\"cv\" style=\"color:${avgDisk >= 90 ? '#f97316' : (avgDisk >= 80 ? '#fbbf24' : '#4ade80')}\">${Math.round(avgDisk)}%</div><div class=\"cl\">Espaço utilizado</div></div></div>${hostCards}</div>`;\n})();",
+        "overflow": "visible",
+        "panelupdateOnMount": true,
+        "reduceOptions": {
+          "calcs": ["lastNotNull"]
+        },
+        "renderOnMount": true,
+        "rootCSS": "",
+        "useGrafanaScrollbar": true
+      },
+      "pluginVersion": "2.2.3",
+      "targets": [
+        {
+          "application": { "filter": "" },
+          "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "${DS_ZABBIX}" },
+          "functions": [],
+          "group": { "filter": "SEFAZ_Hosts_DC" },
+          "host": { "filter": "/.*/", "name": "All" },
+          "item": { "filter": "/^CPU \\(\$idle\\)$/" },
+          "itemTag": { "filter": "" },
+          "options": { "disableDataAlignment": false, "showDisabledItems": false, "skipEmptyValues": false, "useTrends": "default", "useZabbixValueMapping": false },
+          "proxy": { "filter": "" },
+          "queryType": "0",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "tags": { "filter": "" },
+          "trigger": { "filter": "" }
+        },
+        {
+          "application": { "filter": "" },
+          "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "${DS_ZABBIX}" },
+          "functions": [],
+          "group": { "filter": "SEFAZ_Hosts_DC" },
+          "host": { "filter": "/.*/", "name": "All" },
+          "item": { "filter": "/^Memória \\(pavailable\\)$/" },
+          "itemTag": { "filter": "" },
+          "options": { "disableDataAlignment": false, "showDisabledItems": false, "skipEmptyValues": false, "useTrends": "default", "useZabbixValueMapping": false },
+          "proxy": { "filter": "" },
+          "queryType": "0",
+          "refId": "B",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "tags": { "filter": "" },
+          "trigger": { "filter": "" }
+        },
+        {
+          "application": { "filter": "" },
+          "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "${DS_ZABBIX}" },
+          "functions": [],
+          "group": { "filter": "SEFAZ_Hosts_DC" },
+          "host": { "filter": "/.*/", "name": "All" },
+          "item": { "filter": "/^Memória \\(\$total\\)$/" },
+          "itemTag": { "filter": "" },
+          "options": { "disableDataAlignment": false, "showDisabledItems": false, "skipEmptyValues": false, "useTrends": "default", "useZabbixValueMapping": false },
+          "proxy": { "filter": "" },
+          "queryType": "0",
+          "refId": "C",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "tags": { "filter": "" },
+          "trigger": { "filter": "" }
+        },
+        {
+          "application": { "filter": "" },
+          "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "${DS_ZABBIX}" },
+          "functions": [],
+          "group": { "filter": "SEFAZ_Hosts_DC" },
+          "host": { "filter": "/.*/", "name": "All" },
+          "item": { "filter": "/^Memória \\(available\\)$/" },
+          "itemTag": { "filter": "" },
+          "options": { "disableDataAlignment": false, "showDisabledItems": false, "skipEmptyValues": false, "useTrends": "default", "useZabbixValueMapping": false },
+          "proxy": { "filter": "" },
+          "queryType": "0",
+          "refId": "D",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "tags": { "filter": "" },
+          "trigger": { "filter": "" }
+        },
+        {
+          "application": { "filter": "" },
+          "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "${DS_ZABBIX}" },
+          "functions": [],
+          "group": { "filter": "SEFAZ_Hosts_DC" },
+          "host": { "filter": "/.*/", "name": "All" },
+          "item": { "filter": "/^Espaço livre em % /" },
+          "itemTag": { "filter": "" },
+          "options": { "disableDataAlignment": false, "showDisabledItems": false, "skipEmptyValues": false, "useTrends": "default", "useZabbixValueMapping": false },
+          "proxy": { "filter": "" },
+          "queryType": "0",
+          "refId": "E",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "tags": { "filter": "" },
+          "trigger": { "filter": "" }
+        },
+        {
+          "application": { "filter": "" },
+          "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "${DS_ZABBIX}" },
+          "functions": [],
+          "group": { "filter": "SEFAZ_Hosts_DC" },
+          "host": { "filter": "/.*/", "name": "All" },
+          "item": { "filter": "/Interface .* \\(Download\\)$/" },
+          "itemTag": { "filter": "" },
+          "options": { "disableDataAlignment": false, "showDisabledItems": false, "skipEmptyValues": false, "useTrends": "default", "useZabbixValueMapping": false },
+          "proxy": { "filter": "" },
+          "queryType": "0",
+          "refId": "F",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "tags": { "filter": "" },
+          "trigger": { "filter": "" }
+        },
+        {
+          "application": { "filter": "" },
+          "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "${DS_ZABBIX}" },
+          "functions": [],
+          "group": { "filter": "SEFAZ_Hosts_DC" },
+          "host": { "filter": "/.*/", "name": "All" },
+          "item": { "filter": "/Interface .* \\(Upload\\)$/" },
+          "itemTag": { "filter": "" },
+          "options": { "disableDataAlignment": false, "showDisabledItems": false, "skipEmptyValues": false, "useTrends": "default", "useZabbixValueMapping": false },
+          "proxy": { "filter": "" },
+          "queryType": "0",
+          "refId": "G",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "tags": { "filter": "" },
+          "trigger": { "filter": "" }
+        },
+        {
+          "application": { "filter": "" },
+          "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "${DS_ZABBIX}" },
+          "functions": [],
+          "group": { "filter": "SEFAZ_Hosts_DC" },
+          "host": { "filter": "/.*/", "name": "All" },
+          "item": { "filter": "/^Uptime$/" },
+          "itemTag": { "filter": "" },
+          "options": { "disableDataAlignment": false, "showDisabledItems": false, "skipEmptyValues": false, "useTrends": "default", "useZabbixValueMapping": false },
+          "proxy": { "filter": "" },
+          "queryType": "0",
+          "refId": "H",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "tags": { "filter": "" },
+          "trigger": { "filter": "" }
+        },
+        {
+          "application": { "filter": "" },
+          "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "${DS_ZABBIX}" },
+          "functions": [],
+          "group": { "filter": "SEFAZ_Hosts_DC" },
+          "host": { "filter": "/.*/", "name": "All" },
+          "item": { "filter": "/^Agent ping$/" },
+          "itemTag": { "filter": "" },
+          "options": { "disableDataAlignment": false, "showDisabledItems": false, "skipEmptyValues": false, "useTrends": "default", "useZabbixValueMapping": false },
+          "proxy": { "filter": "" },
+          "queryType": "0",
+          "refId": "I",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "tags": { "filter": "" },
+          "trigger": { "filter": "" }
+        },
+        {
+          "application": { "filter": "" },
+          "datasource": { "type": "alexanderzobnin-zabbix-datasource", "uid": "${DS_ZABBIX}" },
+          "functions": [],
+          "group": { "filter": "SEFAZ_Hosts_DC" },
+          "host": { "filter": "/.*/", "name": "All" },
+          "item": { "filter": "" },
+          "itemTag": { "filter": "" },
+          "options": { "count": true, "disableDataAlignment": false, "showDisabledItems": false, "skipEmptyValues": false, "useTrends": "default", "useZabbixValueMapping": false },
+          "proxy": { "filter": "" },
+          "queryType": "4",
+          "refId": "J",
+          "resultFormat": "time_series",
+          "schema": 12,
+          "tags": { "filter": "" },
+          "trigger": { "filter": "" }
+        }
+      ],
+      "title": "SEFAZ Infrastructure Analytics v2.0",
+      "type": "gapit-htmlgraphics-panel"
+    }
+  ],
+  "preload": false,
+  "refresh": "30s",
+  "schemaVersion": 40,
+  "tags": [
+    "sefaz",
+    "infrastructure",
+    "analytics",
+    "dc-monitoring",
+    "v2.0"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "text": "zabbix-sefaz",
+          "value": "aec2bvjiis7pca"
+        },
+        "includeAll": false,
+        "name": "DS_ZABBIX",
+        "options": [],
+        "query": "alexanderzobnin-zabbix-datasource",
+        "refresh": 1,
+        "regex": "",
+        "type": "datasource"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "SEFAZ Infrastructure Analytics v2.0",
+  "uid": "sefaz-infra-analytics-v2",
+  "version": 1,
+  "weekStart": ""
+}
